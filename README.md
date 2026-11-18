@@ -57,3 +57,9 @@ Run with the client closed.
 A package VM may register at most 64 UI modules, and every `.lua` under a
 library's `lua/` counts for every package that requires it. Check the count
 before adding files to `modern-common/lua/`.
+
+## License
+
+MIT, see [LICENSE](LICENSE). The generated item data in
+`packages/spiritech.modern-common/lua/itemreqs_*.lua` and `itemmods.lua` is
+derived from the game client's database and is not covered by this license.
