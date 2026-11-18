@@ -4,10 +4,16 @@ A dark, minimal, flat UI addon set for the Spiritech (Project Rubi-Ka) client.
 
 ## Install
 
-Copy (or clone) the `spiritech.*` folders into
-`~/.local/share/ProjectRubiKa/ui-packages/`, then pick the packages in
-**Options → Interface & HUD → UI packages**. This folder is not touched by the
-launcher updater.
+Packages live in `packages/`. Run
+
+    ./install.sh                         # all packages
+    ./install.sh spiritech.modern-trade  # just one
+
+to copy them into `~/.local/share/ProjectRubiKa/ui-packages/` (override with
+`SPIRITECH_UI_PACKAGES`). `tools/` folders are not copied. Then pick the packages
+in **Options → Interface & HUD → UI packages**.
+
+Edit files here, never in `ui-packages/`: the next install overwrites them.
 
 ## Packages
 
@@ -41,10 +47,10 @@ launcher updater.
 
 Run with the client closed.
 
-- `spiritech.modern-common/tools/gen_itemreqs.py`, `gen_itemmods.py` —
+- `packages/spiritech.modern-common/tools/gen_itemreqs.py`, `gen_itemmods.py` —
   regenerate `lua/itemreqs_*.lua` / `lua/itemmods.lua` from the client's `rdb.db`.
-- `spiritech.modern-common/tools/copy_ui.py FROM TO` — copy UI layout between characters.
-- `spiritech.modern-control-center/tools/migrate_hotbar_labels.py` — migrate hotbar labels.
+- `packages/spiritech.modern-common/tools/copy_ui.py FROM TO` — copy UI layout between characters.
+- `packages/spiritech.modern-control-center/tools/migrate_hotbar_labels.py` — migrate hotbar labels.
 
 ## Limits
 
