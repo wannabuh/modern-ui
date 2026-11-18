@@ -1,0 +1,8 @@
+<?xml version="1.0" standalone="yes"?>
+<!-- Timer stack root. Rows (row.xml) are added from main.lua; the stack grows upward. -->
+<root>
+  <View name="timer_stack" view_layout="stacked" composite_layer="true">
+    <View name="timer_rows" view_layout="vertical" />
+    <BorderView name="layout_editor_frame" visible="false" color="0xF0B84A" draw_background="false" />
+  </View>
+</root>

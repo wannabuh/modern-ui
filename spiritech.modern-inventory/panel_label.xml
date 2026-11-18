@@ -1,0 +1,5 @@
+<?xml version="1.0" standalone="yes"?>
+<!-- An item name under a slot in a "grid with names" panel (placed from Lua). -->
+<root>
+  <TextView name="panel_label" interactive="false" value="" size_to_text="false" text_alignment="center" font_size="10" color="C9D1DB" min_size="Point(50,12)" max_size="Point(50,12)" />
+</root>

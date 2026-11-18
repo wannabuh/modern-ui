@@ -1,0 +1,42 @@
+<?xml version="1.0" standalone="yes"?>
+<!-- A popped-out category panel: header (drag handle, title, close) over a grid of slots.
+     Placed from Lua relative to the inventory window; size follows its contents. -->
+<root>
+  <View name="panel" view_layout="stacked" capture_input="true">
+    <View interactive="false" view_layout="vertical" layout_borders="Rect(1,1,1,1)">
+      <View interactive="false" fill_color="0xF214181E" min_size="Point(-1,20)" max_size="Point(-1,20)" />
+      <View interactive="false" fill_color="0xE60D1015" weight="1" />
+    </View>
+    <View interactive="false" view_layout="vertical">
+      <View interactive="false" fill_color="0xFF2A3039" min_size="Point(-1,1)" max_size="Point(-1,1)" />
+      <View interactive="false" view_layout="horizontal" weight="1">
+        <View interactive="false" fill_color="0xFF2A3039" min_size="Point(1,-1)" max_size="Point(1,-1)" />
+        <HLayoutSpacer />
+        <View interactive="false" fill_color="0xFF2A3039" min_size="Point(1,-1)" max_size="Point(1,-1)" />
+      </View>
+      <View interactive="false" fill_color="0xFF2A3039" min_size="Point(-1,1)" max_size="Point(-1,1)" />
+    </View>
+    <View view_layout="vertical" layout_borders="Rect(1,1,1,1)">
+      <View name="panel_header" view_layout="horizontal" capture_input="true" min_size="Point(-1,20)" max_size="Point(-1,20)" tooltip="Drag to move · right-click for options">
+        <TextView name="panel_title" interactive="false" value="" font_size="11" color="E8ECF1" v_alignment="center" layout_borders="Rect(6,0,0,0)" />
+        <TextView name="panel_count" interactive="false" value="" font_size="10" color="8B95A3" v_alignment="center" layout_borders="Rect(6,0,0,0)" />
+        <HLayoutSpacer />
+        <TextButton name="panel_close" label="×" font_size="13" color="A3ADBA" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(0,0,6,0)" tooltip="Close panel" />
+      </View>
+      <View interactive="false" fill_color="0xFF232831" min_size="Point(-1,1)" max_size="Point(-1,1)" />
+      <View name="panel_grid" view_layout="grid" grid_columns="6" min_columns="1" grid_spacing="2" layout_borders="Rect(4,3,4,4)" />
+      <!-- Grid with names: wider spacing, and a layer of name labels placed under the slots. -->
+      <View name="panel_named_area" view_layout="stacked" visible="false" layout_borders="Rect(4,3,4,4)">
+        <View name="panel_named_grid" view_layout="grid" grid_columns="6" min_columns="1" grid_spacing="14" h_alignment="left" v_alignment="top" layout_borders="Rect(6,0,6,0)" />
+        <View name="panel_labels" interactive="false" view_layout="stacked" />
+      </View>
+      <TextView name="panel_measure" interactive="false" visible="false" value="" font_size="10" />
+      <!-- List view: the shared table (two-line rows, header hidden); the strip covers its scrollbar. -->
+      <View name="panel_list_area" view_layout="stacked" visible="false" layout_borders="Rect(2,2,2,2)">
+        <View name="panel_list" view_layout="vertical" />
+        <View name="panel_list_cover" interactive="false" fill_color="0xFF0D1015" h_alignment="right" min_size="Point(12,-1)" max_size="Point(12,-1)" />
+      </View>
+      <TextView name="panel_empty" interactive="false" visible="false" value="Empty" font_size="10" color="8B95A3" layout_borders="Rect(6,3,0,0)" />
+    </View>
+  </View>
+</root>

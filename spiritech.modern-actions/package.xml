@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package id="spiritech.modern-actions" name="Modern Actions">
+  <Provides role="prk.actions" />
+  <Requires package="spiritech.modern-common" />
+  <Script src="main.lua" />
+  <InteractionScript src="interaction.lua" />
+</Package>

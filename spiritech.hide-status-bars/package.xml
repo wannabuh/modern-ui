@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package id="spiritech.hide-status-bars" name="Hidden (use Player Bars addon)">
+  <Provides role="prk.status-bars" />
+  <Script src="main.lua" />
+</Package>

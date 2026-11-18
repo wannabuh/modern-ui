@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package id="spiritech.modern-team" name="Modern Team">
+  <Provides role="prk.team" />
+  <Requires package="spiritech.modern-common" />
+  <Script src="main.lua" />
+  <InteractionScript src="interaction.lua" />
+</Package>

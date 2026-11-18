@@ -1,0 +1,3 @@
+<Package id="spiritech.modern-common" name="Modern UI (shared)">
+  <Modules root="lua" />
+</Package>

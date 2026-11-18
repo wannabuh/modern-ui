@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!-- Cooldowns window drawn by the Control Center from the shortcut bars' relay. Same flat
+     style as the bar and the NCU window: 1px outline, title strip (drag to move), rows. -->
+<root>
+  <View name="cc_cooldowns" capture_input="true" view_layout="stacked" visible="false">
+    <View interactive="false" fill_color="0xE60D1015" />
+    <View interactive="false" view_layout="vertical">
+      <View interactive="false" fill_color="0xFF2A3039" min_size="Point(-1,1)" max_size="Point(-1,1)" />
+      <View interactive="false" view_layout="horizontal" weight="1">
+        <View interactive="false" fill_color="0xFF2A3039" min_size="Point(1,-1)" max_size="Point(1,-1)" />
+        <HLayoutSpacer />
+        <View interactive="false" fill_color="0xFF2A3039" min_size="Point(1,-1)" max_size="Point(1,-1)" />
+      </View>
+      <View interactive="false" fill_color="0xFF2A3039" min_size="Point(-1,1)" max_size="Point(-1,1)" />
+    </View>
+    <View view_layout="vertical" layout_borders="Rect(1,1,1,1)">
+      <View name="cd_title" capture_input="true" view_layout="horizontal" min_size="Point(-1,18)" max_size="Point(-1,18)" tooltip="Drag to move">
+        <TextView name="cd_title_text" interactive="false" value="Cooldowns" font_size="10" color="A3ADBA" v_alignment="center" weight="1" layout_borders="Rect(6,0,0,0)" />
+        <TextButton name="cd_close" label="×" font_size="12" color="A3ADBA" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(6,0,6,0)" tooltip="Hide (Actions → Cooldowns Window)" />
+      </View>
+      <View interactive="false" fill_color="0xFF232831" min_size="Point(-1,1)" max_size="Point(-1,1)" />
+      <View name="cd_rows" view_layout="vertical" />
+    </View>
+    <TextView name="cd_measure" interactive="false" visible="false" value="" font_size="11" />
+  </View>
+</root>

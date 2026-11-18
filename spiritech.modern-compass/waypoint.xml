@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The game's own compass waypoint marker (same artwork as the built-in compass). -->
+<root>
+  <BitmapView name="waypoint_icon" interactive="false" image="gfx://GFX_GUI_COMPASS_WAYPOINT" />
+</root>

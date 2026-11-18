@@ -1,0 +1,8 @@
+<?xml version="1.0" standalone="yes"?>
+<!-- One category tab: label with a 2px accent underline when selected. -->
+<root>
+  <View name="tab" view_layout="stacked" min_size="Point(-1,22)" max_size="Point(-1,22)" layout_borders="Rect(0,0,10,0)">
+    <TextButton name="tab_label" label="" font_size="12" color="A3ADBA" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" />
+    <View name="tab_line" interactive="false" visible="false" fill_color="0xFF4FB3BF" min_size="Point(-1,2)" max_size="Point(-1,2)" v_alignment="end" />
+  </View>
+</root>

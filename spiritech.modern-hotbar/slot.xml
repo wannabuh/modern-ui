@@ -1,0 +1,10 @@
+<?xml version="1.0" standalone="yes"?>
+<!-- One 36px slot: 1px outline, dark fill, the 32px icon at native size (crisp) in the middle.
+     Empty slots are faded from Lua so only real shortcuts stand out. -->
+<root>
+  <View name="slot_cell" view_layout="stacked" min_size="Point(36,36)" max_size="Point(36,36)">
+    <View name="slot_outline" interactive="false" fill_color="0xFF2A3039" />
+    <View name="slot_fill" interactive="false" fill_color="0xE60D1015" layout_borders="Rect(1,1,1,1)" />
+    <ItemSlotView name="shortcut_slot" click_sound="false" min_size="Point(36,36)" max_size="Point(36,36)" slot_gfx="" icon_inset="2" icon_fit="center" overlay_inset="1" />
+  </View>
+</root>

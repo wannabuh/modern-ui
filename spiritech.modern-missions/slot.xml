@@ -1,0 +1,5 @@
+<?xml version="1.0" standalone="yes"?>
+<!-- Flat 38px mission slot (32px icon at native size). -->
+<root>
+  <ItemSlotView min_size="Point(38,38)" max_size="Point(38,38)" slot_gfx="" fill_color="0xE61B2028" icon_inset="3" icon_fit="center" overlay_inset="1" />
+</root>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modern Trade content. Player trades: their offer / your offer. Shops: goods / bought /
+     sold. Widget names that the stock Trade window uses are kept (our_cash, shop_search,
+     *_dock, *_slots) since the game finds some of them itself (credit entry, drops). -->
+<root>
+  <View name="trade_content" view_layout="vertical" weight="1">
+    <!-- Shop goods -->
+    <View name="shop_section" view_layout="vertical">
+      <View view_layout="horizontal" min_size="Point(-1,22)" max_size="Point(-1,22)">
+        <TextView name="shop_label" value="SHOP" font_size="11" color="A3ADBA" v_alignment="center" layout_borders="Rect(4,0,0,0)" />
+        <TextView name="shop_count" value="" font_size="11" color="6E7885" v_alignment="center" layout_borders="Rect(6,0,0,0)" />
+        <HLayoutSpacer />
+        <TextButton name="sort_name" label="Name" font_size="11" color="8B95A3" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(6,0,0,0)" tooltip="Sort by name (click again to reverse)" />
+        <TextButton name="sort_ql" label="QL" font_size="11" color="8B95A3" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(8,0,0,0)" tooltip="Sort by quality level (click again to reverse)" />
+        <TextButton name="sort_price" label="Price" font_size="11" color="8B95A3" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(8,0,4,0)" tooltip="Sort by price (click again to reverse)" />
+      </View>
+      <View interactive="false" fill_color="0xFF2A3039" min_size="Point(-1,1)" max_size="Point(-1,1)" />
+      <View view_layout="stacked" name="shop_frame" min_size="Point(-1,32)" max_size="Point(-1,32)">
+        <ScrollView name="shop_dock" capture_input="true" view_layout="vertical" v_scrollbar_mode="auto" scrollbar_width="8">
+          <ScrollViewChild name="shop_slots" view_layout="vertical" />
+        </ScrollView>
+        <TextView name="shop_empty" interactive="false" value="Nothing for sale" font_size="11" color="5E6875" h_alignment="center" v_alignment="center" />
+      </View>
+    </View>
+
+    <!-- Their offer / Bought -->
+    <View name="partner_section" view_layout="vertical">
+      <View view_layout="horizontal" min_size="Point(-1,22)" max_size="Point(-1,22)">
+        <TextView name="partner_label" value="THEIR OFFER" font_size="11" color="A3ADBA" v_alignment="center" layout_borders="Rect(4,0,0,0)" />
+        <TextView name="partner_count" value="" font_size="11" color="6E7885" v_alignment="center" layout_borders="Rect(6,0,0,0)" />
+        <HLayoutSpacer />
+        <View name="partner_status" view_layout="stacked" min_size="Point(64,16)" max_size="Point(64,16)" v_alignment="center" layout_borders="Rect(4,0,0,0)">
+          <View name="partner_status_fill" interactive="false" fill_color="0xFF2A3039" />
+          <TextView name="partner_status_text" interactive="false" value="Waiting" font_size="10" color="A3ADBA" h_alignment="center" v_alignment="center" />
+        </View>
+        <TextView name="partner_cash" value="0" font_size="12" color="E8ECF1" size_to_text="false" text_alignment="right" min_size="Point(90,18)" max_size="Point(90,18)" v_alignment="center" layout_borders="Rect(6,0,4,0)" />
+      </View>
+      <View interactive="false" fill_color="0xFF2A3039" min_size="Point(-1,1)" max_size="Point(-1,1)" />
+      <View view_layout="stacked" name="partner_frame" min_size="Point(-1,32)" max_size="Point(-1,32)">
+        <ScrollView name="partner_dock" capture_input="true" view_layout="vertical" v_scrollbar_mode="auto" scrollbar_width="8">
+          <ScrollViewChild name="partner_slots" view_layout="vertical" />
+        </ScrollView>
+        <TextView name="partner_empty" interactive="false" value="Nothing offered yet" font_size="11" color="5E6875" h_alignment="center" v_alignment="center" />
+      </View>
+    </View>
+
+    <!-- Your offer / Sold -->
+    <View name="our_section" view_layout="vertical">
+      <View view_layout="horizontal" min_size="Point(-1,22)" max_size="Point(-1,22)">
+        <TextView name="our_label" value="YOUR OFFER" font_size="11" color="A3ADBA" v_alignment="center" layout_borders="Rect(4,0,0,0)" />
+        <TextView name="our_count" value="" font_size="11" color="6E7885" v_alignment="center" layout_borders="Rect(6,0,0,0)" />
+        <HLayoutSpacer />
+        <View name="our_status" view_layout="stacked" min_size="Point(64,16)" max_size="Point(64,16)" v_alignment="center" layout_borders="Rect(4,0,0,0)">
+          <View name="our_status_fill" interactive="false" fill_color="0xFF2A3039" />
+          <TextView name="our_status_text" interactive="false" value="Waiting" font_size="10" color="A3ADBA" h_alignment="center" v_alignment="center" />
+        </View>
+        <View name="our_cash_frame" view_layout="stacked" min_size="Point(90,18)" max_size="Point(90,18)" v_alignment="center" fill_color="0xFF1B2028" layout_borders="Rect(6,0,4,0)" tooltip="Credits you offer">
+          <TextInputView name="our_cash" draw_border="false" draw_background="false" value="0" font_size="12" color="E8ECF1" max_length="10" min_size="Point(82,18)" max_size="Point(82,18)" v_alignment="center" layout_borders="Rect(4,0,4,0)" />
+        </View>
+      </View>
+      <View interactive="false" fill_color="0xFF2A3039" min_size="Point(-1,1)" max_size="Point(-1,1)" />
+      <View view_layout="stacked" name="our_frame" min_size="Point(-1,32)" max_size="Point(-1,32)">
+        <ScrollView name="our_list" capture_input="true" view_layout="vertical" v_scrollbar_mode="auto" scrollbar_width="8">
+          <ScrollViewChild name="our_rows" view_layout="vertical" />
+        </ScrollView>
+        <TextView name="our_empty" interactive="false" value="Drop items on the slots below" font_size="11" color="5E6875" h_alignment="center" v_alignment="center" />
+      </View>
+      <!-- Drop strip: one row of empty item slots (stock names our_dock / our_slots). -->
+      <View name="our_drop" view_layout="vertical" min_size="Point(-1,42)" max_size="Point(-1,42)" tooltip="Drop items from your inventory here">
+        <ScrollView name="our_dock" capture_input="true" v_scrollbar_mode="never" weight="1" layout_borders="Rect(2,3,2,3)">
+          <ScrollViewChild name="our_slots" view_layout="grid" grid_columns="30" min_columns="1" grid_spacing="2" />
+        </ScrollView>
+      </View>
+    </View>
+
+    <!-- Footer: search (shops), balance (shops), accept / decline -->
+    <View interactive="false" fill_color="0xFF2A3039" min_size="Point(-1,1)" max_size="Point(-1,1)" />
+    <View name="trade_buttons" view_layout="horizontal" min_size="Point(-1,28)" max_size="Point(-1,28)">
+      <View name="search_box" view_layout="stacked" weight="1" min_size="Point(40,20)" max_size="Point(-1,20)" v_alignment="center" layout_borders="Rect(2,0,4,0)">
+        <View interactive="false" fill_color="0xFF1B2028" />
+        <TextInputView name="shop_search" placeholder="Search goods" font_size="11" color="E8ECF1" draw_border="false" draw_background="false" max_length="64" min_size="Point(-1,20)" max_size="Point(-1,20)" v_alignment="center" layout_borders="Rect(6,0,6,0)" tooltip="Item name, at least three letters, then Enter" />
+      </View>
+      <View name="balance_box" view_layout="horizontal" v_alignment="center" layout_borders="Rect(2,0,6,0)">
+        <TextView value="Balance" font_size="10" color="8B95A3" v_alignment="center" />
+        <TextView name="our_balance" value="0" font_size="12" color="E8ECF1" v_alignment="center" layout_borders="Rect(6,0,0,0)" />
+      </View>
+      <HLayoutSpacer name="button_spacer" />
+      <Button name="accept_button" flat="true" view_layout="stacked" capture_input="true" selection_color="4FB3BF" min_size="Point(64,20)" max_size="Point(64,20)" v_alignment="center" layout_borders="Rect(4,0,0,0)" tooltip="Accept">
+        <View interactive="false" fill_color="0xFF2F6E45" />
+        <TextView interactive="false" value="Accept" font_size="11" color="FFFFFF" h_alignment="center" v_alignment="center" />
+      </Button>
+      <Button name="decline_button" flat="true" view_layout="stacked" capture_input="true" selection_color="4FB3BF" min_size="Point(64,20)" max_size="Point(64,20)" v_alignment="center" layout_borders="Rect(4,0,2,0)" tooltip="Decline">
+        <View interactive="false" fill_color="0xFF2A3039" />
+        <TextView interactive="false" value="Decline" font_size="11" color="E8ECF1" h_alignment="center" v_alignment="center" />
+      </Button>
+    </View>
+
+    <View name="trade_menu" min_size="Point(0,0)" max_size="Point(0,0)" />
+    <TextView name="trade_measure" interactive="false" visible="false" value="" font_size="12" />
+  </View>
+</root>

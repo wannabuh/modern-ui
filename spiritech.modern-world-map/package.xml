@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package id="spiritech.modern-world-map" name="Modern World Map">
+  <Provides role="prk.planet-map" />
+  <Requires package="spiritech.modern-common" />
+  <Script src="playfields.lua" />
+  <Script src="main.lua" />
+</Package>

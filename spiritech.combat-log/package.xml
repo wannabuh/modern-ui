@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package id="spiritech.combat-log" name="Combat Log">
+  <Requires package="spiritech.modern-common" />
+  <View id="log" name="Combat Log" />
+  <Script src="main.lua" />
+</Package>

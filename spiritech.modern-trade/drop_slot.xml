@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Empty 36px item slot: the game accepts inventory drops on these (as on the stock window's
+     spare grid cells). -->
+<root>
+  <ItemSlotView min_size="Point(36,36)" max_size="Point(36,36)" slot_gfx="" fill_color="0xFF1B2028" icon_inset="2" icon_fit="center" overlay_inset="1" />
+</root>

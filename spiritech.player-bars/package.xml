@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package id="spiritech.player-bars" name="Player Bars">
+  <Requires package="spiritech.modern-common" />
+  <View id="bars" name="Player Bars" />
+  <Script src="main.lua" />
+</Package>

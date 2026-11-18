@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!--
+  Modern target panel. The secondary ("lower") slot is drawn ABOVE the primary ("upper")
+  slot so the primary stays put when a second target appears. Sizes must match main.lua (slot = 18 name strip + 20 bar = 38).
+-->
+<root>
+  <View name="target_panel" capture_input="true" composite_layer="true" view_layout="vertical">
+    <View name="target_lower" visible="false" view_layout="vertical" layout_borders="Rect(0,0,0,6)">
+      <!-- Name strip: dark backing so the name and level stay readable over bright scenery -->
+      <View view_layout="stacked" min_size="Point(-1,18)" max_size="Point(-1,18)">
+        <View fill_color="0xD90D1015" />
+        <View view_layout="horizontal" layout_borders="Rect(6,0,6,0)">
+          <TextView name="target_lower_name" value="" font_size="12" color="E8ECF1" v_alignment="center" weight="1" min_size="Point(0,-1)" />
+          <View name="target_lower_con" fill_color="0xFF8B95A3" min_size="Point(7,7)" max_size="Point(7,7)" v_alignment="center" layout_borders="Rect(6,0,4,0)" />
+          <TextView name="target_lower_level" value="" font_size="11" color="D5DAE1" v_alignment="center" />
+        </View>
+      </View>
+      <View name="target_lower_bar" view_layout="stacked" min_size="Point(-1,20)" max_size="Point(-1,20)">
+        <View name="target_lower_outline" fill_color="0xFF2A3039" />
+        <View view_layout="stacked" layout_borders="Rect(1,1,1,1)">
+          <View fill_color="0xE60D1015" />
+          <View name="target_lower_fill" visible="false" fill_color="0xFF000000" h_alignment="left" />
+          <View view_layout="horizontal" layout_borders="Rect(6,0,6,0)">
+            <TextView name="target_lower_health" value="" font_size="12" color="FFFFFF" v_alignment="center" />
+            <HLayoutSpacer />
+            <TextView name="target_lower_percent" value="" font_size="12" color="FFFFFF" v_alignment="center" h_alignment="right" />
+          </View>
+        </View>
+      </View>
+    </View>
+    <View name="target_upper" visible="false" view_layout="vertical" layout_borders="Rect(0,0,0,0)">
+      <!-- Name strip: dark backing so the name and level stay readable over bright scenery -->
+      <View view_layout="stacked" min_size="Point(-1,18)" max_size="Point(-1,18)">
+        <View fill_color="0xD90D1015" />
+        <View view_layout="horizontal" layout_borders="Rect(6,0,6,0)">
+          <TextView name="target_upper_name" value="" font_size="12" color="E8ECF1" v_alignment="center" weight="1" min_size="Point(0,-1)" />
+          <View name="target_upper_con" fill_color="0xFF8B95A3" min_size="Point(7,7)" max_size="Point(7,7)" v_alignment="center" layout_borders="Rect(6,0,4,0)" />
+          <TextView name="target_upper_level" value="" font_size="11" color="D5DAE1" v_alignment="center" />
+        </View>
+      </View>
+      <View name="target_upper_bar" view_layout="stacked" min_size="Point(-1,20)" max_size="Point(-1,20)">
+        <View name="target_upper_outline" fill_color="0xFF2A3039" />
+        <View view_layout="stacked" layout_borders="Rect(1,1,1,1)">
+          <View fill_color="0xE60D1015" />
+          <View name="target_upper_fill" visible="false" fill_color="0xFF000000" h_alignment="left" />
+          <View view_layout="horizontal" layout_borders="Rect(6,0,6,0)">
+            <TextView name="target_upper_health" value="" font_size="12" color="FFFFFF" v_alignment="center" />
+            <HLayoutSpacer />
+            <TextView name="target_upper_percent" value="" font_size="12" color="FFFFFF" v_alignment="center" h_alignment="right" />
+          </View>
+        </View>
+      </View>
+    </View>
+  </View>
+</root>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Two roles in one package so shortcut bars can hand their cooldowns to the Control Center
+     through the shared package storage (the Cooldowns window). role.lua runs first and
+     tells each instance which half it is; main.lua / hotbar.lua return early otherwise.
+     Select this package for BOTH "Control center" and "Shortcut bars" in
+     Options → Interface & HUD → UI packages. -->
+<Package id="spiritech.modern-control-center" name="Modern Control Center">
+  <Provides role="prk.control-center" />
+  <Provides role="prk.hotbar" />
+  <Requires package="spiritech.modern-common" />
+  <Script src="role.lua" />
+  <Script src="minibar.lua" />
+  <Script src="rollup_panel.lua" />
+  <Script src="cooldown_window.lua" />
+  <Script src="main.lua" />
+  <Script src="hotbar.lua" />
+  <InteractionScript src="interaction.lua" />
+</Package>

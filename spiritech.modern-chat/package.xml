@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package id="spiritech.modern-chat" name="Modern Chat">
+  <Provides role="prk.chat" />
+  <Requires package="spiritech.modern-common" />
+  <Script src="presentation.lua" />
+  <Script src="main.lua" />
+</Package>

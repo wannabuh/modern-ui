@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- NCU strip: running nano programs as icons with time left. Cells are placed from Lua. -->
+<root>
+  <View name="ncu_strip" capture_input="true" composite_layer="true" view_layout="stacked" />
+</root>

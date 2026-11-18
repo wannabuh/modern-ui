@@ -1,0 +1,64 @@
+<?xml version="1.0" standalone="yes"?>
+<!--
+  Compact Modern Stats strip: name / level / attack rating, then all eight ACs on one row.
+  Fixed size (see main.lua): 520 x 43 = 1 + 20 + 1 + 20 + 1.
+-->
+<root>
+  <View name="stats" interactive="false" view_layout="stacked">
+    <View interactive="false" fill_color="0xE60D1015" />
+    <View interactive="false" view_layout="vertical">
+      <View interactive="false" fill_color="0xFF2A3039" min_size="Point(-1,1)" max_size="Point(-1,1)" />
+      <View interactive="false" view_layout="horizontal" weight="1">
+        <View interactive="false" fill_color="0xFF2A3039" min_size="Point(1,-1)" max_size="Point(1,-1)" />
+        <HLayoutSpacer />
+        <View interactive="false" fill_color="0xFF2A3039" min_size="Point(1,-1)" max_size="Point(1,-1)" />
+      </View>
+      <View interactive="false" fill_color="0xFF2A3039" min_size="Point(-1,1)" max_size="Point(-1,1)" />
+    </View>
+    <View interactive="false" view_layout="vertical" layout_borders="Rect(9,1,9,1)">
+      <View interactive="false" view_layout="horizontal" min_size="Point(-1,20)" max_size="Point(-1,20)">
+        <TextView name="character_name" interactive="false" value="--" font_size="12" color="E8ECF1" v_alignment="center" />
+        <TextView interactive="false" value="LVL" font_size="10" color="A3ADBA" v_alignment="center" layout_borders="Rect(10,0,4,0)" />
+        <TextView name="level" interactive="false" value="--" font_size="12" color="E8ECF1" v_alignment="center" />
+        <HLayoutSpacer />
+        <TextView interactive="false" value="AR" font_size="10" color="A3ADBA" v_alignment="center" layout_borders="Rect(0,0,4,0)" />
+        <TextView name="attack_rating" interactive="false" value="--" font_size="12" color="E8ECF1" v_alignment="center" />
+      </View>
+      <View interactive="false" fill_color="0xFF232831" min_size="Point(-1,1)" max_size="Point(-1,1)" />
+      <View interactive="false" view_layout="horizontal" min_size="Point(-1,20)" max_size="Point(-1,20)">
+        <View name="melee_ac_cell" interactive="false" view_layout="horizontal" weight="1" min_size="Point(0,20)" max_size="Point(-1,20)">
+          <TextView interactive="false" value="Melee" font_size="10" color="A3ADBA" v_alignment="center" layout_borders="Rect(0,0,4,0)" />
+          <TextView name="melee_ac" interactive="false" value="--" font_size="11" color="E8ECF1" v_alignment="center" />
+        </View>
+        <View name="projectile_ac_cell" interactive="false" view_layout="horizontal" weight="1" min_size="Point(0,20)" max_size="Point(-1,20)">
+          <TextView interactive="false" value="Proj" font_size="10" color="A3ADBA" v_alignment="center" layout_borders="Rect(0,0,4,0)" />
+          <TextView name="projectile_ac" interactive="false" value="--" font_size="11" color="E8ECF1" v_alignment="center" />
+        </View>
+        <View name="energy_ac_cell" interactive="false" view_layout="horizontal" weight="1" min_size="Point(0,20)" max_size="Point(-1,20)">
+          <TextView interactive="false" value="Energy" font_size="10" color="A3ADBA" v_alignment="center" layout_borders="Rect(0,0,4,0)" />
+          <TextView name="energy_ac" interactive="false" value="--" font_size="11" color="E8ECF1" v_alignment="center" />
+        </View>
+        <View name="disease_ac_cell" interactive="false" view_layout="horizontal" weight="1" min_size="Point(0,20)" max_size="Point(-1,20)">
+          <TextView interactive="false" value="Disease" font_size="10" color="A3ADBA" v_alignment="center" layout_borders="Rect(0,0,4,0)" />
+          <TextView name="disease_ac" interactive="false" value="--" font_size="11" color="E8ECF1" v_alignment="center" />
+        </View>
+        <View name="chemical_ac_cell" interactive="false" view_layout="horizontal" weight="1" min_size="Point(0,20)" max_size="Point(-1,20)">
+          <TextView interactive="false" value="Chem" font_size="10" color="A3ADBA" v_alignment="center" layout_borders="Rect(0,0,4,0)" />
+          <TextView name="chemical_ac" interactive="false" value="--" font_size="11" color="E8ECF1" v_alignment="center" />
+        </View>
+        <View name="radiation_ac_cell" interactive="false" view_layout="horizontal" weight="1" min_size="Point(0,20)" max_size="Point(-1,20)">
+          <TextView interactive="false" value="Rad" font_size="10" color="A3ADBA" v_alignment="center" layout_borders="Rect(0,0,4,0)" />
+          <TextView name="radiation_ac" interactive="false" value="--" font_size="11" color="E8ECF1" v_alignment="center" />
+        </View>
+        <View name="cold_ac_cell" interactive="false" view_layout="horizontal" weight="1" min_size="Point(0,20)" max_size="Point(-1,20)">
+          <TextView interactive="false" value="Cold" font_size="10" color="A3ADBA" v_alignment="center" layout_borders="Rect(0,0,4,0)" />
+          <TextView name="cold_ac" interactive="false" value="--" font_size="11" color="E8ECF1" v_alignment="center" />
+        </View>
+        <View name="fire_ac_cell" interactive="false" view_layout="horizontal" weight="1" min_size="Point(0,20)" max_size="Point(-1,20)">
+          <TextView interactive="false" value="Fire" font_size="10" color="A3ADBA" v_alignment="center" layout_borders="Rect(0,0,4,0)" />
+          <TextView name="fire_ac" interactive="false" value="--" font_size="11" color="E8ECF1" v_alignment="center" />
+        </View>
+      </View>
+    </View>
+  </View>
+</root>

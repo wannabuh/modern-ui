@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- One item row (height set in code: 36px for two lines, 52px for three; 2px gap).
+     26px icon | name over detail lines | price. Behind it a tint and a 2px left accent,
+     used to flag what a trade partner just changed. -->
+<root>
+  <Button name="trade_row" flat="true" view_layout="stacked" capture_input="true" selection_color="4FB3BF" min_size="Point(-1,36)" max_size="Point(-1,36)">
+    <View name="row_bg" interactive="false" fill_color="0xFF12161C" />
+    <View name="row_tint" interactive="false" />
+    <View name="row_accent" interactive="false" h_alignment="left" min_size="Point(2,-1)" max_size="Point(2,-1)" />
+    <View interactive="false" view_layout="horizontal" layout_borders="Rect(4,0,6,0)">
+      <ItemSlotView name="row_icon" interactive="false" slot_gfx="" icon_fit="center" v_alignment="start" min_size="Point(26,26)" max_size="Point(26,26)" layout_borders="Rect(0,5,0,0)" />
+      <TextView name="row_text" interactive="false" value="" size_to_text="false" font_size="12" color="E8ECF1" weight="1" layout_borders="Rect(8,3,0,3)" />
+      <TextView name="row_price" interactive="false" value="" size_to_text="false" text_alignment="right" font_size="12" color="E8ECF1" v_alignment="start" min_size="Point(70,16)" max_size="Point(70,16)" layout_borders="Rect(4,4,0,0)" />
+    </View>
+  </Button>
+</root>

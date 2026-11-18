@@ -1,0 +1,32 @@
+<?xml version="1.0" standalone="yes"?>
+<!-- One member: profession, L (leader), name, level, flat health bar over a thin nano bar.
+     A teal edge + tint marks your current target. Optional buff strip / missing-buff line. -->
+<root>
+  <View name="team_row" view_layout="vertical" capture_input="true" interactive="true">
+    <View name="row_main" view_layout="stacked" min_size="Point(-1,28)" max_size="Point(-1,28)">
+      <View name="row_target" interactive="false" visible="false" fill_color="0x1F4FB3BF" />
+      <View name="row_target_edge" interactive="false" visible="false" fill_color="0xFF4FB3BF" h_alignment="start" min_size="Point(3,-1)" max_size="Point(3,-1)" />
+      <View view_layout="horizontal" layout_borders="Rect(6,0,6,0)">
+        <ItemSlotView name="profession" slot_gfx="" min_size="Point(22,22)" max_size="Point(22,22)" icon_fit="center" icon_inset="1" v_alignment="center" />
+        <TextView name="leader_tag" interactive="false" visible="false" value="L" font_size="10" color="4FB3BF" v_alignment="center" layout_borders="Rect(5,0,0,0)" tooltip="Team leader" />
+        <TextView name="member_name" interactive="false" value="" font_size="12" color="E8ECF1" v_alignment="center" layout_borders="Rect(5,0,0,0)" />
+        <TextView name="member_level" interactive="false" value="" font_size="10" color="8B95A3" v_alignment="center" min_size="Point(24,16)" max_size="Point(24,16)" />
+        <View view_layout="vertical" weight="1" min_size="Point(40,22)" max_size="Point(-1,22)" v_alignment="center" layout_borders="Rect(6,0,0,0)">
+          <View name="health_bar" view_layout="stacked" min_size="Point(-1,16)" max_size="Point(-1,16)">
+            <View interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE60D1015" layout_borders="Rect(1,1,1,1)" />
+            <View name="health_fill" interactive="false" fill_color="0xFF3E8A58" h_alignment="start" layout_borders="Rect(1,1,1,1)" />
+            <TextView name="health_text" interactive="false" value="" font_size="10" color="FFFFFF" v_alignment="center" layout_borders="Rect(4,0,4,0)" />
+          </View>
+          <View name="nano_bar" view_layout="stacked" min_size="Point(-1,4)" max_size="Point(-1,4)" layout_borders="Rect(0,2,0,0)">
+            <View interactive="false" fill_color="0xFF1B2028" />
+            <View name="nano_fill" interactive="false" fill_color="0xFF2A62A8" h_alignment="start" />
+          </View>
+        </View>
+      </View>
+    </View>
+    <View name="ncu_strip" view_layout="grid" visible="false" min_columns="1" grid_columns="40" grid_spacing="1" h_alignment="right" layout_borders="Rect(4,0,6,2)" />
+    <TextView name="missing_buffs" interactive="false" visible="false" value="" font_size="10" color="F0C060" layout_borders="Rect(33,0,6,2)" />
+    <View interactive="false" fill_color="0xFF1A1F27" min_size="Point(-1,1)" max_size="Point(-1,1)" />
+  </View>
+</root>

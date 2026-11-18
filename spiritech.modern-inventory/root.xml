@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<!-- Full-screen, click-through container mounted as the package root (like the Control
+     Center): holds the inventory window and any popped-out category panels. -->
+<root>
+  <View name="inventory_container" view_layout="stacked" />
+</root>

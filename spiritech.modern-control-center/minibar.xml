@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<root>
+  <View name="minibar" view_layout="horizontal" h_alignment="right" v_alignment="top"
+        visible="false">
+    <Button name="minibar_wear" min_size="Point(19,20)" max_size="Point(19,20)" tooltip="Wear"
+            gfxid_raised="GFX_GUI_SB_WEAR_OFF" gfxid_hover="GFX_GUI_SB_WEAR"
+            gfxid_pressed="GFX_GUI_SB_WEAR" gfxid_selected="GFX_GUI_SB_WEAR" />
+    <Button name="minibar_actions" min_size="Point(19,20)" max_size="Point(19,20)" tooltip="Controls / Actions"
+            gfxid_raised="GFX_GUI_SB_ACTION_OFF" gfxid_hover="GFX_GUI_SB_ACTION"
+            gfxid_pressed="GFX_GUI_SB_ACTION" gfxid_selected="GFX_GUI_SB_ACTION" />
+    <Button name="minibar_knowledge" min_size="Point(19,20)" max_size="Point(19,20)"
+            enabled="false" tooltip="Knowledge — not yet available" gfxid_raised="GFX_GUI_SB_REF_OFF" />
+    <Button name="minibar_missions" min_size="Point(19,20)" max_size="Point(19,20)" tooltip="Missions"
+            gfxid_raised="GFX_GUI_SB_MISSION_OFF" gfxid_hover="GFX_GUI_SB_MISSION"
+            gfxid_pressed="GFX_GUI_SB_MISSION" gfxid_selected="GFX_GUI_SB_MISSION" />
+    <Button name="minibar_team" min_size="Point(19,20)" max_size="Point(19,20)" tooltip="Team"
+            gfxid_raised="GFX_GUI_SB_TEAM_OFF" gfxid_hover="GFX_GUI_SB_TEAM"
+            gfxid_pressed="GFX_GUI_SB_TEAM" gfxid_selected="GFX_GUI_SB_TEAM" />
+    <Button name="minibar_playfield_map" min_size="Point(19,20)" max_size="Point(19,20)" tooltip="PF Map"
+            gfxid_raised="GFX_GUI_SB_MAP_OFF" gfxid_hover="GFX_GUI_SB_MAP"
+            gfxid_pressed="GFX_GUI_SB_MAP" gfxid_selected="GFX_GUI_SB_MAP" />
+    <Button name="minibar_friends" min_size="Point(19,20)" max_size="Point(19,20)" tooltip="Friends"
+            gfxid_raised="GFX_GUI_SB_FRIENDS_OFF" gfxid_hover="GFX_GUI_SB_FRIENDS"
+            gfxid_pressed="GFX_GUI_SB_FRIENDS" gfxid_selected="GFX_GUI_SB_FRIENDS" />
+    <Button name="minibar_programs" min_size="Point(19,20)" max_size="Point(19,20)" tooltip="Programs"
+            gfxid_raised="GFX_GUI_SB_NANO_OFF" gfxid_hover="GFX_GUI_SB_NANO"
+            gfxid_pressed="GFX_GUI_SB_NANO" gfxid_selected="GFX_GUI_SB_NANO" />
+    <Button name="minibar_stats" min_size="Point(19,20)" max_size="Point(19,20)" tooltip="Stats"
+            gfxid_raised="GFX_GUI_SB_STAT_OFF" gfxid_hover="GFX_GUI_SB_STAT"
+            gfxid_pressed="GFX_GUI_SB_STAT" gfxid_selected="GFX_GUI_SB_STAT" />
+    <Button name="minibar_ncu" min_size="Point(19,20)" max_size="Point(19,20)" tooltip="NCU"
+            gfxid_raised="GFX_GUI_SB_NCU_OFF" gfxid_hover="GFX_GUI_SB_NCU"
+            gfxid_pressed="GFX_GUI_SB_NCU" gfxid_selected="GFX_GUI_SB_NCU" />
+  </View>
+</root>

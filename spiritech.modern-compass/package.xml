@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package id="spiritech.modern-compass" name="Modern Compass">
+  <Provides role="prk.compass" />
+  <Requires package="spiritech.modern-common" />
+  <Script src="main.lua" />
+</Package>

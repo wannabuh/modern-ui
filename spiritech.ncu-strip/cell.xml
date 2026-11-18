@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- One program: 34x47 = outline-framed 32px icon over a 12px time label (1px gap). -->
+<root>
+  <View name="cell" interactive="true" view_layout="stacked" min_size="Point(34,47)" max_size="Point(34,47)">
+    <View interactive="false" fill_color="0xE60D1015" />
+    <View interactive="false" view_layout="vertical">
+      <View interactive="false" view_layout="stacked" min_size="Point(34,34)" max_size="Point(34,34)">
+        <View name="cell_outline" interactive="false" fill_color="0xFF2A3039" />
+        <View interactive="false" fill_color="0xFF0D1015" layout_borders="Rect(1,1,1,1)" />
+        <ItemSlotView name="cell_icon" interactive="false" slot_gfx="" icon_fit="cover" layout_borders="Rect(1,1,1,1)" min_size="Point(32,32)" max_size="Point(32,32)" />
+      </View>
+      <TextView name="cell_time" interactive="false" value="" font_size="10" color="E8ECF1" h_alignment="center" min_size="Point(34,13)" max_size="Point(34,13)" />
+    </View>
+  </View>
+</root>

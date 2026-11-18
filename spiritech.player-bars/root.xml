@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<root>
+  <View name="player_bars_root" view_layout="stacked" />
+</root>

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<root>
+  <View name="rollup_panel" capture_input="true" color="Default" view_layout="stacked" visible="false">
+    <View name="rollup_background" fill_color="000000" />
+    <ScrollView name="rollup_scroll" capture_input="true" interactive="true" view_layout="vertical"
+                v_scrollbar_mode="auto" scrollbar_width="11" scrollbar_right_inset="1">
+      <ScrollViewChild name="rollup_pages" view_layout="vertical" />
+    </ScrollView>
+  </View>
+</root>

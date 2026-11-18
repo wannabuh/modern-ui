@@ -1,0 +1,16 @@
+<?xml version="1.0" standalone="yes"?>
+<!-- Modern Team: header (team line + Recruit / Leave), then one unit-frame row per member. -->
+<root>
+  <View name="team_content" view_layout="vertical">
+    <View name="team_header" view_layout="horizontal" min_size="Point(-1,22)" max_size="Point(-1,22)" layout_borders="Rect(6,0,6,0)">
+      <TextView name="team_info" interactive="false" value="" font_size="11" color="A3ADBA" v_alignment="center" weight="1" />
+      <TextButton name="invite_button" label="Recruit" font_size="11" color="E8ECF1" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(10,0,0,0)" tooltip="Recruit the targeted player into your team" />
+      <TextButton name="leave_button" label="Leave" font_size="11" color="E8ECF1" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(10,0,0,0)" tooltip="Leave your team" />
+    </View>
+    <View name="team_header_divider" interactive="false" fill_color="0xFF232831" min_size="Point(-1,1)" max_size="Point(-1,1)" />
+    <View name="team_rows" view_layout="vertical" />
+    <!-- Anchor for the "Window options" submenu shown from every member's right-click menu. -->
+    <View name="team_options_menu" min_size="Point(0,0)" max_size="Point(0,0)" />
+    <TextView name="team_measure" interactive="false" visible="false" value="" font_size="12" />
+  </View>
+</root>

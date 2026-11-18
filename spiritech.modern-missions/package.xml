@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package id="spiritech.modern-missions" name="Modern Missions">
+  <Provides role="prk.missions" />
+  <Requires package="spiritech.modern-common" />
+  <Script src="main.lua" />
+</Package>

@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!-- NCU window drawn by the Control Center (which owns the data). Same style as the bar; drag to move. -->
+<root>
+  <View name="cc_ncu" capture_input="true" composite_layer="true" view_layout="stacked">
+    <View interactive="false" fill_color="0xE60D1015" />
+    <View interactive="false" view_layout="vertical">
+      <View interactive="false" fill_color="0xFF2A3039" min_size="Point(-1,1)" max_size="Point(-1,1)" />
+      <View interactive="false" view_layout="horizontal" weight="1">
+        <View interactive="false" fill_color="0xFF2A3039" min_size="Point(1,-1)" max_size="Point(1,-1)" />
+        <HLayoutSpacer />
+        <View interactive="false" fill_color="0xFF2A3039" min_size="Point(1,-1)" max_size="Point(1,-1)" />
+      </View>
+      <View interactive="false" fill_color="0xFF2A3039" min_size="Point(-1,1)" max_size="Point(-1,1)" />
+    </View>
+    <View interactive="false" view_layout="horizontal" layout_borders="Rect(8,1,8,1)">
+      <TextView interactive="false" value="NCU" font_size="10" color="A3ADBA" v_alignment="center" layout_borders="Rect(0,0,6,0)" />
+      <!-- NCU meter: track + fill (fill width set from Lua) -->
+      <!-- Stretches to fill the space between the label and the number -->
+      <View name="ncu_meter" interactive="false" view_layout="stacked" weight="1" min_size="Point(20,6)" max_size="Point(-1,6)" v_alignment="center">
+        <View interactive="false" fill_color="0xFF1B2028" />
+        <View name="ncu_meter_fill" interactive="false" visible="false" fill_color="0xFF4FB3BF" h_alignment="left" />
+      </View>
+      <TextView name="ncu" interactive="false" value="-- / --" font_size="11" color="E8ECF1" v_alignment="center" h_alignment="right" layout_borders="Rect(8,0,0,0)" />
+    </View>
+  </View>
+</root>

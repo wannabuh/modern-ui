@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modern Map content. BORDER / BAR in main.lua must match the sizes below. -->
+<root>
+  <View name="pfmap_page" view_layout="vertical">
+    <View name="pfmap_plate" view_layout="stacked">
+      <!-- Background + 1px outline -->
+      <View interactive="false" fill_color="0xF00D1015" />
+      <View interactive="false" view_layout="vertical">
+        <View interactive="false" fill_color="0xFF2A3039" min_size="Point(-1,1)" max_size="Point(-1,1)" />
+        <View interactive="false" view_layout="horizontal" weight="1">
+          <View interactive="false" fill_color="0xFF2A3039" min_size="Point(1,-1)" max_size="Point(1,-1)" />
+          <HLayoutSpacer />
+          <View interactive="false" fill_color="0xFF2A3039" min_size="Point(1,-1)" max_size="Point(1,-1)" />
+        </View>
+        <View interactive="false" fill_color="0xFF2A3039" min_size="Point(-1,1)" max_size="Point(-1,1)" />
+      </View>
+
+      <!-- Square map with an info strip underneath (the strip and border are the drag handles) -->
+      <View view_layout="vertical" layout_borders="Rect(3,3,3,0)">
+        <View name="pfmap_view" view_layout="stacked">
+          <PannedSurfaceView name="pfmap_surface" capture_input="true" pointer_pan="false" />
+          <View name="pfmap_unavailable" interactive="false" view_layout="vertical" h_alignment="center" v_alignment="center" visible="false">
+            <TextView value="Map not available" font_size="11" color="8B95A3" h_alignment="center" />
+          </View>
+        </View>
+        <View interactive="false" view_layout="horizontal" min_size="Point(-1,18)" max_size="Point(-1,18)" layout_borders="Rect(3,0,3,0)">
+          <TextView name="pfmap_coords" interactive="false" value="" font_size="11" color="8B95A3" v_alignment="center" />
+          <HLayoutSpacer />
+          <TextView name="pfmap_heading" interactive="false" value="" font_size="11" color="8B95A3" v_alignment="center" h_alignment="right" />
+        </View>
+      </View>
+    </View>
+
+    <!-- Optional controls (right-click the map → Show buttons) -->
+    <View name="pfmap_controls" view_layout="vertical" visible="false" fill_color="0xF20D1015" min_size="Point(176,136)" max_size="Point(-1,136)" layout_borders="Rect(0,4,0,0)">
+      <View view_layout="vertical" layout_borders="Rect(8,8,8,8)">
+        <Button name="pfmap_show_areas" label="Areas" font_size="12" weight="0" min_size="Point(-1,26)" max_size="Point(-1,26)" enabled="false" layout_borders="Rect(0,0,0,6)" />
+        <View view_layout="horizontal" min_size="Point(-1,26)" max_size="Point(-1,26)" layout_borders="Rect(0,0,0,6)">
+          <Button name="pfmap_build" label="Build" font_size="12" weight="1" min_size="Point(60,26)" max_size="Point(-1,26)" enabled="false" layout_borders="Rect(0,0,6,0)" />
+          <Button name="pfmap_war" label="War" font_size="12" weight="1" min_size="Point(60,26)" max_size="Point(-1,26)" enabled="false" />
+        </View>
+        <View view_layout="horizontal" min_size="Point(-1,26)" max_size="Point(-1,26)" layout_borders="Rect(0,0,0,6)">
+          <TextView value="X" font_size="12" color="8B95A3" min_size="Point(12,26)" max_size="Point(12,26)" v_alignment="center" layout_borders="Rect(0,0,4,0)" />
+          <TextInputView name="pfmap_x" font_size="12" max_length="8" weight="1" min_size="Point(50,26)" max_size="Point(-1,26)" />
+          <TextView value="Z" font_size="12" color="8B95A3" min_size="Point(12,26)" max_size="Point(12,26)" v_alignment="center" layout_borders="Rect(8,0,4,0)" />
+          <TextInputView name="pfmap_z" font_size="12" max_length="8" weight="1" min_size="Point(50,26)" max_size="Point(-1,26)" />
+        </View>
+        <View view_layout="horizontal" min_size="Point(-1,26)" max_size="Point(-1,26)">
+          <Button name="pfmap_add_waypoint" label="Add" font_size="12" weight="1" min_size="Point(60,26)" max_size="Point(-1,26)" layout_borders="Rect(0,0,6,0)" />
+          <Button name="pfmap_remove_waypoint" label="Remove" font_size="12" weight="1" min_size="Point(60,26)" max_size="Point(-1,26)" />
+        </View>
+      </View>
+    </View>
+  </View>
+</root>

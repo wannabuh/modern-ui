@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- One log row, 16px: direction glyph, name, amount (right-aligned), type.
+     Behind it: a background tint and a 2px left accent, both unfilled except on crits. -->
+<root>
+  <View name="log_row" interactive="true" capture_input="true" view_layout="stacked" min_size="Point(-1,16)" max_size="Point(-1,16)">
+    <View name="row_tint" interactive="false" />
+    <View name="row_accent" interactive="false" h_alignment="left" min_size="Point(2,16)" max_size="Point(2,16)" />
+    <View interactive="false" view_layout="horizontal" layout_borders="Rect(4,0,4,0)">
+      <TextView name="row_glyph" interactive="false" value="" font_size="9" color="4FB3BF" v_alignment="center" min_size="Point(14,16)" max_size="Point(14,16)" />
+      <TextView name="row_name" interactive="false" value="" font_size="11" color="E8ECF1" v_alignment="center" weight="1" />
+      <TextView name="row_amount" interactive="false" value="" font_size="11" color="E8ECF1" v_alignment="center" min_size="Point(56,16)" max_size="Point(56,16)" />
+      <TextView name="row_type" interactive="false" value="" font_size="10" color="8B95A3" v_alignment="center" min_size="Point(64,16)" max_size="Point(64,16)" layout_borders="Rect(8,0,0,0)" />
+    </View>
+  </View>
+</root>

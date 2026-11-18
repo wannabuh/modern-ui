@@ -1,0 +1,344 @@
+<?xml version="1.0" standalone="yes"?>
+<!--
+  Modern Wear: text tabs (Weapons / Clothing / Implants / Social), the pages, and a
+  status line. Slots are the built-in ones (same names and placements, so the game's drop
+  targets and tooltips are unchanged), restyled as 42px flat cells: 1px outline (red when
+  over-equipped, amber when skill-locked), implant cells tinted blue, social purple, small labels
+  when empty. The window is resizable: wider shows more pages side by side (main.lua). Generated from the built-in Wear/content.xml.
+-->
+<root>
+  <View name="wear_content" view_layout="vertical">
+    <View name="wear_tabs" view_layout="horizontal" min_size="Point(-1,22)" max_size="Point(-1,22)" layout_borders="Rect(6,0,0,0)">
+      <View name="wear_weapons_tab_cell" view_layout="stacked" min_size="Point(-1,22)" max_size="Point(-1,22)" layout_borders="Rect(0,0,12,0)">
+        <TextButton name="wear_weapons_tab" label="Weapons" font_size="12" color="8B95A3" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" />
+        <View name="wear_weapons_tab_line" interactive="false" visible="false" fill_color="0xFF4FB3BF" min_size="Point(-1,2)" max_size="Point(-1,2)" v_alignment="end" />
+      </View>
+      <View name="wear_clothing_tab_cell" view_layout="stacked" min_size="Point(-1,22)" max_size="Point(-1,22)" layout_borders="Rect(0,0,12,0)">
+        <TextButton name="wear_clothing_tab" label="Clothing" font_size="12" color="8B95A3" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" />
+        <View name="wear_clothing_tab_line" interactive="false" visible="false" fill_color="0xFF4FB3BF" min_size="Point(-1,2)" max_size="Point(-1,2)" v_alignment="end" />
+      </View>
+      <View name="wear_implants_tab_cell" view_layout="stacked" min_size="Point(-1,22)" max_size="Point(-1,22)" layout_borders="Rect(0,0,12,0)">
+        <TextButton name="wear_implants_tab" label="Implants" font_size="12" color="8B95A3" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" />
+        <View name="wear_implants_tab_line" interactive="false" visible="false" fill_color="0xFF4FB3BF" min_size="Point(-1,2)" max_size="Point(-1,2)" v_alignment="end" />
+      </View>
+      <View name="wear_social_tab_cell" view_layout="stacked" min_size="Point(-1,22)" max_size="Point(-1,22)" layout_borders="Rect(0,0,12,0)">
+        <TextButton name="wear_social_tab" label="Social" font_size="12" color="8B95A3" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" />
+        <View name="wear_social_tab_line" interactive="false" visible="false" fill_color="0xFF4FB3BF" min_size="Point(-1,2)" max_size="Point(-1,2)" v_alignment="end" />
+      </View>
+    </View>
+    <View interactive="false" fill_color="0xFF232831" min_size="Point(-1,1)" max_size="Point(-1,1)" />
+    <View name="wear_pages" view_layout="horizontal" h_alignment="center" layout_borders="Rect(10,6,10,4)">
+      <View name="wear_weapons" view_layout="vertical">
+        <View name="wear_weapons_grid" view_layout="grid" grid_columns="3" min_columns="3" grid_spacing_x="3" grid_spacing_y="3">
+          <View name="wear_cell_1" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_1" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_1" placement="1" label="Hud&#10;1" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_15" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_15" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_15" placement="15" label="Hud&#10;2" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_2" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_2" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_2" placement="2" label="Hud&#10;3" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_3" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_3" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_3" placement="3" label="Utils&#10;1" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_4" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_4" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_4" placement="4" label="Utils&#10;2" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_5" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_5" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_5" placement="5" label="Utils&#10;3" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_6" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_6" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_6" placement="6" label="Right&#10;Hand" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_7" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_7" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_7" placement="7" label="Deck" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_8" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_8" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_8" placement="8" label="Left&#10;Hand" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_9" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_9" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_9" placement="9" label="Deck&#10;1" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_10" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_10" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_10" placement="10" label="Deck&#10;2" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_11" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_11" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_11" placement="11" label="Deck&#10;3" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_12" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_12" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_12" placement="12" label="Deck&#10;4" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_13" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_13" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_13" placement="13" label="Deck&#10;5" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_14" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_14" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_14" placement="14" label="Deck&#10;6" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+        </View>
+      </View>
+      <View name="wear_clothing" view_layout="vertical">
+        <View name="wear_clothing_grid" view_layout="grid" grid_columns="3" min_columns="3" grid_spacing_x="3" grid_spacing_y="3">
+          <View name="wear_cell_17" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_17" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_17" placement="17" label="Neck" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_18" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_18" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_18" placement="18" label="Head" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_19" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_19" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_19" placement="19" label="Back" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_20" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_20" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_20" placement="20" label="Right&#10;Shoulder" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_21" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_21" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_21" placement="21" label="Chest" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_22" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_22" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_22" placement="22" label="Left&#10;Shoulder" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_23" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_23" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_23" placement="23" label="Right&#10;Arm" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_24" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_24" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_24" placement="24" label="Hands" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_25" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_25" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_25" placement="25" label="Left&#10;Arm" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_26" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_26" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_26" placement="26" label="Right&#10;Wrist" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_27" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_27" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_27" placement="27" label="Legs" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_28" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_28" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_28" placement="28" label="Left&#10;Wrist" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_29" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_29" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_29" placement="29" label="Right&#10;Finger" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_30" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_30" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_30" placement="30" label="Feet" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_31" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_31" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE61B2028" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_31" placement="31" label="Left&#10;Finger" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+        </View>
+      </View>
+      <View name="wear_implants" view_layout="vertical">
+        <View name="wear_implants_grid" view_layout="grid" grid_columns="3" min_columns="3" grid_spacing_x="3" grid_spacing_y="3">
+          <View name="wear_cell_33" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_33" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE6162430" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_33" placement="33" label="Eyes" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_34" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_34" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE6162430" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_34" placement="34" label="Head" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_35" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_35" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE6162430" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_35" placement="35" label="Ears" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_36" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_36" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE6162430" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_36" placement="36" label="Right&#10;Arm" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_37" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_37" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE6162430" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_37" placement="37" label="Chest" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_38" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_38" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE6162430" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_38" placement="38" label="Left&#10;Arm" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_39" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_39" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE6162430" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_39" placement="39" label="Right&#10;Wrist" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_40" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_40" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE6162430" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_40" placement="40" label="Waist" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_41" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_41" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE6162430" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_41" placement="41" label="Left&#10;Wrist" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_42" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_42" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE6162430" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_42" placement="42" label="Right&#10;Hand" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_43" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_43" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE6162430" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_43" placement="43" label="Legs" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_44" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_44" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE6162430" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_44" placement="44" label="Left&#10;Hand" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_spacer_implants_1" interactive="false" min_size="Point(42,42)" max_size="Point(42,42)" />
+          <View name="wear_cell_45" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_45" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE6162430" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_45" placement="45" label="Feet" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_spacer_implants_2" interactive="false" min_size="Point(42,42)" max_size="Point(42,42)" />
+        </View>
+      </View>
+      <View name="wear_social" view_layout="vertical">
+        <View name="wear_social_grid" view_layout="grid" grid_columns="3" min_columns="3" grid_spacing_x="3" grid_spacing_y="3">
+          <View name="wear_cell_49" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_49" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE6261B30" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_49" placement="49" label="Neck" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_50" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_50" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE6261B30" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_50" placement="50" label="Head" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_51" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_51" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE6261B30" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_51" placement="51" label="Back" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_52" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_52" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE6261B30" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_52" placement="52" label="Right&#10;Shoulder" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_53" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_53" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE6261B30" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_53" placement="53" label="Chest" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_54" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_54" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE6261B30" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_54" placement="54" label="Left&#10;Shoulder" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_55" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_55" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE6261B30" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_55" placement="55" label="Right&#10;Arm" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_56" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_56" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE6261B30" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_56" placement="56" label="Hands" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_57" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_57" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE6261B30" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_57" placement="57" label="Left&#10;Arm" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_58" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_58" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE6261B30" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_58" placement="58" label="Right&#10;Wrist" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_59" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_59" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE6261B30" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_59" placement="59" label="Legs" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_60" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_60" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE6261B30" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_60" placement="60" label="Left&#10;Wrist" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_61" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_61" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE6261B30" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_61" placement="61" label="Right&#10;Hand" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_62" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_62" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE6261B30" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_62" placement="62" label="Feet" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+          <View name="wear_cell_63" view_layout="stacked" min_size="Point(42,42)" max_size="Point(42,42)">
+            <View name="wear_outline_63" interactive="false" fill_color="0xFF2A3039" />
+            <View interactive="false" fill_color="0xE6261B30" layout_borders="Rect(1,1,1,1)" />
+            <ItemSlotView name="wear_slot_63" placement="63" label="Left&#10;Hand" font_size="9" min_size="Point(42,42)" max_size="Point(42,42)" slot_gfx="" icon_inset="5" icon_fit="center" overlay_inset="1" />
+          </View>
+        </View>
+      </View>
+    </View>
+    <View interactive="false" fill_color="0xFF232831" min_size="Point(-1,1)" max_size="Point(-1,1)" />
+    <TextView name="wear_measure" interactive="false" visible="false" value="" font_size="12" />
+    <TextView name="wear_status" interactive="false" value="" font_size="11" color="8B95A3" v_alignment="center" min_size="Point(-1,18)" max_size="Point(-1,18)" layout_borders="Rect(6,0,6,0)" />
+  </View>
+</root>

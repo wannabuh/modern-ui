@@ -1,0 +1,24 @@
+<?xml version="1.0" standalone="yes"?>
+<!--
+  Title-less frame for Modern Stats. Core/window.lua looks up every named view
+  below, so they must exist; the visible chrome is drawn by content.xml.
+  window_titlebar fills the whole frame, so the strip can be dragged from anywhere
+  (all content is non-interactive).
+-->
+<root>
+  <View name="window" capture_input="true" color="Default" composite_layer="true" interaction_scope="true" view_layout="stacked">
+    <View name="window_floating" view_layout="stacked">
+      <View name="window_titlebar" view_layout="horizontal">
+        <View name="window_icon_slot" view_layout="stacked" visible="false">
+          <BitmapView name="window_icon" interactive="true" image="gfx://GFX_GUI_WINDOW_ICON_I" min_size="Point(15,15)" max_size="Point(15,15)" />
+        </View>
+        <View name="window_title_tab" view_layout="stacked" visible="false">
+          <TextView name="window_title" />
+        </View>
+        <Button name="window_pin" visible="false" min_size="Point(15,15)" max_size="Point(15,15)" gfxid_raised="GFX_GUI_WINDOW_PIN" gfxid_hover="GFX_GUI_WINDOW_PIN_STATE2" gfxid_pressed="GFX_GUI_WINDOW_PIN_STATE3" />
+        <Button name="window_close" visible="false" min_size="Point(15,15)" max_size="Point(15,15)" gfxid_raised="GFX_GUI_WINDOW_CLOSE_X" gfxid_hover="GFX_GUI_WINDOW_CLOSE_X_STATE2" gfxid_pressed="GFX_GUI_WINDOW_CLOSE_X_STATE3" />
+      </View>
+      <View name="window_content" view_layout="vertical" />
+    </View>
+  </View>
+</root>

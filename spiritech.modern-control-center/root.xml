@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<root>
+  <View name="control_center" view_layout="stacked" visible="false">
+    <!-- One slim bar in the bottom-right corner replaces both wings. Size is set from main.lua. -->
+    <View name="right_wing_dock" view_layout="stacked" h_alignment="right" v_alignment="bottom" layout_borders="Rect(0,0,6,6)" />
+  </View>
+</root>

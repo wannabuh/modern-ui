@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Combat Log content: summary + filters, a divider, then the rows (newest at the bottom). -->
+<root>
+  <View name="log_content" view_layout="vertical">
+    <View view_layout="horizontal" min_size="Point(-1,18)" max_size="Point(-1,18)" layout_borders="Rect(4,0,2,0)">
+      <TextButton name="log_summary" label="No combat yet" font_size="11" color="A3ADBA" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" weight="1" tooltip="Click to copy your best crit" />
+      <TextButton name="filter_out" label="Out" font_size="11" color="E8ECF1" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(8,0,0,0)" tooltip="Your (and your pet's) attacks" />
+      <TextButton name="filter_in" label="In" font_size="11" color="E8ECF1" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(8,0,0,0)" tooltip="Attacks on you (and your pet)" />
+      <TextButton name="filter_heal" label="Heal" font_size="11" color="E8ECF1" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(8,0,0,0)" tooltip="Healing you give and receive" />
+      <TextButton name="log_clear" label="Clear" font_size="11" color="A3ADBA" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(10,0,0,0)" tooltip="Clear the log and restart the DPS count" />
+    </View>
+    <View interactive="false" fill_color="0xFF232831" min_size="Point(-1,1)" max_size="Point(-1,1)" layout_borders="Rect(0,0,0,2)" />
+    <ScrollView name="log_scroll" view_layout="vertical" capture_input="true" v_scrollbar_mode="auto" scrollbar_width="8" weight="1">
+      <ScrollViewChild name="log_rows" view_layout="vertical" />
+    </ScrollView>
+    <!-- Copy box: click a row (or the best-crit line) to put its text here, then select it and Ctrl+C. -->
+    <View name="copy_bar" view_layout="horizontal" visible="false" min_size="Point(-1,20)" max_size="Point(-1,20)" layout_borders="Rect(0,2,0,0)">
+      <View view_layout="stacked" weight="1">
+        <View interactive="false" fill_color="0xFF1B2028" />
+        <TextInputView name="copy_text" value="" max_length="160" font_size="11" color="E8ECF1" draw_border="false" draw_background="false" v_alignment="center" min_size="Point(-1,18)" max_size="Point(-1,18)" layout_borders="Rect(5,0,5,0)" tooltip="Select the text and press Ctrl+C to copy" />
+      </View>
+      <TextButton name="copy_close" label="×" font_size="12" color="A3ADBA" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(6,0,2,0)" tooltip="Hide" />
+    </View>
+    <TextView name="log_measure" interactive="false" visible="false" value="" font_size="11" />
+  </View>
+</root>

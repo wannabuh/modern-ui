@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modern Actions content: every action as a clickable row (fixed order, so rows stay
+     bound in combat). -->
+<root>
+  <View name="actions_content" view_layout="stacked">
+    <ScrollView name="all_scroll" capture_input="true" view_layout="vertical" v_scrollbar_mode="auto" scrollbar_width="8">
+      <ScrollViewChild name="all_rows" view_layout="vertical" />
+    </ScrollView>
+    <!-- Anchor for the options menu opened by right-clicking a row (works in compact mode). -->
+    <View name="actions_menu" min_size="Point(0,0)" max_size="Point(0,0)" />
+    <TextView name="actions_measure" interactive="false" visible="false" value="" font_size="11" />
+  </View>
+</root>

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!-- One display-only cooldown row, 21px + 1px gap: time-left bar behind | 18px icon | name | time. -->
+<root>
+  <View name="cd_row" interactive="false" view_layout="stacked" min_size="Point(-1,21)" max_size="Point(-1,21)">
+    <View name="row_bar" interactive="false" h_alignment="left" min_size="Point(0,21)" max_size="Point(4096,21)" />
+    <View interactive="false" view_layout="horizontal" layout_borders="Rect(4,0,6,0)">
+      <ItemSlotView name="row_icon" interactive="false" slot_gfx="" icon_fit="center" v_alignment="center" min_size="Point(18,18)" max_size="Point(18,18)" />
+      <TextView name="row_name" interactive="false" value="" font_size="11" color="E8ECF1" v_alignment="center" weight="1" layout_borders="Rect(6,0,0,0)" />
+      <TextView name="row_time" interactive="false" value="" font_size="11" color="A3ADBA" v_alignment="center" min_size="Point(48,21)" max_size="Point(48,21)" />
+    </View>
+  </View>
+</root>

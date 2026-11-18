@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modern World Map: the map, then a flat 30px toolbar underneath it
+     (your zone on the left, zoom / centre controls on the right). -->
+<root>
+  <View name="planet_map" view_layout="vertical" weight="1">
+    <PannedSurfaceView name="planet_tiles" capture_input="true" pointer_pan="true" weight="1" />
+    <View name="planet_toolbar" view_layout="stacked" min_size="Point(-1,30)" max_size="Point(-1,30)">
+      <View interactive="false" fill_color="0xFF2A3039" />
+      <View interactive="false" fill_color="0xE60D1015" layout_borders="Rect(1,1,1,1)" />
+      <View view_layout="horizontal" layout_borders="Rect(10,0,10,0)">
+        <TextView name="planet_location" interactive="false" value="" font_size="13" color="E8ECF1" v_alignment="center" tooltip="The zone you are in" />
+        <HLayoutSpacer />
+        <TextButton name="planet_zoom_out" label="−" font_size="18" color="E8ECF1" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" tooltip="Zoom out" />
+        <TextView name="planet_zoom_level" interactive="false" value="" font_size="12" color="A3ADBA" v_alignment="center" layout_borders="Rect(10,0,10,0)" />
+        <TextButton name="planet_zoom_in" label="+" font_size="18" color="E8ECF1" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" tooltip="Zoom in" />
+        <View interactive="false" fill_color="0xFF2A3039" min_size="Point(1,16)" max_size="Point(1,16)" v_alignment="center" layout_borders="Rect(12,0,12,0)" />
+        <TextButton name="planet_centre_character" label="Me" font_size="13" color="4FB3BF" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" tooltip="Center on you" />
+        <TextButton name="planet_centre_quest" label="Mission" font_size="13" color="F0C060" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(14,0,0,0)" tooltip="Center on your mission" />
+      </View>
+    </View>
+  </View>
+</root>

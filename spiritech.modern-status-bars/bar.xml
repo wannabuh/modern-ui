@@ -1,0 +1,17 @@
+<?xml version="1.0" standalone="yes"?>
+<!-- One horizontal flat bar. Sizes are set from main.lua. -->
+<root>
+  <View name="status_bar_window" capture_input="true" composite_layer="true" view_layout="stacked">
+    <!-- 1px outline, then an opaque track inset by 1px -->
+    <View interactive="false" fill_color="0xFF2A3039" />
+    <View interactive="false" view_layout="stacked" layout_borders="Rect(1,1,1,1)">
+      <View interactive="false" fill_color="0xE60D1015" />
+      <View name="status_fill" interactive="false" fill_color="0xFF000000" h_alignment="left" />
+      <View interactive="false" view_layout="horizontal" layout_borders="Rect(6,0,6,0)">
+        <TextView name="status_label" interactive="false" value="" font_size="12" color="E8ECF1" v_alignment="center" />
+        <HLayoutSpacer />
+        <TextView name="status_value" interactive="false" value="-- / --" font_size="12" color="E8ECF1" v_alignment="center" h_alignment="right" />
+      </View>
+    </View>
+  </View>
+</root>

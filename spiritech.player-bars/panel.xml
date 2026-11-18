@@ -1,0 +1,56 @@
+<?xml version="1.0" standalone="yes"?>
+<!-- Player bars: individual outlined bars, no shared background. Widths are set from main.lua. -->
+<root>
+  <View name="player_bars" capture_input="true" composite_layer="true" view_layout="vertical">
+    <View name="health_bar" interactive="false" view_layout="stacked" min_size="Point(-1,20)" max_size="Point(-1,20)" layout_borders="Rect(0,0,0,0)">
+      <View interactive="false" fill_color="0xFF2A3039" />
+      <View interactive="false" view_layout="stacked" layout_borders="Rect(1,1,1,1)">
+        <View interactive="false" fill_color="0xE60D1015" />
+        <View name="health_fill" interactive="false" visible="false" fill_color="0xFF000000" h_alignment="left" />
+        <View interactive="false" view_layout="horizontal" layout_borders="Rect(6,0,6,0)">
+          <TextView name="health_label" interactive="false" value="" font_size="12" color="FFFFFF" v_alignment="center" />
+          <HLayoutSpacer />
+          <TextView name="health_value" interactive="false" value="-- / --" font_size="12" color="FFFFFF" v_alignment="center" h_alignment="right" />
+        </View>
+      </View>
+    </View>
+    <View name="nano_bar" interactive="false" view_layout="stacked" min_size="Point(-1,20)" max_size="Point(-1,20)" layout_borders="Rect(0,3,0,0)">
+      <View interactive="false" fill_color="0xFF2A3039" />
+      <View interactive="false" view_layout="stacked" layout_borders="Rect(1,1,1,1)">
+        <View interactive="false" fill_color="0xE60D1015" />
+        <View name="nano_fill" interactive="false" visible="false" fill_color="0xFF000000" h_alignment="left" />
+        <View interactive="false" view_layout="horizontal" layout_borders="Rect(6,0,6,0)">
+          <TextView name="nano_label" interactive="false" value="" font_size="12" color="FFFFFF" v_alignment="center" />
+          <HLayoutSpacer />
+          <TextView name="nano_value" interactive="false" value="-- / --" font_size="12" color="FFFFFF" v_alignment="center" h_alignment="right" />
+        </View>
+      </View>
+    </View>
+    <View name="progress_row" interactive="false" view_layout="horizontal" min_size="Point(-1,14)" max_size="Point(-1,14)" layout_borders="Rect(0,3,0,0)">
+      <View name="xp_bar" interactive="false" view_layout="stacked" min_size="Point(-1,14)" max_size="Point(-1,14)" layout_borders="Rect(0,0,0,0)">
+        <View interactive="false" fill_color="0xFF2A3039" />
+        <View interactive="false" view_layout="stacked" layout_borders="Rect(1,1,1,1)">
+          <View interactive="false" fill_color="0xE60D1015" />
+          <View name="xp_fill" interactive="false" visible="false" fill_color="0xFF000000" h_alignment="left" />
+          <View interactive="false" view_layout="horizontal" layout_borders="Rect(6,0,6,0)">
+            <TextView name="xp_label" interactive="false" value="" font_size="11" color="FFFFFF" v_alignment="center" />
+            <HLayoutSpacer />
+            <TextView name="xp_value" interactive="false" value="-- / --" font_size="11" color="FFFFFF" v_alignment="center" h_alignment="right" />
+          </View>
+        </View>
+      </View>
+      <View name="alien_bar" interactive="false" view_layout="stacked" min_size="Point(-1,14)" max_size="Point(-1,14)" layout_borders="Rect(3,0,0,0)">
+        <View interactive="false" fill_color="0xFF2A3039" />
+        <View interactive="false" view_layout="stacked" layout_borders="Rect(1,1,1,1)">
+          <View interactive="false" fill_color="0xE60D1015" />
+          <View name="alien_fill" interactive="false" visible="false" fill_color="0xFF000000" h_alignment="left" />
+          <View interactive="false" view_layout="horizontal" layout_borders="Rect(6,0,6,0)">
+            <TextView name="alien_label" interactive="false" value="" font_size="11" color="FFFFFF" v_alignment="center" />
+            <HLayoutSpacer />
+            <TextView name="alien_value" interactive="false" value="-- / --" font_size="11" color="FFFFFF" v_alignment="center" h_alignment="right" />
+          </View>
+        </View>
+      </View>
+    </View>
+  </View>
+</root>

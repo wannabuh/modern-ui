@@ -1,0 +1,3 @@
+<root>
+  <View name="chat_frame_host" view_layout="stacked" weight="1" />
+</root>

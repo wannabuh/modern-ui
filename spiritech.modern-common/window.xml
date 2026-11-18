@@ -1,0 +1,51 @@
+<?xml version="1.0" standalone="yes"?>
+<!--
+  Modern flat window frame. Drop-in replacement for Core/window.xml.
+
+  Keep these totals in sync with Core/window.lua:
+    vertical chrome   = 1 (border) + 24 (title) + 1 (divider) + 2 + 4 (content pad) + 1 (border) = 33  (CONTENT_ENDS)
+    horizontal chrome = 1 + 4 + 4 + 1 = 10  (CONTENT_SIDES is 11, same slack as the stock frame)
+  All named views below are looked up by Core/window.lua and must exist.
+-->
+<root>
+  <View name="window" capture_input="true" color="Default" composite_layer="true" interaction_scope="true" view_layout="stacked">
+    <View name="window_floating" view_layout="stacked">
+
+      <!-- Fill (title band + body), then the outline as its own layer, as in Modern Stats -->
+      <View interactive="false" view_layout="vertical" layout_borders="Rect(1,1,1,1)">
+        <View interactive="false" fill_color="0xF214181E" min_size="Point(-1,24)" max_size="Point(-1,24)" />
+        <View interactive="false" fill_color="0xE60D1015" weight="1" />
+      </View>
+      <View interactive="false" view_layout="vertical">
+        <View interactive="false" fill_color="0xFF2A3039" min_size="Point(-1,1)" max_size="Point(-1,1)" />
+        <View interactive="false" view_layout="horizontal" weight="1">
+          <View interactive="false" fill_color="0xFF2A3039" min_size="Point(1,-1)" max_size="Point(1,-1)" />
+          <HLayoutSpacer />
+          <View interactive="false" fill_color="0xFF2A3039" min_size="Point(1,-1)" max_size="Point(1,-1)" />
+        </View>
+        <View interactive="false" fill_color="0xFF2A3039" min_size="Point(-1,1)" max_size="Point(-1,1)" />
+      </View>
+
+      <!-- Chrome + content -->
+      <View view_layout="vertical" weight="1" layout_borders="Rect(1,1,1,1)">
+        <View name="window_titlebar" view_layout="horizontal" capture_input="true" min_size="Point(-1,24)" max_size="Point(-1,24)">
+          <View name="window_icon_slot" view_layout="stacked">
+            <BitmapView name="window_icon" interactive="true" image="gfx://GFX_GUI_WINDOW_ICON_I" graphic_mode="tinted" alpha="0.45" min_size="Point(15,15)" max_size="Point(15,15)" v_alignment="center" layout_borders="Rect(5,0,0,0)" />
+          </View>
+          <View name="window_title_tab" view_layout="stacked" min_size="Point(-1,17)" max_size="Point(-1,17)" v_alignment="center" layout_borders="Rect(3,0,0,0)">
+            <View view_layout="horizontal">
+              <TextView name="window_title" font_size="12" color="9AA4B1" weight="1" layout_borders="Rect(3,0,0,0)" v_alignment="center" />
+            </View>
+          </View>
+          <View name="window_tabs" view_layout="horizontal" selected_on_top="true" v_alignment="center" min_size="Point(-1,17)" max_size="Point(-1,17)" layout_borders="Rect(3,0,0,0)" />
+          <HLayoutSpacer />
+          <Button name="window_pin" visible="false" graphic_mode="tinted" alpha="0.35" active_alpha="0.9" min_size="Point(15,15)" max_size="Point(15,15)" v_alignment="center" layout_borders="Rect(0,0,4,0)" gfxid_raised="GFX_GUI_WINDOW_PIN" gfxid_hover="GFX_GUI_WINDOW_PIN_STATE2" gfxid_pressed="GFX_GUI_WINDOW_PIN_STATE3" />
+          <Button name="window_close" visible="false" graphic_mode="tinted" alpha="0.35" active_alpha="0.9" min_size="Point(15,15)" max_size="Point(15,15)" v_alignment="center" layout_borders="Rect(0,0,5,0)" gfxid_raised="GFX_GUI_WINDOW_CLOSE_X" gfxid_hover="GFX_GUI_WINDOW_CLOSE_X_STATE2" gfxid_pressed="GFX_GUI_WINDOW_CLOSE_X_STATE3" />
+        </View>
+        <View interactive="false" fill_color="0xFF232831" min_size="Point(-1,1)" max_size="Point(-1,1)" />
+        <View name="window_content" view_layout="vertical" weight="1" layout_borders="Rect(4,2,4,4)" />
+      </View>
+
+    </View>
+  </View>
+</root>

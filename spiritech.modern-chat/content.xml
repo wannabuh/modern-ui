@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modern Chat content: borderless log, then a flat input line with the output channel on
+     the left. Names are the built-in ones (the game looks some of them up). -->
+<root>
+  <View name="chat_content" view_layout="vertical" weight="1" layout_borders="Rect(2,2,2,2)">
+    <View name="chat_log_frame" view_layout="vertical" weight="1" layout_borders="Rect(0,0,0,3)">
+      <ScrollView name="chat_log" view_layout="vertical" capture_input="true" v_scrollbar_mode="auto" weight="1" layout_borders="Rect(4,2,4,2)" />
+    </View>
+    <View name="chat_entry" view_layout="stacked" min_size="Point(-1,26)" max_size="Point(-1,26)">
+      <View interactive="false" fill_color="0xFF1B2028" />
+      <View interactive="false" fill_color="0xFF2A3039" min_size="Point(-1,1)" max_size="Point(-1,1)" v_alignment="start" />
+      <View view_layout="horizontal">
+        <TextButton name="chat_target" label="Vicinity" color="0xF2EEB0" hover_color="White" font_size="12" v_alignment="center" layout_borders="Rect(8,0,2,0)" />
+        <TextView interactive="false" value="›" font_size="10" color="5E6875" v_alignment="center" layout_borders="Rect(4,0,4,0)" />
+        <TextInputView name="chat_input" draw_border="false" draw_background="false" weight="1" font_size="13" max_length="255" min_size="Point(0,26)" max_size="Point(-1,26)" v_alignment="center" />
+      </View>
+    </View>
+  </View>
+</root>

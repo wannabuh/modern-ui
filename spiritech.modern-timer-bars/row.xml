@@ -1,0 +1,19 @@
+<?xml version="1.0" standalone="yes"?>
+<!-- One flat timer bar: 1px outline, dark track, colour fill, label left / time right. -->
+<root>
+  <View name="timer_row" visible="false" view_layout="vertical">
+    <View name="timer_bar" view_layout="stacked">
+      <View fill_color="0xFF2A3039" />
+      <View view_layout="stacked" layout_borders="Rect(1,1,1,1)">
+        <View fill_color="0xE60D1015" />
+        <View name="timer_fill" visible="false" fill_color="0xFF000000" h_alignment="left" />
+        <View view_layout="horizontal" layout_borders="Rect(6,0,6,0)">
+          <TextView name="timer_label" value="" font_size="11" color="FFFFFF" v_alignment="center" />
+          <HLayoutSpacer />
+          <TextView name="timer_time" value="" font_size="11" color="FFFFFF" v_alignment="center" h_alignment="right" />
+        </View>
+      </View>
+    </View>
+    <View name="timer_gap" min_size="Point(-1,3)" max_size="Point(-1,3)" />
+  </View>
+</root>

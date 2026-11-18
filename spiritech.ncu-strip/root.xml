@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<root>
+  <View name="ncu_strip_root" view_layout="stacked" />
+</root>

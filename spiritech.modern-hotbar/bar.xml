@@ -1,0 +1,36 @@
+<?xml version="1.0" standalone="yes"?>
+<!--
+  Modern Hotbar: ten crisp 36px slots with 2px gaps, plus a slim drag grip.
+  Horizontal: 8 (grip) + 2 + 10 x 36 + 9 x 2 = 388 wide; 14px label + 2 + 36 = 52 tall.
+  Vertical: 36 x 388 (no label; there is no room for text on a 36px-wide bar).
+-->
+<root>
+  <View name="shortcut_bar" capture_input="true" composite_layer="true" view_layout="stacked" min_size="Point(36,36)" max_size="Point(388,388)" h_alignment="center" v_alignment="end">
+
+    <View name="shortcut_bar_horizontal" view_layout="vertical" h_alignment="start" v_alignment="start" min_size="Point(388,52)" max_size="Point(388,52)">
+      <!-- Label tab above the bar: dark backing + bright text. Click and type; width follows the text. -->
+      <View name="shortcut_bar_label_tab" view_layout="stacked" h_alignment="start" min_size="Point(64,14)" max_size="Point(64,14)" layout_borders="Rect(10,0,0,2)">
+        <View interactive="false" fill_color="0xE60D1015" />
+        <TextView name="shortcut_bar_label_measure" interactive="false" visible="false" value="" font_size="10" />
+        <TextInputView name="shortcut_bar_label" value="" placeholder="Add label" max_length="24" font_size="10" color="E8ECF1" draw_border="false" draw_background="false" v_alignment="center" min_size="Point(-1,14)" max_size="Point(-1,14)" layout_borders="Rect(5,0,5,0)" tooltip="Bar label: click to edit" />
+      </View>
+      <View view_layout="horizontal" min_size="Point(388,36)" max_size="Point(388,36)">
+      <View name="shortcut_bar_spinner" view_layout="horizontal" capture_input="true" min_size="Point(8,36)" max_size="Point(8,36)" tooltip="Drag to move">
+        <View name="shortcut_bar_grip_a" interactive="false" fill_color="0xFF3A424D" min_size="Point(1,16)" max_size="Point(1,16)" v_alignment="center" layout_borders="Rect(2,0,0,0)" />
+        <View name="shortcut_bar_grip_b" interactive="false" fill_color="0xFF3A424D" min_size="Point(1,16)" max_size="Point(1,16)" v_alignment="center" layout_borders="Rect(2,0,0,0)" />
+      </View>
+      <View interactive="false" min_size="Point(2,36)" max_size="Point(2,36)" />
+      <View name="shortcut_bar_slots" view_layout="horizontal" min_size="Point(378,36)" max_size="Point(378,36)" />
+      </View>
+    </View>
+
+    <View name="shortcut_bar_vertical" view_layout="vertical" visible="false" h_alignment="start" v_alignment="start" min_size="Point(36,388)" max_size="Point(36,388)">
+      <View name="shortcut_bar_spinner" view_layout="vertical" capture_input="true" min_size="Point(36,8)" max_size="Point(36,8)" tooltip="Drag to move">
+        <View name="shortcut_bar_grip_a" interactive="false" fill_color="0xFF3A424D" min_size="Point(16,1)" max_size="Point(16,1)" h_alignment="center" layout_borders="Rect(0,2,0,0)" />
+        <View name="shortcut_bar_grip_b" interactive="false" fill_color="0xFF3A424D" min_size="Point(16,1)" max_size="Point(16,1)" h_alignment="center" layout_borders="Rect(0,2,0,0)" />
+      </View>
+      <View interactive="false" min_size="Point(36,2)" max_size="Point(36,2)" />
+      <View name="shortcut_bar_slots" view_layout="vertical" min_size="Point(36,378)" max_size="Point(36,378)" />
+    </View>
+  </View>
+</root>

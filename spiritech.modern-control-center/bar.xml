@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!--
+  Modern Control Center bar: one row of flat text buttons plus the AGG/DEF slider.
+  NCU and credits moved to the bottom-centre status strip (status_strip.xml).
+  A teal underline marks buttons whose window is open. Widths/heights are set from main.lua.
+-->
+<root>
+  <View name="cc_bar" capture_input="true" composite_layer="true" view_layout="stacked">
+    <View interactive="false" fill_color="0xE60D1015" />
+    <View interactive="false" view_layout="vertical">
+      <View interactive="false" fill_color="0xFF2A3039" min_size="Point(-1,1)" max_size="Point(-1,1)" />
+      <View interactive="false" view_layout="horizontal" weight="1">
+        <View interactive="false" fill_color="0xFF2A3039" min_size="Point(1,-1)" max_size="Point(1,-1)" />
+        <HLayoutSpacer />
+        <View interactive="false" fill_color="0xFF2A3039" min_size="Point(1,-1)" max_size="Point(1,-1)" />
+      </View>
+      <View interactive="false" fill_color="0xFF2A3039" min_size="Point(-1,1)" max_size="Point(-1,1)" />
+    </View>
+    <View view_layout="vertical" layout_borders="Rect(1,1,1,1)">
+      <!-- Buttons row -->
+      <View name="cc_buttons" view_layout="horizontal" min_size="Point(-1,24)" max_size="Point(-1,24)">
+        <!-- Drag grip -->
+        <View name="cc_grip" capture_input="true" view_layout="horizontal" min_size="Point(12,24)" max_size="Point(12,24)" tooltip="Drag to move">
+          <View interactive="false" fill_color="0xFF3A424D" min_size="Point(1,12)" max_size="Point(1,12)" v_alignment="center" layout_borders="Rect(4,0,0,0)" />
+          <View interactive="false" fill_color="0xFF3A424D" min_size="Point(1,12)" max_size="Point(1,12)" v_alignment="center" layout_borders="Rect(2,0,0,0)" />
+        </View>
+        <View name="actions_cell" view_layout="stacked">
+          <TextButton name="actions" font_size="11" color="D5DAE1" hover_color="FFFFFF" pressed_color="4FB3BF" h_alignment="center" v_alignment="center" />
+          <View name="actions_open" interactive="false" visible="false" fill_color="0xFF4FB3BF" min_size="Point(-1,2)" max_size="Point(-1,2)" v_alignment="bottom" layout_borders="Rect(6,0,6,1)" />
+        </View>
+        <View name="character_cell" view_layout="stacked">
+          <TextButton name="character" font_size="11" color="D5DAE1" hover_color="FFFFFF" pressed_color="4FB3BF" h_alignment="center" v_alignment="center" />
+          <View name="character_open" interactive="false" visible="false" fill_color="0xFF4FB3BF" min_size="Point(-1,2)" max_size="Point(-1,2)" v_alignment="bottom" layout_borders="Rect(6,0,6,1)" />
+        </View>
+        <View name="inventory_cell" view_layout="stacked">
+          <TextButton name="inventory" font_size="11" color="D5DAE1" hover_color="FFFFFF" pressed_color="4FB3BF" h_alignment="center" v_alignment="center" />
+          <View name="inventory_open" interactive="false" visible="false" fill_color="0xFF4FB3BF" min_size="Point(-1,2)" max_size="Point(-1,2)" v_alignment="bottom" layout_borders="Rect(6,0,6,1)" />
+        </View>
+        <View name="wear_cell" view_layout="stacked">
+          <TextButton name="wear" font_size="11" color="D5DAE1" hover_color="FFFFFF" pressed_color="4FB3BF" h_alignment="center" v_alignment="center" />
+          <View name="wear_open" interactive="false" visible="false" fill_color="0xFF4FB3BF" min_size="Point(-1,2)" max_size="Point(-1,2)" v_alignment="bottom" layout_borders="Rect(6,0,6,1)" />
+        </View>
+        <View name="nano_cell" view_layout="stacked">
+          <TextButton name="nano" font_size="11" color="D5DAE1" hover_color="FFFFFF" pressed_color="4FB3BF" h_alignment="center" v_alignment="center" />
+          <View name="nano_open" interactive="false" visible="false" fill_color="0xFF4FB3BF" min_size="Point(-1,2)" max_size="Point(-1,2)" v_alignment="bottom" layout_borders="Rect(6,0,6,1)" />
+        </View>
+        <View name="ncu_window_cell" view_layout="stacked">
+          <TextButton name="ncu_window" font_size="11" color="D5DAE1" hover_color="FFFFFF" pressed_color="4FB3BF" h_alignment="center" v_alignment="center" />
+          <View name="ncu_window_open" interactive="false" visible="false" fill_color="0xFF4FB3BF" min_size="Point(-1,2)" max_size="Point(-1,2)" v_alignment="bottom" layout_borders="Rect(6,0,6,1)" />
+        </View>
+        <View name="map_cell" view_layout="stacked">
+          <TextButton name="map" font_size="11" color="D5DAE1" hover_color="FFFFFF" pressed_color="4FB3BF" h_alignment="center" v_alignment="center" />
+          <View name="map_open" interactive="false" visible="false" fill_color="0xFF4FB3BF" min_size="Point(-1,2)" max_size="Point(-1,2)" v_alignment="bottom" layout_borders="Rect(6,0,6,1)" />
+        </View>
+        <View name="missions_cell" view_layout="stacked">
+          <TextButton name="missions" font_size="11" color="D5DAE1" hover_color="FFFFFF" pressed_color="4FB3BF" h_alignment="center" v_alignment="center" />
+          <View name="missions_open" interactive="false" visible="false" fill_color="0xFF4FB3BF" min_size="Point(-1,2)" max_size="Point(-1,2)" v_alignment="bottom" layout_borders="Rect(6,0,6,1)" />
+        </View>
+        <View name="team_cell" view_layout="stacked">
+          <TextButton name="team" font_size="11" color="D5DAE1" hover_color="FFFFFF" pressed_color="4FB3BF" h_alignment="center" v_alignment="center" />
+          <View name="team_open" interactive="false" visible="false" fill_color="0xFF4FB3BF" min_size="Point(-1,2)" max_size="Point(-1,2)" v_alignment="bottom" layout_borders="Rect(6,0,6,1)" />
+        </View>
+        <View name="friends_cell" view_layout="stacked">
+          <TextButton name="friends" font_size="11" color="D5DAE1" hover_color="FFFFFF" pressed_color="4FB3BF" h_alignment="center" v_alignment="center" />
+          <View name="friends_open" interactive="false" visible="false" fill_color="0xFF4FB3BF" min_size="Point(-1,2)" max_size="Point(-1,2)" v_alignment="bottom" layout_borders="Rect(6,0,6,1)" />
+        </View>
+        <View name="store_cell" view_layout="stacked">
+          <TextButton name="store" font_size="11" color="D5DAE1" hover_color="FFFFFF" pressed_color="4FB3BF" h_alignment="center" v_alignment="center" />
+          <View name="store_open" interactive="false" visible="false" fill_color="0xFF4FB3BF" min_size="Point(-1,2)" max_size="Point(-1,2)" v_alignment="bottom" layout_borders="Rect(6,0,6,1)" />
+        </View>
+        <View name="cc_aggdef" view_layout="horizontal" min_size="Point(-1,24)" max_size="Point(-1,24)" layout_borders="Rect(6,0,8,0)">
+          <View interactive="false" fill_color="0xFF232831" min_size="Point(1,14)" max_size="Point(1,14)" v_alignment="center" layout_borders="Rect(0,0,8,0)" />
+          <TextView interactive="false" value="DEF" font_size="10" color="A3ADBA" v_alignment="center" layout_borders="Rect(0,0,5,0)" />
+          <Slider name="aggdef" track_height="14" track_slices="Rect(1,5,1,5)" min_size="Point(100,14)" max_size="Point(100,14)" v_alignment="center" bg_gfx="GFX_GUI_CONTROLCENTER_AGGDEF_SLIDER_BACKGROUND" thumb_gfx="GFX_GUI_CONTROLCENTER_AGGDEF_SLIDER" thumb_width="9" />
+          <TextView interactive="false" value="AGG" font_size="10" color="A3ADBA" v_alignment="center" layout_borders="Rect(5,0,0,0)" />
+          <Button name="aggdef_info" visible="false" graphic_mode="tinted" alpha="0.5" active_alpha="0.9" min_size="Point(13,13)" max_size="Point(13,13)" v_alignment="center" layout_borders="Rect(5,0,0,0)" gfxid_raised="GFX_GUI_WINDOW_ICON_I" gfxid_hover="GFX_GUI_WINDOW_ICON_I" gfxid_pressed="GFX_GUI_WINDOW_ICON_I" tooltip="How AGG/DEF affects your character" />
+        </View>
+      </View>
+    </View>
+  </View>
+</root>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package id="spiritech.modern-status-bars" name="Modern Status Bars">
+  <Provides role="prk.status-bars" />
+  <Requires package="spiritech.modern-common" />
+  <Script src="main.lua" />
+</Package>

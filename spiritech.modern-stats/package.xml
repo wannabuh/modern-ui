@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package id="spiritech.modern-stats" name="Modern Stats">
+  <Provides role="prk.stats" />
+  <Requires package="spiritech.modern-common" />
+  <Script src="main.lua" />
+</Package>

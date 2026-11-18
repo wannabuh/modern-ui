@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Flat compass strip. Size is set from main.lua; band children are placed from Lua. -->
+<root>
+  <View name="compass_window" capture_input="true" composite_layer="true" view_layout="stacked">
+    <View interactive="false" fill_color="0xB30D1015" />
+    <View interactive="false" view_layout="vertical">
+      <View interactive="false" fill_color="0xFF2A3039" min_size="Point(-1,1)" max_size="Point(-1,1)" />
+      <View interactive="false" view_layout="horizontal" weight="1">
+        <View interactive="false" fill_color="0xFF2A3039" min_size="Point(1,-1)" max_size="Point(1,-1)" />
+        <HLayoutSpacer />
+        <View interactive="false" fill_color="0xFF2A3039" min_size="Point(1,-1)" max_size="Point(1,-1)" />
+      </View>
+      <View interactive="false" fill_color="0xFF2A3039" min_size="Point(-1,1)" max_size="Point(-1,1)" />
+    </View>
+    <View name="compass_band" interactive="false" view_layout="stacked" layout_borders="Rect(1,1,1,1)" />
+    <!-- Waypoint distance, drawn over the band on the right -->
+    <View name="compass_distance_box" interactive="false" visible="false" view_layout="horizontal" fill_color="0xE60D1015" h_alignment="right" layout_borders="Rect(0,1,1,1)">
+      <TextView name="compass_distance" interactive="false" value="" font_size="11" color="4FB3BF" v_alignment="center" layout_borders="Rect(5,0,5,0)" />
+    </View>
+  </View>
+</root>

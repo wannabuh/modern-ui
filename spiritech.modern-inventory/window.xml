@@ -1,0 +1,72 @@
+<root>
+  <View name="inventory_body" view_layout="vertical" h_alignment="center" v_alignment="center">
+    <!-- Organizer (main inventory only): one row with the category tabs on the left and
+         Mark seen / Sort / Organize on the right. Each part can be hidden from the title menu. -->
+    <View name="organizer" view_layout="vertical" visible="false" min_size="Point(-1,26)" max_size="Point(-1,26)" layout_borders="Rect(2.5,0,2.5,0)">
+      <View name="organizer_row" view_layout="horizontal" min_size="Point(-1,22)" max_size="Point(-1,22)">
+        <View name="tab_row" view_layout="horizontal" min_size="Point(-1,22)" max_size="Point(-1,22)" />
+        <TextButton name="tab_add" label="+" font_size="14" color="A3ADBA" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(2,0,4,0)" tooltip="New category" />
+        <HLayoutSpacer />
+        <TextButton name="seen_button" label="Mark seen" font_size="11" color="F0C060" hover_color="FFFFFF" pressed_color="4FB3BF" visible="false" v_alignment="center" layout_borders="Rect(8,0,0,0)" tooltip="Clear the New list" />
+        <TextButton name="sort_button" label="Sort: Slot" font_size="11" color="E8ECF1" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(10,0,0,0)" tooltip="Change the display order (items don't move)" />
+        <TextButton name="organize_button" label="Organize" font_size="11" color="A3ADBA" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(10,0,2,0)" tooltip="While on, click an item to choose its categories" />
+      </View>
+      <!-- Shown instead of the row above while naming a new category. -->
+      <View name="add_row" view_layout="horizontal" visible="false" min_size="Point(-1,22)" max_size="Point(-1,22)">
+        <View view_layout="stacked" weight="1" min_size="Point(40,22)" max_size="Point(-1,22)">
+          <View interactive="false" fill_color="0xFF1B2028" />
+          <TextInputView name="add_name" placeholder="Category name" font_size="12" color="E8ECF1" draw_border="false" draw_background="false" max_length="20" min_size="Point(-1,22)" max_size="Point(-1,22)" v_alignment="center" layout_borders="Rect(6,0,6,0)" />
+        </View>
+        <TextButton name="add_confirm" label="Add" font_size="11" color="4FB3BF" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(8,0,0,0)" />
+        <TextButton name="add_cancel" label="Cancel" font_size="11" color="A3ADBA" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(8,0,2,0)" />
+      </View>
+      <View interactive="false" fill_color="0xFF232831" min_size="Point(-1,1)" max_size="Point(-1,1)" layout_borders="Rect(0,0,0,3)" />
+      <TextView name="organizer_measure" interactive="false" visible="false" value="" font_size="12" />
+    </View>
+    <View name="inventory_root" view_layout="stacked" weight="1">
+      <ScrollView name="inventory_content" capture_input="true" v_scrollbar_mode="auto" scrollbar_width="11" scrollbar_right_inset="1" scrollbar_arrow_gap="1">
+        <ScrollViewChild name="inventory_grid" view_layout="grid" grid_columns="1" min_columns="1" grid_spacing="2" h_alignment="center" layout_borders="Rect(0,4,0,0)" />
+      </ScrollView>
+      <!-- Filtered / sorted / category views (display only; same items, same native handling). -->
+      <ScrollView name="filtered_content" capture_input="true" visible="false" v_scrollbar_mode="auto" scrollbar_width="11" scrollbar_right_inset="1" scrollbar_arrow_gap="1">
+        <ScrollViewChild name="filtered_grid" view_layout="grid" grid_columns="1" min_columns="1" grid_spacing="2" h_alignment="center" layout_borders="Rect(0,4,0,0)" />
+      </ScrollView>
+      <View name="inventory_list" view_layout="vertical" visible="false" />
+      <TextView name="empty_note" interactive="false" visible="false" value="" font_size="11" color="8B95A3" h_alignment="center" v_alignment="center" />
+      <!-- Organize mode: catches clicks over the grid so they tag items instead of using them. -->
+      <View name="organize_overlay" capture_input="true" visible="false" fill_color="0x144FB3BF" />
+    </View>
+    <View name="footer" view_layout="horizontal" visible="false" min_size="Point(-1,22)" max_size="Point(-1,22)" layout_borders="Rect(2.5,1,2.5,3)">
+      <View name="search_box" view_layout="stacked" weight="1" min_size="Point(40,22)" max_size="Point(-1,22)" v_alignment="center">
+        <View interactive="false" fill_color="0xFF1B2028" />
+        <TextInputView name="search_query" placeholder="Search items" visible="false" font_size="12" color="E8ECF1" draw_border="false" draw_background="false" max_length="64" min_size="Point(-1,22)" max_size="Point(-1,22)" v_alignment="center" layout_borders="Rect(6,0,6,0)" tooltip="Item name, at least three letters, then Enter" />
+      </View>
+      <HLayoutSpacer name="footer_spacer" />
+      <View name="slot_count_frame" view_layout="stacked" visible="false" min_size="Point(-1,22)" max_size="Point(-1,22)" v_alignment="center" layout_borders="Rect(4,0,0,0)" tooltip="Slots holding an item, of all slots">
+        <TextView name="slot_count" value="" font_size="11" color="A3ADBA" v_alignment="center" layout_borders="Rect(6,0,4,0)" />
+      </View>
+    </View>
+    <View name="credits_section" view_layout="vertical" visible="false" layout_borders="Rect(2.5,0,2.5,3)">
+      <View name="credits_divider" interactive="false" fill_color="0xFF232831" min_size="Point(-1,1)" max_size="Point(-1,1)" layout_borders="Rect(0,1,0,4)" />
+      <View view_layout="horizontal" min_size="Point(-1,22)" max_size="Point(-1,22)">
+        <View name="credits_balance_frame" view_layout="horizontal" weight="1" min_size="Point(40,22)" max_size="Point(-1,22)" v_alignment="center" fill_color="0xFF1B2028">
+          <TextView name="credits_balance_label" value="Balance" font_size="11" color="A3ADBA" v_alignment="center" layout_borders="Rect(6,0,6,0)" />
+          <HLayoutSpacer />
+          <TextView name="credits_balance" value="0" font_size="13" color="E8ECF1" v_alignment="center" layout_borders="Rect(0,0,6,0)" />
+        </View>
+        <View name="credits_choice" view_layout="horizontal" min_size="Point(-1,22)" max_size="Point(-1,22)">
+          <Button name="credits_deposit" label="Deposit" font_size="12" min_size="Point(76,22)" max_size="Point(76,22)" v_alignment="center" layout_borders="Rect(4,0,0,0)" />
+          <Button name="credits_withdraw" label="Withdraw" font_size="12" min_size="Point(76,22)" max_size="Point(76,22)" v_alignment="center" layout_borders="Rect(4,0,0,0)" />
+        </View>
+      </View>
+      <View name="credits_entry" view_layout="horizontal" visible="false" min_size="Point(-1,22)" max_size="Point(-1,22)" layout_borders="Rect(0,4,0,0)">
+        <View name="credits_amount_frame" view_layout="horizontal" weight="1" min_size="Point(40,22)" max_size="Point(-1,22)" v_alignment="center" fill_color="0xFF1B2028">
+          <TextView name="credits_entry_label" value="Deposit" font_size="11" color="A3ADBA" v_alignment="center" layout_borders="Rect(6,0,0,0)" />
+          <TextInputView name="credits_amount" draw_border="false" draw_background="false" font_size="13" color="E8ECF1" max_length="13" weight="1" min_size="Point(40,22)" max_size="Point(-1,22)" v_alignment="center" layout_borders="Rect(6,0,0,0)" />
+        </View>
+        <Button name="credits_cancel" label="Cancel" font_size="12" min_size="Point(76,22)" max_size="Point(76,22)" v_alignment="center" layout_borders="Rect(4,0,0,0)" />
+        <Button name="credits_transfer" label="Deposit" font_size="12" min_size="Point(76,22)" max_size="Point(76,22)" v_alignment="center" layout_borders="Rect(4,0,0,0)" />
+      </View>
+    </View>
+  </View>
+</root>

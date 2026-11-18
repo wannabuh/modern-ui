@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package id="spiritech.modern-wear" name="Modern Wear">
+  <Provides role="prk.wear" />
+  <Requires package="spiritech.modern-common" />
+  <Script src="main.lua" />
+</Package>
