@@ -4,7 +4,10 @@ A dark, minimal, flat UI addon set for the Spiritech (Project Rubi-Ka) client.
 
 ## Install
 
-Packages live in `packages/`. Run
+From a release: download `modern-ui-<version>.zip` from the GitHub releases page and
+unzip it into `~/.local/share/ProjectRubiKa/ui-packages/`.
+
+From source: packages live in `packages/`. Run
 
     ./install.sh                         # all packages
     ./install.sh spiritech.modern-trade  # just one
@@ -51,6 +54,11 @@ Run with the client closed.
   regenerate `lua/itemreqs_*.lua` / `lua/itemmods.lua` from the client's `rdb.db`.
 - `packages/spiritech.modern-common/tools/copy_ui.py FROM TO` — copy UI layout between characters.
 - `packages/spiritech.modern-control-center/tools/migrate_hotbar_labels.py` — migrate hotbar labels.
+
+## Releasing
+
+`./release.sh 1.2.0` builds `dist/modern-ui-1.2.0.zip`; tag the commit `v1.2.0`
+and attach the zip to a GitHub release.
 
 ## Limits
 
