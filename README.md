@@ -57,8 +57,13 @@ Run with the client closed.
 
 ## Releasing
 
-`./release.sh 1.2.0` builds `dist/modern-ui-1.2.0.zip`; tag the commit `v1.2.0`
-and attach the zip to a GitHub release.
+`./release.sh 1.2.0` stamps `version="1.2.0"` and `apiVersion="0.1.0"` (override with
+`API_VERSION=`; keep it matching the client's `addon-api.version.txt`) into every
+`package.xml`, checks that each package folder matches its id and that every required
+package is bundled, and builds `dist/modern-ui-1.2.0.zip` (one top-level folder per
+package, LICENSE inside each). Commit the manifests, tag the commit `v1.2.0`, and upload
+the zip. Published versions cannot be replaced, so the script refuses a version that is
+already tagged; always bump.
 
 ## Limits
 
