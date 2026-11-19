@@ -6,6 +6,8 @@
 --       Newland Desert                       −  2/5  +  │  Me  Mission
 --   * the game's own player and mission markers; switch maps from the title menu
 -- "Show buttons" (title menu / right-click) still hides the toolbar.
+-- "Me" (or "Follow player" in the menu) centres on you and keeps following as you move;
+-- dragging the map or clicking "Me" again stops following.
 pcall(ui.require, "spiritech.modern-common/screenfit") -- keep window positions through fullscreen changes
 local Window = ui.require("core.window")
 local Theme = ui.require("spiritech.modern-common/theme")
@@ -34,6 +36,8 @@ local frame
 local menu_character, menu_quest
 local rebuild_menu
 local current_map = ""
+local following = false
+local set_following
 
 local function publish(changed)
 	ui.publish("buttons", tostring(buttons))
@@ -105,6 +109,7 @@ local function compose_menu(anchor)
 	end
 	ui.menu.submenu(anchor, "Select Map", choices_menu)
 	ui.menu.add(anchor, "Show buttons", buttons, planet_map_toggle_buttons)
+	ui.menu.add(anchor, "Follow player", following, function() set_following(not following) end)
 end
 
 rebuild_menu = function()
@@ -155,6 +160,30 @@ local function refresh_buttons()
 		rebuild_menu()
 	end
 	ui.menu.checked(frame.icon, 4, buttons)
+	ui.menu.checked(frame.icon, 5, following)
+end
+
+-- Follow mode: the "Me" button reads "● Me" while the map follows you.
+set_following = function(value)
+	following = value
+	ui.text(character, following and "● Me" or "Me")
+	ui.tooltip(character, following and "Following you (drag the map or click to stop)" or "Center on you and follow")
+	if following then planet_map_centre("character") end
+	refresh_buttons()
+end
+
+local function follow()
+	if not following or game.planet_map.point("character") == 0 then return end
+	if view.read("dragged") ~= 0 then -- you grabbed the map: stop following
+		set_following(false)
+		return
+	end
+	if view.read("width") <= 0 or view.read("height") <= 0 then return end
+	local x = game.planet_map.point("character_x") - view.read("width") / 2
+	local y = game.planet_map.point("character_y") - view.read("height") / 2
+	if math.abs(view.read("x") - x) > 1 or math.abs(view.read("y") - y) > 1 then
+		view.pan(x, y) -- near the map edges the pan is clamped; harmless to repeat
+	end
 end
 
 local function change_zoom(step)
@@ -172,7 +201,7 @@ end
 
 ui.on_click(zoom_in, function() change_zoom(1) end)
 ui.on_click(zoom_out, function() change_zoom(-1) end)
-ui.on_click(character, function() planet_map_centre("character") end)
+ui.on_click(character, function() set_following(not following) end)
 ui.on_click(quest, function() planet_map_centre("quest") end)
 
 function planet_map_restore(saved_zoom, saved_buttons, saved_first_time)
@@ -215,6 +244,7 @@ function planet_map_update(current_revision, count)
 		centre_pending = false
 		planet_map_centre("character")
 	end
+	follow()
 	frame:resize(ui.chosen_width(frame.root), ui.chosen_height(frame.root))
 	refresh_buttons()
 	view.markers_begin()

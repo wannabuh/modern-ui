@@ -14,7 +14,7 @@
         <TextView name="planet_zoom_level" interactive="false" value="" font_size="12" color="A3ADBA" v_alignment="center" layout_borders="Rect(10,0,10,0)" />
         <TextButton name="planet_zoom_in" label="+" font_size="18" color="E8ECF1" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" tooltip="Zoom in" />
         <View interactive="false" fill_color="0xFF2A3039" min_size="Point(1,16)" max_size="Point(1,16)" v_alignment="center" layout_borders="Rect(12,0,12,0)" />
-        <TextButton name="planet_centre_character" label="Me" font_size="13" color="4FB3BF" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" tooltip="Center on you" />
+        <TextButton name="planet_centre_character" label="Me" font_size="13" color="4FB3BF" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" tooltip="Center on you and follow" />
         <TextButton name="planet_centre_quest" label="Mission" font_size="13" color="F0C060" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(14,0,0,0)" tooltip="Center on your mission" />
       </View>
     </View>
