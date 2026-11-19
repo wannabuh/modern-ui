@@ -335,10 +335,13 @@ ui.publish("view_mode", mode)
 -- root is now the full-screen container, so they're kept in this package's storage instead:
 --   win/<character>/<window title> = "x,y,width,height"
 local window_key_title, window_character, window_restored = nil, nil, false
+local loot_window = false -- corpses / chests: one shared spot ("win/<character>/~loot") for all of them
 local last_saved, last_save_time = nil, 0
 
 local function window_key()
-	if not (window_key_title and window_character) then return nil end
+	if not window_character then return nil end
+	if loot_window then return "win/" .. window_character .. "/~loot" end
+	if not window_key_title then return nil end
 	return "win/" .. window_character .. "/" .. window_key_title:gsub("[^%w _%-]", "_")
 end
 
@@ -434,9 +437,11 @@ function inventory_configure(configuration)
 		width, height = sizing:size(configuration.columns, configuration.rows, true)
 	end
 	frame:resize(width, height + footer_height(search_reserved) + organizer:height())
-	-- Remember inventory / bag / bank windows (they show a slot count); not loot windows,
-	-- whose titles are corpse and chest names.
+	-- Inventory / bag / bank windows (they show a slot count) are remembered per title; loot
+	-- windows (titles are corpse and chest names) all share one remembered spot and size.
 	window_key_title = configuration.slot_count and configuration.title or nil
+	loot_window = not configuration.slot_count
+	if loot_window then window_restored = false end -- re-apply the saved spot each time a loot window opens
 	restore_window()
 end
 
@@ -455,7 +460,7 @@ function inventory_apply(snapshot, container, title, first_free)
 	end
 	-- A renamed bag: its saved position follows the new title (copied, so the old key still
 	-- works if the game opens it under its old title next time).
-	if window_key_title and title and title ~= "" and title ~= window_key_title and window_key_title ~= "Inventory" then
+	if not loot_window and window_key_title and title and title ~= "" and title ~= window_key_title and window_key_title ~= "Inventory" then
 		local old = window_key()
 		window_key_title = title
 		local new = window_key()
