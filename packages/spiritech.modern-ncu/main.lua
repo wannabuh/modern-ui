@@ -1,8 +1,10 @@
 -- Modern NCU: slim list of running nano programs (role prk.ncu).
 -- Two-line rows: icon | name / "NCU cost · time left" in smaller, dimmer text. No header; the title shows
 -- NCU used / maximum. Rows keep the built-in bindings, so right-click still cancels and
--- Shift-click still inspects (also in combat). Biggest NCU users at the top, so the
--- programs worth cancelling to free space are first.
+-- Shift-click still inspects (also in combat). Sort from the title menu ("i"): biggest NCU
+-- users first (default: the programs worth cancelling to free space), or by time left
+-- (soonest / longest first; permanent programs count as the longest). Saved in preference
+-- modern_ncu_sort. In combat the game pins the row order, so a new sort shows after combat.
 pcall(ui.require, "spiritech.modern-common/screenfit") -- keep window positions through fullscreen changes
 local Window = ui.require("core.window")
 local Security = ui.require("core.security")
@@ -32,6 +34,17 @@ local BAR_COLORS = {
 	Hostile = "#4DB23A3A",
 }
 local SOON_COLOR = "#F0C060"
+
+-- Sort modes: id, menu label, descending.
+local SORTS = {
+	{ "ncu", "Sort by NCU (biggest first)", true },
+	{ "time", "Sort by time left (soonest first)", false },
+	{ "time_desc", "Sort by time left (longest first)", true },
+}
+local sort_mode = "ncu"
+for _, sort in ipairs(SORTS) do
+	if ui.preference.read("modern_ncu_sort") == sort[1] then sort_mode = sort[1] end
+end
 
 local content = ui.load("content.xml")
 local list = ui.find(content, "ncu_list")
@@ -100,9 +113,12 @@ local columns = {
 		icon = function(entry) return entry.icon end,
 	},
 	{
-		-- One cell for both lines. Sorted by NCU cost (the id is only the sort key).
+		-- One cell for both lines. Sorted by NCU cost or time left (the id is only the sort key).
 		id = "program", title = "Program", width = 150, minimum = 60,
-		value = function(entry) return entry.ncu_cost end,
+		value = function(entry)
+			if sort_mode == "ncu" then return entry.ncu_cost end
+			return entry.permanent and math.huge or math.max(0, entry.seconds)
+		end,
 		text = plain,
 	},
 }
@@ -128,9 +144,15 @@ local table_view = Table.create({
 	action = "game.ncu.cancel",
 	tie = Presentation.tie,
 })
--- Flat look: no header row; always sorted by NCU cost, biggest first (ties by name).
+-- Flat look: no header row; the sort is chosen from the title menu (ties by name).
 ui.visible(ui.find(table_view.root, "table_header_scroll"), false)
-table_view.sort, table_view.descending = "program", true
+local function sort_descending()
+	for _, sort in ipairs(SORTS) do
+		if sort[1] == sort_mode then return sort[3] end
+	end
+	return true
+end
+table_view.sort, table_view.descending = "program", sort_descending()
 
 -- After the table writes its rows: bigger icons, and rich text for the two lines.
 -- Runs after every update (also in combat, where the game may add rows itself).
@@ -201,7 +223,22 @@ local function show()
 end
 
 local frame
+local function set_sort(mode)
+	sort_mode = mode
+	table_view.descending = sort_descending()
+	ui.preference.write("modern_ncu_sort", mode, "text")
+	for index, sort in ipairs(SORTS) do
+		ui.menu.checked(frame.icon, index, sort[1] == mode)
+	end
+	show()
+end
+local menu = {}
+for _, sort in ipairs(SORTS) do
+	menu[#menu + 1] = { label = sort[2], checked = sort[1] == sort_mode, invoke = function() set_sort(sort[1]) end }
+end
+
 frame = Window.create({
+	menu = menu,
 	template = Theme.WINDOW_TEMPLATE,
 	title = "NCU --/--",
 	content = content,
