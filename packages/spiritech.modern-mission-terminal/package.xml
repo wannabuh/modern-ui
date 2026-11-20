@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Two roles in one package so the Info window can pass an inspected mission's reward items
-     to the terminal list through the shared package storage. main.lua builds the matching
-     half on the first role callback. Select this package for BOTH "Mission terminal" and
+     to the terminal list through the shared package storage. main.lua tells the instances
+     apart at init. Select this package for BOTH "Mission terminal" and
      "Info" in Options → Interface & HUD → UI packages. -->
 <Package id="spiritech.modern-mission-terminal" name="Modern Mission Terminal" version="1.1.0" apiVersion="0.1.0">
   <Provides role="prk.mission-terminal" />

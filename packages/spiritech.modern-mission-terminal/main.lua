@@ -1,8 +1,10 @@
 -- Modern Mission Terminal: one package, two roles (prk.mission-terminal + prk.info), so the
 -- Info window can hand the reward items of an inspected mission to the terminal list
 -- through the package's shared storage.
--- No API names the role at init, so each instance builds nothing until the game calls one
--- of its role's callbacks; the first one decides which half (terminal.lua / info.lua) it is.
+-- A provider must mount its window during init, but no API names the role. Each role gets
+-- its own native adapter, so this asks the Mission Terminal adapter: a direct Lua call of
+-- accept is always refused with false (never sends anything) in the terminal instance and
+-- fails ("Unknown ... capability") in the Info instance. Result logged to storage "role_log_<role>".
 pcall(ui.require, "spiritech.modern-common/screenfit") -- keep window positions through fullscreen changes
 
 local PENDING_MS = 4000 -- an Info page opening this soon after a row click belongs to it
@@ -44,35 +46,19 @@ local function relay(facts)
 	ui.storage.write("rewards", table.concat(lines, "\n"))
 end
 
--- ------------------------------------------------------------------ role switch
-local role
-local function become(which)
-	if role then return role == which end
-	role = which
-	if which == "info" then
-		BUILD_INFO()
-		local stock_show = info_show
-		info_show = function(token, facts, cells, refresh)
-			stock_show(token, facts, cells, refresh)
-			if not refresh then pcall(relay, facts) end
-		end
-	else
-		BUILD_TERMINAL()
-	end
-	return true
-end
+-- ------------------------------------------------------------------ role
+local ok, result = pcall(game.mission_terminal.accept, 0)
+local role = (ok and result == false) and "terminal" or "info"
+pcall(ui.storage.write, "role_log_" .. role, string.format("accept probe ok=%s result=%s -> %s",
+	tostring(ok), tostring(result), role))
 
-local function stub(which, name)
-	local self
-	self = function(...)
-		if become(which) and _ENV[name] ~= self then return _ENV[name](...) end
+if role == "info" then
+	BUILD_INFO()
+	local stock_show = info_show
+	info_show = function(token, facts, cells, refresh)
+		stock_show(token, facts, cells, refresh)
+		if not refresh then pcall(relay, facts) end
 	end
-	_ENV[name] = self
-end
-
-for _, name in ipairs({ "mission_terminal_configure", "mission_terminal_apply", "mission_terminal_sliders" }) do
-	stub("terminal", name)
-end
-for _, name in ipairs({ "info_show", "info_navigate", "info_update", "info_impact_width" }) do
-	stub("info", name)
+else
+	BUILD_TERMINAL()
 end
