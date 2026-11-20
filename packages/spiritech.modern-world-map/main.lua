@@ -3,11 +3,13 @@
 -- teleport where allowed, saved state), restyled:
 --   * the shared flat frame; title shows the current map
 --   * the old button rows become a 30px toolbar underneath the map:
---       Newland Desert                       −  2/5  +  │  Me  Mission
+--       Newland Desert            −  2/5  +   [==slider==]   │  Me  Mission
 --   * the game's own player and mission markers; switch maps from the title menu
 -- "Show buttons" (title menu / right-click) still hides the toolbar.
 -- "Me" (or "Follow player" in the menu) centres on you and keeps following as you move;
 -- dragging the map or clicking "Me" again stops following.
+-- Two zooms: −/+ switch between the map's images (levels, as the built-in map), the slider
+-- magnifies the current image (1x to 4x). Both keep the spot in the middle of the view put.
 pcall(ui.require, "spiritech.modern-common/screenfit") -- keep window positions through fullscreen changes
 local Window = ui.require("core.window")
 local Theme = ui.require("spiritech.modern-common/theme")
@@ -20,6 +22,7 @@ local toolbar = ui.find(content, "planet_toolbar")
 local zoom_in = ui.find(content, "planet_zoom_in")
 local zoom_out = ui.find(content, "planet_zoom_out")
 local zoom_level = ui.find(content, "planet_zoom_level")
+local zoom_slider = ui.find(content, "planet_zoom")
 local character = ui.find(content, "planet_centre_character")
 local quest = ui.find(content, "planet_centre_quest")
 local location = ui.find(content, "planet_location")
@@ -38,6 +41,30 @@ local rebuild_menu
 local current_map = ""
 local following = false
 local set_following
+
+-- Map units (pan offsets, view width/height, marker positions) are the current level's image
+-- pixels, so the middle of the view is x + width / 2 at any scale.
+local MAX_SCALE = 4 -- slider: magnification of the current image, 1x to MAX_SCALE
+local levels = {} -- [level + 1] = { w, h }: each level's image size at scale 1
+local scale = 1
+local calibrate_pending = true
+local PLAYER_RADIUS, PLAYER_OUTLINE = 5, 1.5 -- player dot, in screen pixels at any magnification
+local PLAYER_COLOR = "#FFFFD84A" -- yellow
+
+-- Mission marker (the game's sprite) and the player as a flat dot. Sprites grow with the
+-- slider's magnification and have no size option; the dot's radius is divided by it instead.
+local function draw_markers()
+	view.markers_begin()
+	if game.planet_map.point("quest") ~= 0 then
+		view.sprite("GFX_GUI_PLANETMAP_MISSION_MARKER2", game.planet_map.point("quest_x"), game.planet_map.point("quest_y"), 0)
+	end
+	if game.planet_map.point("character") ~= 0 then
+		local x, y = game.planet_map.point("character_x"), game.planet_map.point("character_y")
+		view.fan(x, y, (PLAYER_RADIUS + PLAYER_OUTLINE) / scale, 0, 2 * math.pi, "#FF0D1015")
+		view.fan(x, y, PLAYER_RADIUS / scale, 0, 2 * math.pi, PLAYER_COLOR)
+	end
+	view.markers_end()
+end
 
 local function publish(changed)
 	ui.publish("buttons", tostring(buttons))
@@ -152,9 +179,10 @@ end
 local function refresh_buttons()
 	enable(zoom_in, zoom < records - 1, Theme.color.text)
 	enable(zoom_out, records > 0 and zoom > 0, Theme.color.text)
+	ui.text(zoom_level, records > 0 and string.format("%d/%d", zoom + 1, records) or "")
 	enable(character, game.planet_map.point("character") ~= 0, ME_COLOR)
 	enable(quest, game.planet_map.point("held_quest") ~= 0, MISSION_COLOR)
-	ui.text(zoom_level, records > 0 and string.format("%d/%d", zoom + 1, records) or "")
+	ui.enabled(zoom_slider, records > 0)
 	if menu_character ~= (game.planet_map.point("character") ~= 0)
 		or menu_quest ~= (game.planet_map.point("quest") ~= 0) then
 		rebuild_menu()
@@ -186,19 +214,80 @@ local function follow()
 	end
 end
 
+-- One level's image size: zoom far in so the image overflows the view, pan past the far
+-- corner (the pan is clamped to the image) and read where it stopped.
+local function measure(index)
+	game.planet_map.record(index)
+	view.zoom(16, 0, 0)
+	view.pan(1e7, 1e7)
+	return view.read("x") + view.read("width"), view.read("y") + view.read("height")
+end
+
+local function calibrate()
+	levels = {}
+	local log = {}
+	for index = 0, records - 1 do
+		local w, h = measure(index)
+		log[#log + 1] = string.format("%d:%.0fx%.0f", index, w, h)
+		local previous = levels[index]
+		if not (w > 0 and h > 0) or (previous and w <= previous.w) then
+			-- Unreadable: assume each level doubles the previous one.
+			w = previous and previous.w * 2 or 1024
+			h = previous and previous.h * 2 or 1024
+			log[#log] = log[#log] .. "?"
+		end
+		levels[index + 1] = { w = w, h = h }
+	end
+	pcall(ui.storage.write, "zoom_log", table.concat(log, " ")) -- for diagnosis
+	calibrate_pending = false
+end
+
+-- Where the middle of the view is, as a share of the current image (nil if unknown).
+local function centre_share()
+	local current = levels[zoom + 1]
+	if not current then return nil end
+	return (view.read("x") + view.read("width") / 2) / current.w,
+		(view.read("y") + view.read("height") / 2) / current.h
+end
+
+local function pan_to_share(u, v)
+	local current = levels[zoom + 1]
+	if not (u and current) then return end
+	view.pan(u * current.w - view.read("width") / 2, v * current.h - view.read("height") / 2)
+end
+
+-- Slider: magnify the current image, keeping the middle of the view put.
+local function set_scale(value)
+	local u, v = centre_share()
+	scale = math.max(1, math.min(MAX_SCALE, value))
+	view.zoom(scale, 0, 0)
+	pan_to_share(u, v)
+	ui.progress(zoom_slider, math.log(scale) / math.log(MAX_SCALE))
+	draw_markers()
+end
+
+-- −/+: switch image (level), keeping the middle of the view on the same spot and the slider's magnification.
 local function change_zoom(step)
 	local chosen = math.max(0, math.min(records - 1, zoom + step))
 	if records == 0 or chosen == zoom then
 		return
 	end
-	local x, y = view.read("x"), view.read("y")
+	local u, v = centre_share()
 	zoom = chosen
 	game.planet_map.record(zoom)
-	view.pan(x, y)
+	view.zoom(scale, 0, 0)
+	pan_to_share(u, v)
+	draw_markers()
 	refresh_buttons()
 	publish(true)
 end
 
+ui.on_value_changed(zoom_slider, function(position)
+	set_scale(MAX_SCALE ^ position)
+end)
+ui.on_value_committed(zoom_slider, function()
+	ui.storage.write("zoom_scale", string.format("%.3f", scale))
+end)
 ui.on_click(zoom_in, function() change_zoom(1) end)
 ui.on_click(zoom_out, function() change_zoom(-1) end)
 ui.on_click(character, function() set_following(not following) end)
@@ -234,6 +323,7 @@ function planet_map_update(current_revision, count)
 		end
 		view.pan(0, 0)
 		centre_pending = true
+		calibrate_pending = true -- another map: measure its levels once the view has a size
 		publish(false)
 	end
 	if first_pending then
@@ -242,19 +332,18 @@ function planet_map_update(current_revision, count)
 		ui.place(frame.root, 95, 72)
 	elseif centre_pending and view.read("width") > 0 and view.read("height") > 0 then
 		centre_pending = false
+		if calibrate_pending and records > 0 then
+			calibrate()
+			game.planet_map.record(zoom) -- measuring visited every level
+			view.pan(0, 0)
+			set_scale(tonumber(ui.storage.read("zoom_scale")) or 1)
+		end
 		planet_map_centre("character")
 	end
 	follow()
 	frame:resize(ui.chosen_width(frame.root), ui.chosen_height(frame.root))
 	refresh_buttons()
-	view.markers_begin()
-	if game.planet_map.point("quest") ~= 0 then
-		view.sprite("GFX_GUI_PLANETMAP_MISSION_MARKER2", game.planet_map.point("quest_x"), game.planet_map.point("quest_y"), 0)
-	end
-	if game.planet_map.point("character") ~= 0 then
-		view.sprite("GFX_GUI_PLANETMAP_PLAYER_MARKER", game.planet_map.point("character_x"), game.planet_map.point("character_y"), 0)
-	end
-	view.markers_end()
+	draw_markers()
 end
 
 -- The zone you're in, by name (playfields.lua, generated from the client database).

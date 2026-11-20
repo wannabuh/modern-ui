@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Modern World Map: the map, then a flat 30px toolbar underneath it
-     (your zone on the left, zoom / centre controls on the right). -->
+     (your zone on the left, map level / magnify / centre controls on the right). -->
 <root>
   <View name="planet_map" view_layout="vertical" weight="1">
     <PannedSurfaceView name="planet_tiles" capture_input="true" pointer_pan="true" weight="1" />
@@ -10,9 +10,10 @@
       <View view_layout="horizontal" layout_borders="Rect(10,0,10,0)">
         <TextView name="planet_location" interactive="false" value="" font_size="13" color="E8ECF1" v_alignment="center" tooltip="The zone you are in" />
         <HLayoutSpacer />
-        <TextButton name="planet_zoom_out" label="−" font_size="18" color="E8ECF1" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" tooltip="Zoom out" />
+        <TextButton name="planet_zoom_out" label="−" font_size="18" color="E8ECF1" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" tooltip="Less detailed map" />
         <TextView name="planet_zoom_level" interactive="false" value="" font_size="12" color="A3ADBA" v_alignment="center" layout_borders="Rect(10,0,10,0)" />
-        <TextButton name="planet_zoom_in" label="+" font_size="18" color="E8ECF1" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" tooltip="Zoom in" />
+        <TextButton name="planet_zoom_in" label="+" font_size="18" color="E8ECF1" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" tooltip="More detailed map" />
+        <Slider name="planet_zoom" track_height="14" track_slices="Rect(1,5,1,5)" min_size="Point(90,14)" max_size="Point(90,14)" v_alignment="center" layout_borders="Rect(12,0,0,0)" bg_gfx="GFX_GUI_CONTROLCENTER_AGGDEF_SLIDER_BACKGROUND" thumb_gfx="GFX_GUI_CONTROLCENTER_AGGDEF_SLIDER" thumb_width="9" tooltip="Magnify" />
         <View interactive="false" fill_color="0xFF2A3039" min_size="Point(1,16)" max_size="Point(1,16)" v_alignment="center" layout_borders="Rect(12,0,12,0)" />
         <TextButton name="planet_centre_character" label="Me" font_size="13" color="4FB3BF" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" tooltip="Center on you and follow" />
         <TextButton name="planet_centre_quest" label="Mission" font_size="13" color="F0C060" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(14,0,0,0)" tooltip="Center on your mission" />
