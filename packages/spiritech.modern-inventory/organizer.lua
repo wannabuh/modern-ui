@@ -32,6 +32,7 @@ ui.define("inventory.organizer", function()
 	local TAGGABLE_BUILT_IN = { "Favorites" }
 	local BAG_WORDS = { "backpack", "bag", "pouch", "sack", "satchel", "container" } -- name words that mean "container"
 	local SORTS = { "Slot", "Name", "Quality", "Stack", "New" }
+	local BAG_SORTS = { Slot = true, Name = true, Quality = true } -- bag / bank / loot windows (title menu)
 	local SELECTED, IDLE = "#E8ECF1", "#A3ADBA"
 	local ORGANIZE_ON = "#4FB3BF"
 	local ROW_HEIGHT = 26 -- the organizer row incl. divider; keep in sync with window.xml
@@ -65,6 +66,7 @@ ui.define("inventory.organizer", function()
 		self.category = "All"
 		self.filter = ""
 		self.sort = "Slot"
+		self.bag_sort = "Slot" -- display order in bag / bank / loot windows (organizer inactive)
 		self.organizing = false
 		self.custom = {}
 		self.tags = {} -- category -> { [item name] = true }
@@ -139,6 +141,8 @@ ui.define("inventory.organizer", function()
 	end
 
 	function Organizer:load()
+		local bag_sort = ui.storage.read(self:storage_key("bag_sort"))
+		if BAG_SORTS[bag_sort] then self.bag_sort = bag_sort end
 		self.custom = split_lines(ui.storage.read(self:storage_key("categories")))
 		self.tags = {}
 		for _, category in ipairs(self:taggable()) do
@@ -529,7 +533,8 @@ ui.define("inventory.organizer", function()
 
 	-- True when the plain game grid can be shown as-is (keeps empty slots as drop targets).
 	function Organizer:is_plain()
-		return not self.active or (self.category == "All" and self.filter == "" and self.sort == "Slot")
+		if not self.active then return self.bag_sort == "Slot" end
+		return (self.category == "All" and self.filter == "" and self.sort == "Slot")
 	end
 
 	-- Items of one category (optionally name-filtered), in the current display order.
@@ -541,10 +546,13 @@ ui.define("inventory.organizer", function()
 				list[#list + 1] = { entry = entry, order = index }
 			end
 		end
-		local sort = self.sort
+		local sort = self.active and self.sort or self.bag_sort
 		table.sort(list, function(a, b)
 			local x, y = a.entry, b.entry
-			if sort == "Name" and x.name ~= y.name then return x.name < y.name end
+			if sort == "Name" then
+				if x.name ~= y.name then return x.name < y.name end
+				if x.quality ~= y.quality then return x.quality > y.quality end
+			end
 			if sort == "Quality" and x.quality ~= y.quality then return x.quality > y.quality end
 			if sort == "Stack" and x.count ~= y.count then return x.count > y.count end
 			if sort == "New" then
@@ -1154,6 +1162,14 @@ ui.define("inventory.organizer", function()
 		ui.preference.write("modern_show_" .. part, tostring(value), "bool")
 		self:apply_visibility()
 		if self.options.resize then self.options.resize() end
+		self.options.reconcile()
+	end
+
+	-- Bag / bank / loot windows: one sort order shared by all of them (per character).
+	function Organizer:set_bag_sort(sort)
+		if not BAG_SORTS[sort] or sort == self.bag_sort then return end
+		self.bag_sort = sort
+		if self.character then ui.storage.write(self:storage_key("bag_sort"), sort) end
 		self.options.reconcile()
 	end
 

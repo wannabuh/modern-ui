@@ -308,6 +308,17 @@ local function build_title_menu()
 		ui.menu.add(frame.icon, "Rename", false, function() request_name("rename") end)
 		ui.menu.add(frame.icon, "Reset To Default", false, function() request_name("reset") end)
 	end
+	if not organizer.active then
+		-- Bags, bank and loot: display order (shared by all of them, per character).
+		ui.menu.separator(frame.icon)
+		for _, choice in ipairs({ { "Slot", "Sort by slot" }, { "Name", "Sort by name" }, { "Quality", "Sort by QL" } }) do
+			local sort, label = choice[1], choice[2]
+			ui.menu.add(frame.icon, label, organizer.bag_sort == sort, function()
+				organizer:set_bag_sort(sort)
+				build_title_menu() -- move the check mark
+			end)
+		end
+	end
 	if organizer.active then
 		ui.menu.separator(frame.icon)
 		for _, part in ipairs({ { "tabs", "Show tabs" }, { "sort", "Show sort" }, { "organize", "Show organize" } }) do
@@ -387,6 +398,7 @@ game.character.subscribe("self", "", function(_, me)
 			-- Name -> id lookup for tools/copy_ui.py (storage keys only carry the id).
 			if me.name and me.name ~= "" then pcall(ui.storage.write, "who/" .. window_character, me.name) end
 			restore_window()
+			build_title_menu() -- the saved bag sort is known now (the organizer loads it first)
 		end
 	end
 end)
@@ -420,6 +432,10 @@ function inventory_configure(configuration)
 	ui.grid_columns(filtered_grid, capacity)
 	-- The organizer is for the main inventory only (not bags, bank or loot).
 	organizer:activate(configuration.title == "Inventory" and configuration.slot_count and not configuration.request_close)
+	-- Bags, bank and loot open in list mode unless List Mode was turned off for that window.
+	if not organizer.active and mode ~= "list" and ui.preference.read("listview_config.listview_mode") == "" then
+		set_mode("list")
+	end
 	renamable = configuration.renamable == true
 	renamable_title = renamable and configuration.title or nil
 	if renamable then
