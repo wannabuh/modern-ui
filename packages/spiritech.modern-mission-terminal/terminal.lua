@@ -1,19 +1,15 @@
 -- Modern Mission Terminal, terminal half (role prk.mission-terminal): offers as a list.
---   Row: icon | the reward item names once known | the server's short summary.
---   Click selects (as the stock slot does); inspecting with the modifier held stays native.
---   The server sends no reward data with an offer (summary is cut to ~28 characters, icon
---   is a slot handle), so rewards come from the Info half: clicking a row writes storage
---   "inspect_pending" = "<offer key>\t<ms>"; the Info page that opens next records its
---   item names under "rewards" (lines "<offer key>\t<name>\t<name>..."); rows poll that.
+--   Row: icon | the server's summary (cut to ~28 characters by the server; full in tooltip).
+--   Click selects (as the stock slot does); inspecting with the modifier held stays native,
+--   and the (restyled) Info window names the reward item.
 -- The rest (reward mode, chosen reward, sliders, request / accept / cancel) is the stock
--- window's logic in the flat palette. Every reply is logged to storage "terminal_log".
+-- window's logic in the flat palette.
 function BUILD_TERMINAL()
 local Window = ui.require("core.window")
 local Theme = ui.require("spiritech.modern-common/theme")
 
-local WIDTH, MAX_OFFERS, LINES = 360, 6, 3
-local REWARD_COLOR, SUMMARY_COLOR, HINT_COLOR = "#F0C060", "#A3ADBA", "#5E6875"
-local TEXT_ROOM_PAD = 4 + 36 + 8 + 6 + 6 -- row borders + icon + text gap + right pad + slack
+local WIDTH, MAX_OFFERS, LINES = 360, 6, 2
+local TEXT_ROOM_PAD = 4 + 32 + 8 + 6 + 6 -- row borders + icon + text gap + right pad + slack
 
 local content = ui.load("terminal.xml")
 local function find(name) return ui.find(content, name) end
@@ -106,28 +102,6 @@ for index = 1, MAX_OFFERS do
 end
 
 local offers = {}
-local session = tostring(ui.time())
-local generation, last_summaries = 0, nil
-local rewards, rewards_raw = {}, nil -- offer key -> { names }
-
-local function offer_key(index)
-	return session .. ":" .. generation .. ":" .. index
-end
-
-local function read_rewards()
-	local ok, raw = pcall(ui.storage.read, "rewards")
-	raw = ok and raw or ""
-	if raw == rewards_raw then return false end
-	rewards_raw, rewards = raw, {}
-	for line in (raw .. "\n"):gmatch("(.-)\n") do
-		local fields = {}
-		for field in (line .. "\t"):gmatch("(.-)\t") do fields[#fields + 1] = field end
-		if #fields >= 1 and fields[1] ~= "" then
-			rewards[fields[1]] = { table.unpack(fields, 2) }
-		end
-	end
-	return true
-end
 
 local function show_offers()
 	local room = width - Window.CONTENT_SIDES - 8 - TEXT_ROOM_PAD
@@ -135,31 +109,17 @@ local function show_offers()
 		local offer = offers[index]
 		if offer and offer.reference ~= 0 then
 			local summary = plain(offer.description)
-			local names = rewards[offer_key(index)]
-			if not names then
-				local by_title = rewards[session .. ":" .. generation .. ":title:" .. summary]
-				if by_title then
-					local matches = 0
-					for _, other in ipairs(offers) do
-						if plain(other.description) == summary then matches = matches + 1 end
-					end
-					if matches == 1 then names = by_title end
-				end
-			end
 			ui.bind(row.root, offer.reference)
 			ui.action(row.root, "game.mission_terminal.choose", offer.reference, "left")
 			ui.selected(row.root, offer.selected)
 			ui.content(row.icon, true)
 			ui.icon(row.icon, offer.icon)
 			local lines = {}
-			if names then
-				local text = #names > 0 and table.concat(names, " · ") or "No item reward"
-				for _, line in ipairs(wrap(text, room, 2)) do lines[#lines + 1] = { line, REWARD_COLOR } end
+			for line_index, line in ipairs(wrap(summary, room, LINES)) do
+				lines[line_index] = { line, line_index == 1 and Theme.color.text or "#A3ADBA" }
 			end
-			for _, line in ipairs(wrap(summary, room, LINES - #lines)) do lines[#lines + 1] = { line, SUMMARY_COLOR } end
-			if #lines == 0 then lines[1] = { "Mission " .. index, SUMMARY_COLOR } end
-			if not names and #lines < LINES then lines[#lines + 1] = { "Inspect to see the reward", HINT_COLOR } end
-			ui.tooltip(row.root, names and (table.concat(names, "\n") .. "\n\n" .. summary) or summary)
+			if #lines == 0 then lines[1] = { "Mission " .. index, Theme.color.text } end
+			ui.tooltip(row.root, summary)
 			local texts = {}
 			for line_index, line in ipairs(lines) do texts[line_index] = line[1] end
 			ui.text(row.text, table.concat(texts, "\n"))
@@ -170,30 +130,6 @@ local function show_offers()
 		end
 	end
 end
-
--- Pressing a row (select or inspect) marks it as the offer the next Info page belongs to.
--- on_pointer "start" is used because on_click does not fire on these command-bound rows.
-local function mark(index)
-	local offer = offers[index]
-	if offer then
-		pcall(ui.storage.write, "inspect_pending", offer_key(index) .. "\t" .. tostring(ui.time())
-			.. "\t" .. plain(offer.description):gsub("[\t\n]", " "))
-	end
-end
-for index, row in ipairs(rows) do
-	ui.on_pointer(row.root, function(phase)
-		if phase == "start" then mark(index) end
-	end)
-	ui.on_click(row.root, function() mark(index) end)
-end
-
--- Pick up reward names the Info half wrote (polled while offers are shown).
-local next_poll = 0
-ui.on_update(function(now)
-	if now < next_poll then return end
-	next_poll = now + 300
-	if #offers > 0 and read_rewards() then show_offers() end
-end)
 
 -- ------------------------------------------------------------------ window
 local frame = Window.create({
@@ -280,33 +216,8 @@ local function apply_reward(reward)
 	ui.text(request_text, reward.pinned_mode and "Request chain" or request_label)
 end
 
--- ------------------------------------------------------------------ diagnostic
-local replies = 0
-local function log_reply(state, list_offers, reward)
-	replies = replies + 1
-	local out = { string.format("reply %d  offers=%d  selected=%s", replies, #list_offers, tostring(state.selected)) }
-	for index, offer in ipairs(list_offers) do
-		out[#out + 1] = string.format("#%d ref=%s icon=%s selected=%s", index, tostring(offer.reference),
-			tostring(offer.icon), tostring(offer.selected))
-		out[#out + 1] = "  " .. (offer.description or ""):gsub("\r", ""):gsub("\n", "\\n\n  ")
-	end
-	out[#out + 1] = string.format("reward pinned_mode=%s has_pin=%s name=%s ql=%s icon=%s cost=%s",
-		tostring(reward.pinned_mode), tostring(reward.has_pin), tostring(reward.name), tostring(reward.ql),
-		tostring(reward.icon), tostring(reward.cost))
-	pcall(ui.storage.write, "terminal_log", table.concat(out, "\n"))
-end
-
 function mission_terminal_apply(state, list_offers, reward)
-	pcall(log_reply, state, list_offers, reward)
-	local summaries = {}
-	for index, offer in ipairs(list_offers) do summaries[index] = tostring(offer.description) end
-	summaries = table.concat(summaries, "\0")
-	if summaries ~= last_summaries then
-		last_summaries, generation = summaries, generation + 1
-		pcall(ui.storage.write, "offer_set", session .. ":" .. generation)
-	end
 	offers = list_offers
-	read_rewards()
 	ui.visible(empty, #offers == 0)
 	show_offers()
 	command(request, "game.mission_terminal.request", state.request)
