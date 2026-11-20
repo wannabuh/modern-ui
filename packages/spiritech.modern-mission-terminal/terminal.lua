@@ -136,6 +136,16 @@ local function show_offers()
 		if offer and offer.reference ~= 0 then
 			local summary = plain(offer.description)
 			local names = rewards[offer_key(index)]
+			if not names then
+				local by_title = rewards[session .. ":" .. generation .. ":title:" .. summary]
+				if by_title then
+					local matches = 0
+					for _, other in ipairs(offers) do
+						if plain(other.description) == summary then matches = matches + 1 end
+					end
+					if matches == 1 then names = by_title end
+				end
+			end
 			ui.bind(row.root, offer.reference)
 			ui.action(row.root, "game.mission_terminal.choose", offer.reference, "left")
 			ui.selected(row.root, offer.selected)
@@ -161,13 +171,20 @@ local function show_offers()
 	end
 end
 
--- A click on a row (select or inspect) marks it as the offer the next Info page belongs to.
+-- Pressing a row (select or inspect) marks it as the offer the next Info page belongs to.
+-- on_pointer "start" is used because on_click does not fire on these command-bound rows.
+local function mark(index)
+	local offer = offers[index]
+	if offer then
+		pcall(ui.storage.write, "inspect_pending", offer_key(index) .. "\t" .. tostring(ui.time())
+			.. "\t" .. plain(offer.description):gsub("[\t\n]", " "))
+	end
+end
 for index, row in ipairs(rows) do
-	ui.on_click(row.root, function()
-		if offers[index] then
-			pcall(ui.storage.write, "inspect_pending", offer_key(index) .. "\t" .. tostring(ui.time()))
-		end
+	ui.on_pointer(row.root, function(phase)
+		if phase == "start" then mark(index) end
 	end)
+	ui.on_click(row.root, function() mark(index) end)
 end
 
 -- Pick up reward names the Info half wrote (polled while offers are shown).
@@ -286,6 +303,7 @@ function mission_terminal_apply(state, list_offers, reward)
 	summaries = table.concat(summaries, "\0")
 	if summaries ~= last_summaries then
 		last_summaries, generation = summaries, generation + 1
+		pcall(ui.storage.write, "offer_set", session .. ":" .. generation)
 	end
 	offers = list_offers
 	read_rewards()

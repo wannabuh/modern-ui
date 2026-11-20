@@ -16,18 +16,36 @@ local function split(text, separator)
 	return fields
 end
 
-local function relay(facts)
-	local pending = split(ui.storage.read("inspect_pending") or "", "\t")
-	local key, stamp = pending[1], tonumber(pending[2])
-	if not key or key == "" or not stamp or ui.time() - stamp > PENDING_MS then return end
-	ui.storage.write("inspect_pending", "") -- one page per click (item pages opened later are not rewards)
+local function trim(text)
+	return (tostring(text or ""):gsub("[\t\n\r]", " "):gsub("^%s+", ""):gsub("%s+$", ""))
+end
 
-	local names, seen, log = {}, {}, { "key " .. key }
+-- An inspected mission page: title = the offer's summary text, then Description / Reward /
+-- Cash / Experience / "Item reward:" followed by the item facts (icons; text = item name).
+local function relay(facts)
+	local title = trim(facts[1] and facts[1].text)
+	local reward_at
+	for index, fact in ipairs(facts) do
+		if not fact.item and trim(fact.text):lower():match("^item reward") then reward_at = index end
+	end
+	if not reward_at then return end -- not a mission page
+
+	local pending = split(ui.storage.read("inspect_pending") or "", "\t")
+	local key = pending[1]
+	local fresh = key and key ~= "" and tonumber(pending[2]) and ui.time() - tonumber(pending[2]) <= PENDING_MS
+	if fresh and trim(pending[3]) == title then
+		ui.storage.write("inspect_pending", "") -- one page per press
+	else
+		-- terminal uses this only when one current offer has this text
+		key = (ui.storage.read("offer_set") or "") .. ":title:" .. title
+	end
+
+	local names, seen, log = {}, {}, { "key " .. key .. "  pending=" .. tostring(ui.storage.read("inspect_pending")) }
 	for index, fact in ipairs(facts) do
 		log[#log + 1] = string.format("%d %s indent=%d item=%s link=%s doc=%s row=%s value=%s | %s", index,
 			tostring(fact.tone), fact.indent or 0, tostring(fact.item), tostring(fact.link), tostring(fact.document),
-			tostring(fact.row), tostring(fact.value), tostring(fact.text):gsub("\n", "\\n"))
-		local name = fact.item and tostring(fact.text or ""):gsub("[\t\n]", " ") or ""
+			tostring(fact.row), tostring(fact.value), (tostring(fact.text):gsub("\n", "\\n")))
+		local name = index > reward_at and fact.item and trim(fact.text) or ""
 		if name ~= "" and not seen[name] then
 			seen[name] = true
 			names[#names + 1] = name
@@ -35,12 +53,14 @@ local function relay(facts)
 	end
 	ui.storage.write("info_log", table.concat(log, "\n"))
 
-	-- Keep only this offer set's entries (key = session:generation:index).
-	local set = key:match("^(.*):%d+$") or key
+	-- Keep only this offer set's entries (keys session:generation:<index | title:text>).
+	local set = (ui.storage.read("offer_set") or "") .. ":"
 	local lines = {}
 	for _, line in ipairs(split(ui.storage.read("rewards") or "", "\n")) do
-		local other = line:match("^([^\t]*)")
-		if other and other ~= key and (other:match("^(.*):%d+$") or other) == set then lines[#lines + 1] = line end
+		local other = line:match("^([^\t]*)") or ""
+		if other ~= "" and other ~= key and other:sub(1, #set) == set then
+			lines[#lines + 1] = line
+		end
 	end
 	lines[#lines + 1] = key .. (#names > 0 and ("\t" .. table.concat(names, "\t")) or "")
 	ui.storage.write("rewards", table.concat(lines, "\n"))
