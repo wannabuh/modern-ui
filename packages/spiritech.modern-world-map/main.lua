@@ -44,6 +44,7 @@ local following = false
 -- baseline (after login, a map change or a level change, where coordinates differ).
 local mission_seen
 local set_following
+local sample -- route diagnostic, defined below
 
 -- Map units (pan offsets, view width/height, marker positions) are the current level's image
 -- pixels, so the middle of the view is x + width / 2 at any scale.
@@ -368,6 +369,29 @@ function planet_map_update(current_revision, count)
 	frame:resize(ui.chosen_width(frame.root), ui.chosen_height(frame.root))
 	refresh_buttons()
 	draw_markers()
+	pcall(sample)
+end
+
+-- DIAGNOSTIC (route planning): pairs of your zone + local position with where the game draws
+-- you on the current map, to measure the world -> map projection. Storage "route_samples",
+-- last 80 samples, one per >= 1 s and >= 5 m of movement or a zone / map / level change.
+local self_me
+local route_samples, last_sample = {}, nil
+sample = function()
+	local me = self_me
+	if not me or not me.playfield or not me.x or game.planet_map.point("character") == 0 then return end
+	local now = ui.time()
+	local key = table.concat({ me.playfield, current_map, zoom }, "|")
+	if last_sample and last_sample.key == key and now - last_sample.time < 1000 then return end
+	if last_sample and last_sample.key == key
+		and math.abs(me.x - last_sample.x) < 5 and math.abs(me.z - last_sample.z) < 5 then return end
+	last_sample = { key = key, time = now, x = me.x, z = me.z }
+	local size = levels[zoom + 1]
+	route_samples[#route_samples + 1] = string.format("%d\t%.1f\t%.1f\t%s\t%d\t%s\t%.2f\t%.2f",
+		me.playfield, me.x, me.z, current_map, zoom, size and (size.w .. "x" .. size.h) or "?",
+		game.planet_map.point("character_x"), game.planet_map.point("character_y"))
+	if #route_samples > 80 then table.remove(route_samples, 1) end
+	pcall(ui.storage.write, "route_samples", table.concat(route_samples, "\n"))
 end
 
 -- The zone you're in, by name (playfields.lua, generated from the client database).
@@ -375,6 +399,8 @@ game.character.subscribe("self", "", function(_, me)
 	local id = me and me.playfield
 	local name = id and PLAYFIELDS and PLAYFIELDS[id]
 	ui.text(location, name or (id and ("Zone " .. id)) or "")
+	self_me = me
+	pcall(sample)
 end)
 
 show_buttons(buttons)
