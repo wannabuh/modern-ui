@@ -3,5 +3,7 @@
   <Provides role="prk.planet-map" />
   <Requires package="spiritech.modern-common" />
   <Script src="playfields.lua" />
+  <Script src="whompahs.lua" />
+  <Script src="route.lua" />
   <Script src="main.lua" />
 </Package>

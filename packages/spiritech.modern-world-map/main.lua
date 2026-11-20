@@ -44,7 +44,7 @@ local following = false
 -- baseline (after login, a map change or a level change, where coordinates differ).
 local mission_seen
 local set_following
-local sample -- route diagnostic, defined below
+local sample, refresh_route -- route planning, defined below
 
 -- Map units (pan offsets, view width/height, marker positions) are the current level's image
 -- pixels, so the middle of the view is x + width / 2 at any scale.
@@ -55,10 +55,47 @@ local calibrate_pending = true
 local PLAYER_RADIUS, PLAYER_OUTLINE = 5, 1.5 -- player dot, in screen pixels at any magnification
 local PLAYER_COLOR = "#FFFFD84A" -- yellow
 
+-- Whompah route (route.lua): dotted walking legs and a ring on each whompah stand used.
+local ROUTE_COLOR, STAND_COLOR, OUTLINE_COLOR = "#FFF0C060", "#FF4FB3BF", "#FF0D1015"
+local ROUTE_DOT, ROUTE_GAP, STAND_RADIUS = 1.8, 7, 4.5 -- screen pixels
+local route_shown = ui.storage.read("route_shown") ~= "false"
+local route -- latest plan, in global coordinates (nil = nothing to draw)
+
+local function draw_route()
+	if not route or not route_shown then return end
+	local function at(gx, gz) return ROUTE.project(current_map, zoom, gx, gz) end
+	local length, segments = 0, {}
+	for _, leg in ipairs(route.legs) do
+		local ax, ay = at(leg[1], leg[2])
+		local bx, by = at(leg[3], leg[4])
+		if ax and bx then
+			local d = math.sqrt((bx - ax) ^ 2 + (by - ay) ^ 2)
+			segments[#segments + 1] = { ax, ay, bx, by, d }
+			length = length + d
+		end
+	end
+	local gap = math.max(ROUTE_GAP / scale, length / 600) -- at most ~600 dots
+	for _, seg in ipairs(segments) do
+		local count = math.max(1, math.floor(seg[5] / gap))
+		for i = 0, count do
+			local t = i / count
+			view.fan(seg[1] + (seg[3] - seg[1]) * t, seg[2] + (seg[4] - seg[2]) * t, ROUTE_DOT / scale, 0, 2 * math.pi, ROUTE_COLOR)
+		end
+	end
+	for _, stand in ipairs(route.stands) do
+		local x, y = at(stand[1], stand[2])
+		if x then
+			view.fan(x, y, (STAND_RADIUS + 1.5) / scale, 0, 2 * math.pi, OUTLINE_COLOR)
+			view.fan(x, y, STAND_RADIUS / scale, 0, 2 * math.pi, STAND_COLOR)
+		end
+	end
+end
+
 -- Mission marker (the game's sprite) and the player as a flat dot. Sprites grow with the
 -- slider's magnification and have no size option; the dot's radius is divided by it instead.
 local function draw_markers()
 	view.markers_begin()
+	draw_route()
 	if game.planet_map.point("quest") ~= 0 then
 		view.sprite("GFX_GUI_PLANETMAP_MISSION_MARKER2", game.planet_map.point("quest_x"), game.planet_map.point("quest_y"), 0)
 	end
@@ -318,6 +355,30 @@ end
 
 ui.on_click(quest, show_mission)
 
+-- Route button: toggles the route; its tooltip lists the steps.
+local route_button = ui.find(content, "planet_route")
+refresh_route = function()
+	local available = route ~= nil
+	ui.text_color(route_button, not available and "#5E6875" or route_shown and MISSION_COLOR or "#A3ADBA")
+	ui.text(route_button, route_shown and available and "● Route" or "Route")
+	local lines
+	if not available then
+		lines = { "Route to your mission (upload a mission to the map)" }
+	else
+		lines = { string.format("Fastest way to your mission (about %d min):", math.max(1, math.floor(route.seconds / 60 + 0.5))) }
+		for index, step in ipairs(route.steps) do lines[#lines + 1] = index .. ". " .. step end
+		lines[#lines + 1] = route_shown and "Click to hide the route" or "Click to show the route"
+	end
+	ui.tooltip(route_button, table.concat(lines, "\n"))
+end
+ui.on_click(route_button, function()
+	route_shown = not route_shown
+	pcall(ui.storage.write, "route_shown", tostring(route_shown))
+	refresh_route()
+	draw_markers()
+end)
+refresh_route()
+
 function planet_map_restore(saved_zoom, saved_buttons, saved_first_time)
 	zoom = math.max(0, saved_zoom)
 	first_time = saved_first_time
@@ -369,29 +430,35 @@ function planet_map_update(current_revision, count)
 	frame:resize(ui.chosen_width(frame.root), ui.chosen_height(frame.root))
 	refresh_buttons()
 	draw_markers()
-	pcall(sample)
+	local ok, problem = pcall(sample)
+	if not ok then pcall(ui.storage.write, "route_error", tostring(problem)) end
 end
 
--- DIAGNOSTIC (route planning): pairs of your zone + local position with where the game draws
--- you on the current map, to measure the world -> map projection. Storage "route_samples",
--- last 80 samples, one per >= 1 s and >= 5 m of movement or a zone / map / level change.
+-- Route planning: where the game draws you calibrates this map level's projection
+-- (ROUTE.observe), then the route from you to the mission marker is re-planned (at most
+-- twice a second, or at once when the map or level changes).
 local self_me
-local route_samples, last_sample = {}, nil
+local planned_at, planned_key = 0, nil
 sample = function()
 	local me = self_me
-	if not me or not me.playfield or not me.x or game.planet_map.point("character") == 0 then return end
+	local here = game.planet_map.point("character") ~= 0
+	if me and me.playfield and me.x and here and current_map ~= "" then
+		ROUTE.observe(current_map, zoom, me.playfield, me.x, me.z,
+			game.planet_map.point("character_x"), game.planet_map.point("character_y"))
+	end
 	local now = ui.time()
-	local key = table.concat({ me.playfield, current_map, zoom }, "|")
-	if last_sample and last_sample.key == key and now - last_sample.time < 1000 then return end
-	if last_sample and last_sample.key == key
-		and math.abs(me.x - last_sample.x) < 5 and math.abs(me.z - last_sample.z) < 5 then return end
-	last_sample = { key = key, time = now, x = me.x, z = me.z }
-	local size = levels[zoom + 1]
-	route_samples[#route_samples + 1] = string.format("%d\t%.1f\t%.1f\t%s\t%d\t%s\t%.2f\t%.2f",
-		me.playfield, me.x, me.z, current_map, zoom, size and (size.w .. "x" .. size.h) or "?",
-		game.planet_map.point("character_x"), game.planet_map.point("character_y"))
-	if #route_samples > 80 then table.remove(route_samples, 1) end
-	pcall(ui.storage.write, "route_samples", table.concat(route_samples, "\n"))
+	local key = current_map .. "|" .. zoom
+	if key == planned_key and now - planned_at < 500 then return end
+	planned_at, planned_key = now, key
+	local old = route
+	route = nil
+	if here and game.planet_map.point("quest") ~= 0 and current_map ~= "" then
+		local sx, sz = ROUTE.unproject(current_map, zoom, game.planet_map.point("character_x"), game.planet_map.point("character_y"))
+		local gx, gz = ROUTE.unproject(current_map, zoom, game.planet_map.point("quest_x"), game.planet_map.point("quest_y"))
+		if sx and gx then route = ROUTE.plan(current_map, sx, sz, gx, gz) end
+	end
+	if refresh_route then refresh_route() end
+	if (old ~= nil or route ~= nil) and route_shown then draw_markers() end
 end
 
 -- The zone you're in, by name (playfields.lua, generated from the client database).
@@ -400,7 +467,8 @@ game.character.subscribe("self", "", function(_, me)
 	local name = id and PLAYFIELDS and PLAYFIELDS[id]
 	ui.text(location, name or (id and ("Zone " .. id)) or "")
 	self_me = me
-	pcall(sample)
+	local ok, problem = pcall(sample)
+	if not ok then pcall(ui.storage.write, "route_error", tostring(problem)) end
 end)
 
 show_buttons(buttons)
