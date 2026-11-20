@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Modern World Map: the map, then a flat 30px toolbar underneath it
-     (your zone on the left, map level / magnify / centre / route controls on the right). -->
+     (your zone on the left, map level / magnify / centre controls on the right). -->
 <root>
   <View name="planet_map" view_layout="vertical" weight="1">
     <PannedSurfaceView name="planet_tiles" capture_input="true" pointer_pan="true" weight="1" />
@@ -17,7 +17,6 @@
         <View interactive="false" fill_color="0xFF2A3039" min_size="Point(1,16)" max_size="Point(1,16)" v_alignment="center" layout_borders="Rect(12,0,12,0)" />
         <TextButton name="planet_centre_character" label="Me" font_size="13" color="4FB3BF" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" tooltip="Center on you and follow" />
         <TextButton name="planet_centre_quest" label="Mission" font_size="13" color="F0C060" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(14,0,0,0)" tooltip="Center on your mission" />
-        <TextButton name="planet_route" label="Route" font_size="13" color="F0C060" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(14,0,0,0)" tooltip="Show the fastest way to your mission, using whompahs" />
       </View>
     </View>
   </View>
