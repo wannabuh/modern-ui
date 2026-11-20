@@ -1,5 +1,5 @@
 -- Modern Mission Terminal (role prk.mission-terminal): offers as a list.
---   Row: icon | the server's summary (cut to ~28 characters by the server; full in tooltip).
+--   Row: icon | the server's summary (cut to ~28 characters by the server).
 --   Click selects (as the stock slot does); inspecting with the modifier held stays native,
 --   and the (restyled) Info window names the reward item.
 -- The rest (reward mode, chosen reward, sliders, request / accept / cancel) is the stock
@@ -119,7 +119,6 @@ for index, row in ipairs(rows) do
 			lines[line_index] = { line, line_index == 1 and Theme.color.text or "#A3ADBA" }
 		end
 		if #lines == 0 then lines[1] = { "Mission " .. index, Theme.color.text } end
-		ui.tooltip(row.root, summary)
 		local texts = {}
 		for line_index, line in ipairs(lines) do texts[line_index] = line[1] end
 		ui.text(row.text, table.concat(texts, "\n"))
