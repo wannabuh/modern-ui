@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- One mission offer: 32px icon | up to three lines of the server's mission summary.
+     Click selects the offer; inspecting (modifier + click) stays native. -->
+<root>
+  <Button name="offer_row" flat="true" view_layout="stacked" capture_input="true" selection_color="4FB3BF" min_size="Point(-1,52)" max_size="Point(-1,52)" layout_borders="Rect(0,0,0,2)">
+    <View name="row_bg" interactive="false" fill_color="0xFF12161C" />
+    <View interactive="false" view_layout="horizontal" layout_borders="Rect(4,0,6,0)">
+      <ItemSlotView name="row_icon" interactive="false" slot_gfx="" icon_fit="center" v_alignment="start" min_size="Point(36,36)" max_size="Point(36,36)" layout_borders="Rect(0,8,0,0)" />
+      <TextView name="row_text" interactive="false" value="" size_to_text="false" font_size="12" color="E8ECF1" weight="1" layout_borders="Rect(8,3,0,3)" />
+    </View>
+  </Button>
+</root>
