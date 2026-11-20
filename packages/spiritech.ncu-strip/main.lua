@@ -3,8 +3,8 @@
 -- so it works while the NCU window is closed. It cannot cancel programs: use the NCU window
 -- (right-click a row) for that.
 --
--- Icons fill left to right from the column's left edge and wrap to a new row at 520px;
--- the strip grows upward so its bottom edge stays put.
+-- Icons fill left to right from the column's left edge and wrap to a new row at 520px,
+-- stacking rows bottom to top; the strip grows upward so its bottom edge stays put.
 -- Each icon: outline colour by type (red hostile, green team), a sweep for time used, and
 -- the time left underneath (amber in the last minute). Same order as the NCU list:
 -- biggest NCU cost first.
@@ -123,10 +123,11 @@ local function present(effects)
 	for index, effect in ipairs(list) do
 		local view = cell(index)
 		local slot = index - 1
-		-- Left to right, wrapping to a new row once the 520px column is full.
+		-- Left to right, wrapping to a new row once the 520px column is full. The first row
+		-- sits at the bottom and later rows stack on top of it.
 		local row = math.floor(slot / COLUMNS)
 		local left = (slot % COLUMNS) * (CELL_W + GAP)
-		ui.place(view.view, left, row * (CELL_H + GAP))
+		ui.place(view.view, left, (rows - 1 - row) * (CELL_H + GAP))
 		ui.visible(view.view, true)
 		-- Like Core's grid/table: mark the slot as holding content, then set its icon.
 		ui.content(view.icon, true)
