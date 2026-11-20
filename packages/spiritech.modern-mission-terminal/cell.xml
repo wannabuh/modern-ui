@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <View view_layout="horizontal" layout_borders="Rect(16,0,0,0)">
+    <HLayoutSpacer />
+    <TextView name="value" font_size="13" word_wrap="false" />
+    <TextView name="note" font_size="13" word_wrap="false" font_style="italic" layout_borders="Rect(4,0,0,0)" />
+  </View>
+</root>

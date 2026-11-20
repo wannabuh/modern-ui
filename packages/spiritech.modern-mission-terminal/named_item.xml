@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <View view_layout="horizontal" interactive="true" layout_borders="Rect(0,0,0,1)">
+    <ItemSlotView name="icon" slot_gfx="" icon_fit="center" overlay_inset="0" interactive="false" min_size="Point(16,16)" max_size="Point(16,16)" v_alignment="center" layout_borders="Rect(0,0,4,0)" />
+    <TextView name="label" font_size="13" word_wrap="false" interactive="false" v_alignment="center" />
+  </View>
+</root>

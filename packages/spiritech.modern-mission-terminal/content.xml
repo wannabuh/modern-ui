@@ -1,88 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Modern Mission Terminal: offers as a list (icon + the server's summary text), then the
-     stock controls in the flat palette. Slider names match the stock window. -->
 <root>
-  <View name="mission_terminal" view_layout="vertical" layout_borders="Rect(4,4,4,4)">
-    <View name="offer_list" view_layout="vertical" />
-    <TextView name="offer_empty" interactive="false" value="Request missions to see offers" font_size="11" color="8B95A3" h_alignment="center" min_size="Point(-1,40)" max_size="Point(-1,40)" text_alignment="center" />
-    <View view_layout="horizontal" min_size="Point(-1,22)" max_size="Point(-1,22)" layout_borders="Rect(0,6,0,0)">
-      <Button name="mode_random" flat="true" view_layout="stacked" capture_input="true" selection_color="4FB3BF" weight="1" min_size="Point(40,20)" max_size="Point(-1,20)" v_alignment="center" tooltip="Missions reward a random item">
-        <View interactive="false" fill_color="0xFF2A3039" />
-        <TextView name="mode_random_label" interactive="false" value="Random reward" font_size="11" color="E8ECF1" h_alignment="center" v_alignment="center" />
-      </Button>
-      <Button name="mode_pinned" flat="true" view_layout="stacked" capture_input="true" selection_color="4FB3BF" weight="1" min_size="Point(40,20)" max_size="Point(-1,20)" v_alignment="center" layout_borders="Rect(4,0,0,0)" tooltip="Missions become a chain that ends with a reward you choose">
-        <View interactive="false" fill_color="0xFF2A3039" />
-        <TextView name="mode_pinned_label" interactive="false" value="Chosen reward" font_size="11" color="E8ECF1" h_alignment="center" v_alignment="center" />
-      </Button>
-    </View>
-    <View name="reward_row" view_layout="horizontal" visible="false" layout_borders="Rect(0,8,0,0)">
-      <ItemSlotView name="reward_slot" min_size="Point(40,40)" max_size="Point(40,40)" slot_gfx="" fill_color="0xE61B2028" icon_fit="center" icon_inset="3" tooltip="Choose the reward" />
-      <View view_layout="vertical" weight="1" layout_borders="Rect(6,0,4,0)">
-        <TextView name="reward_name" font_size="12" color="E8ECF1" min_size="Point(-1,16)" max_size="Point(-1,-1)" />
-        <TextView name="reward_ql" font_size="11" color="A3ADBA" min_size="Point(-1,15)" max_size="Point(-1,-1)" />
-        <TextView name="reward_cost" font_size="11" color="F0C060" min_size="Point(-1,15)" max_size="Point(-1,-1)" />
-      </View>
-      <Button name="reward_clear" flat="true" view_layout="stacked" capture_input="true" selection_color="4FB3BF" min_size="Point(48,20)" max_size="Point(48,20)" v_alignment="center" tooltip="Clear the chosen reward">
-        <View interactive="false" fill_color="0xFF2A3039" />
-        <TextView name="reward_clear_label" interactive="false" value="Clear" font_size="11" color="E8ECF1" h_alignment="center" v_alignment="center" />
-      </Button>
-    </View>
-    <View name="row_difficulty" view_layout="horizontal" layout_borders="Rect(0,10,0,0)">
-      <TextView name="row_difficulty_min" font_size="12" color="A3ADBA" text_alignment="right" min_size="Point(0,18)" max_size="Point(0,-1)" v_alignment="center" />
-      <Slider name="slider_difficulty" min_size="Point(92,13)" max_size="Point(92,13)" v_alignment="center" layout_borders="Rect(5,0,5,0)" bg_gfx="GFX_GUI_MISSION_SLIDER_BACKGROUND" thumb_gfx="GFX_GUI_CONTROLCENTER_AGGDEF_SLIDER" thumb_width="11" color="FFFFFF" />
-      <TextView name="row_difficulty_max" font_size="12" color="A3ADBA" text_alignment="left" min_size="Point(0,18)" max_size="Point(0,-1)" v_alignment="center" />
-    </View>
-    <View view_layout="horizontal" min_size="Point(-1,26)" max_size="Point(-1,26)" layout_borders="Rect(0,6,0,0)">
-      <Button name="request" flat="true" view_layout="stacked" capture_input="true" selection_color="4FB3BF" min_size="Point(140,20)" max_size="Point(140,20)" v_alignment="center">
-        <View interactive="false" fill_color="0xFF1F5F69" />
-        <TextView name="request_label" interactive="false" value="Request missions" font_size="11" color="FFFFFF" h_alignment="center" v_alignment="center" />
-      </Button>
+  <View name="info" view_layout="vertical" weight="1">
+    <ScrollView name="info_scroll" capture_input="true" v_scrollbar_mode="auto" scrollbar_width="11" weight="1">
+      <ScrollViewChild name="info_lines" view_layout="vertical" capture_input="true" layout_borders="Rect(8,8,8,8)" />
+    </ScrollView>
+    <View view_layout="horizontal" min_size="Point(-1,28)" max_size="Point(-1,28)" layout_borders="Rect(8,8,8,8)">
       <HLayoutSpacer />
-      <TextButton name="advanced" label="More options" font_size="11" color="8B95A3" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" />
+      <Button name="info_back" label="Back" font_size="13" min_size="Point(76,28)" max_size="Point(76,28)" v_alignment="center" layout_borders="Rect(0,0,8,0)" />
+      <Button name="info_forward" label="Forward" font_size="13" min_size="Point(76,28)" max_size="Point(76,28)" v_alignment="center" />
     </View>
-    <View name="advanced_rows" view_layout="vertical" visible="false" layout_borders="Rect(0,6,0,0)">
-      <View name="row_good" view_layout="horizontal" layout_borders="Rect(0,0,0,0)">
-        <TextView name="row_good_min" font_size="12" color="A3ADBA" text_alignment="right" min_size="Point(0,18)" max_size="Point(0,-1)" v_alignment="center" />
-        <Slider name="slider_good" min_size="Point(92,13)" max_size="Point(92,13)" v_alignment="center" layout_borders="Rect(5,0,5,0)" bg_gfx="GFX_GUI_MISSION_SLIDER_BACKGROUND" thumb_gfx="GFX_GUI_CONTROLCENTER_AGGDEF_SLIDER" thumb_width="11" color="FFFFFF" />
-        <TextView name="row_good_max" font_size="12" color="A3ADBA" text_alignment="left" min_size="Point(0,18)" max_size="Point(0,-1)" v_alignment="center" />
-      </View>
-      <View name="row_order" view_layout="horizontal" layout_borders="Rect(0,0,0,0)">
-        <TextView name="row_order_min" font_size="12" color="A3ADBA" text_alignment="right" min_size="Point(0,18)" max_size="Point(0,-1)" v_alignment="center" />
-        <Slider name="slider_order" min_size="Point(92,13)" max_size="Point(92,13)" v_alignment="center" layout_borders="Rect(5,0,5,0)" bg_gfx="GFX_GUI_MISSION_SLIDER_BACKGROUND" thumb_gfx="GFX_GUI_CONTROLCENTER_AGGDEF_SLIDER" thumb_width="11" color="FFFFFF" />
-        <TextView name="row_order_max" font_size="12" color="A3ADBA" text_alignment="left" min_size="Point(0,18)" max_size="Point(0,-1)" v_alignment="center" />
-      </View>
-      <View name="row_open" view_layout="horizontal" layout_borders="Rect(0,0,0,0)">
-        <TextView name="row_open_min" font_size="12" color="A3ADBA" text_alignment="right" min_size="Point(0,18)" max_size="Point(0,-1)" v_alignment="center" />
-        <Slider name="slider_open" min_size="Point(92,13)" max_size="Point(92,13)" v_alignment="center" layout_borders="Rect(5,0,5,0)" bg_gfx="GFX_GUI_MISSION_SLIDER_BACKGROUND" thumb_gfx="GFX_GUI_CONTROLCENTER_AGGDEF_SLIDER" thumb_width="11" color="FFFFFF" />
-        <TextView name="row_open_max" font_size="12" color="A3ADBA" text_alignment="left" min_size="Point(0,18)" max_size="Point(0,-1)" v_alignment="center" />
-      </View>
-      <View name="row_physical" view_layout="horizontal" layout_borders="Rect(0,0,0,0)">
-        <TextView name="row_physical_min" font_size="12" color="A3ADBA" text_alignment="right" min_size="Point(0,18)" max_size="Point(0,-1)" v_alignment="center" />
-        <Slider name="slider_physical" min_size="Point(92,13)" max_size="Point(92,13)" v_alignment="center" layout_borders="Rect(5,0,5,0)" bg_gfx="GFX_GUI_MISSION_SLIDER_BACKGROUND" thumb_gfx="GFX_GUI_CONTROLCENTER_AGGDEF_SLIDER" thumb_width="11" color="FFFFFF" />
-        <TextView name="row_physical_max" font_size="12" color="A3ADBA" text_alignment="left" min_size="Point(0,18)" max_size="Point(0,-1)" v_alignment="center" />
-      </View>
-      <View name="row_headon" view_layout="horizontal" layout_borders="Rect(0,0,0,0)">
-        <TextView name="row_headon_min" font_size="12" color="A3ADBA" text_alignment="right" min_size="Point(0,18)" max_size="Point(0,-1)" v_alignment="center" />
-        <Slider name="slider_headon" min_size="Point(92,13)" max_size="Point(92,13)" v_alignment="center" layout_borders="Rect(5,0,5,0)" bg_gfx="GFX_GUI_MISSION_SLIDER_BACKGROUND" thumb_gfx="GFX_GUI_CONTROLCENTER_AGGDEF_SLIDER" thumb_width="11" color="FFFFFF" />
-        <TextView name="row_headon_max" font_size="12" color="A3ADBA" text_alignment="left" min_size="Point(0,18)" max_size="Point(0,-1)" v_alignment="center" />
-      </View>
-      <View name="row_credits" view_layout="horizontal" layout_borders="Rect(0,0,0,0)">
-        <TextView name="row_credits_min" font_size="12" color="A3ADBA" text_alignment="right" min_size="Point(0,18)" max_size="Point(0,-1)" v_alignment="center" />
-        <Slider name="slider_credits" min_size="Point(92,13)" max_size="Point(92,13)" v_alignment="center" layout_borders="Rect(5,0,5,0)" bg_gfx="GFX_GUI_MISSION_SLIDER_BACKGROUND" thumb_gfx="GFX_GUI_CONTROLCENTER_AGGDEF_SLIDER" thumb_width="11" color="FFFFFF" />
-        <TextView name="row_credits_max" font_size="12" color="A3ADBA" text_alignment="left" min_size="Point(0,18)" max_size="Point(0,-1)" v_alignment="center" />
-      </View>
-    </View>
-    <View view_layout="horizontal" min_size="Point(-1,26)" max_size="Point(-1,26)" layout_borders="Rect(0,6,0,0)">
-      <Button name="accept" flat="true" view_layout="stacked" capture_input="true" selection_color="4FB3BF" min_size="Point(110,20)" max_size="Point(110,20)" v_alignment="center">
-        <View interactive="false" fill_color="0xFF2F6E45" />
-        <TextView name="accept_label" interactive="false" value="Accept" font_size="11" color="FFFFFF" h_alignment="center" v_alignment="center" />
-      </Button>
-      <HLayoutSpacer />
-      <Button name="cancel" flat="true" view_layout="stacked" capture_input="true" selection_color="4FB3BF" min_size="Point(70,20)" max_size="Point(70,20)" v_alignment="center">
-        <View interactive="false" fill_color="0xFF2A3039" />
-        <TextView name="cancel_label" interactive="false" value="Cancel" font_size="11" color="E8ECF1" h_alignment="center" v_alignment="center" />
-      </Button>
-    </View>
-    <TextView name="offer_measure" interactive="false" visible="false" value="" font_size="12" />
   </View>
 </root>

@@ -1,244 +1,78 @@
--- Modern Mission Terminal (role prk.mission-terminal): the offers as a list, so every
--- mission's summary text is readable without hovering or inspecting each one.
---   Row: icon | up to three lines of the server's summary (full text in the tooltip).
---   Click selects (as the stock slot does); inspecting with the modifier held stays native.
--- The rest (reward mode, chosen reward, sliders, request / accept / cancel) is the stock
--- window's logic in the flat palette.
--- Diagnostic: every offer reply is written to storage key "terminal_log" (raw summary text,
--- icon handle, reward fields), to learn what the server's summary actually contains.
+-- Modern Mission Terminal: one package, two roles (prk.mission-terminal + prk.info), so the
+-- Info window can hand the reward items of an inspected mission to the terminal list
+-- through the package's shared storage.
+-- No API names the role at init, so each instance builds nothing until the game calls one
+-- of its role's callbacks; the first one decides which half (terminal.lua / info.lua) it is.
 pcall(ui.require, "spiritech.modern-common/screenfit") -- keep window positions through fullscreen changes
-local Window = ui.require("core.window")
-local Theme = ui.require("spiritech.modern-common/theme")
 
-local WIDTH, MAX_OFFERS, LINES = 360, 6, 3
-local ROW = 52 -- row.xml height incl. 2px gap below
-local TEXT_ROOM_PAD = 4 + 36 + 8 + 6 + 6 -- row borders + icon + text gap + right pad + slack
+local PENDING_MS = 4000 -- an Info page opening this soon after a row click belongs to it
 
-local content = ui.load("content.xml")
-local function find(name) return ui.find(content, name) end
-local list, empty, measure = find("offer_list"), find("offer_empty"), find("offer_measure")
-local request, accept, cancel = find("request"), find("accept"), find("cancel")
-local request_text = find("request_label")
-local advanced, advanced_rows = find("advanced"), find("advanced_rows")
-local mode_random, mode_pinned = find("mode_random"), find("mode_pinned")
-local reward_row, reward_slot = find("reward_row"), find("reward_slot")
-local reward_name, reward_ql, reward_cost, reward_clear = find("reward_name"), find("reward_ql"), find("reward_cost"), find("reward_clear")
-local row_difficulty = find("row_difficulty")
-local request_label = "Request missions"
-local slider_rows = { "difficulty", "good", "order", "open", "physical", "headon", "credits" }
-local sliders = {}
-local width = WIDTH
-local show_advanced = ui.preference.read("show_advanced_options") == "true"
-
-for index, name in ipairs(slider_rows) do
-	sliders[index] = find("slider_" .. name)
-	ui.on_value_committed(sliders[index], function(value)
-		game.mission_terminal.slider(index, value)
-	end)
+-- ------------------------------------------------------------------ info relay
+local function split(text, separator)
+	local fields = {}
+	for field in (text .. separator):gmatch("(.-)" .. separator) do fields[#fields + 1] = field end
+	return fields
 end
 
--- ------------------------------------------------------------------ text
-local function escape(text)
-	return (text:gsub("&", "&amp;"):gsub("<", "&lt;"):gsub(">", "&gt;"))
-end
+local function relay(facts)
+	local pending = split(ui.storage.read("inspect_pending") or "", "\t")
+	local key, stamp = pending[1], tonumber(pending[2])
+	if not key or key == "" or not stamp or ui.time() - stamp > PENDING_MS then return end
+	ui.storage.write("inspect_pending", "") -- one page per click (item pages opened later are not rewards)
 
-local function plain(text)
-	text = (text or ""):gsub("\r", ""):gsub("<[^>]*>", "")
-	return text
-end
+	local names, seen, log = {}, {}, { "key " .. key }
+	for index, fact in ipairs(facts) do
+		log[#log + 1] = string.format("%d %s indent=%d item=%s link=%s doc=%s row=%s value=%s | %s", index,
+			tostring(fact.tone), fact.indent or 0, tostring(fact.item), tostring(fact.link), tostring(fact.document),
+			tostring(fact.row), tostring(fact.value), tostring(fact.text):gsub("\n", "\\n"))
+		local name = fact.item and tostring(fact.text or ""):gsub("[\t\n]", " ") or ""
+		if name ~= "" and not seen[name] then
+			seen[name] = true
+			names[#names + 1] = name
+		end
+	end
+	ui.storage.write("info_log", table.concat(log, "\n"))
 
-local function text_width(text)
-	ui.text(measure, text)
-	return ui.text_width(measure)
-end
-
--- Word-wrap the summary into lines that fit `room`; the last shown line ends in "..." when cut.
-local function wrap(text, room, limit)
+	-- Keep only this offer set's entries (key = session:generation:index).
+	local set = key:match("^(.*):%d+$") or key
 	local lines = {}
-	for raw in (text .. "\n"):gmatch("(.-)\n") do
-		local paragraph = raw:gsub("^%s+", ""):gsub("%s+$", "")
-		if paragraph ~= "" then
-			local line = ""
-			for word in paragraph:gmatch("%S+") do
-				local candidate = line == "" and word or (line .. " " .. word)
-				if line ~= "" and text_width(candidate) > room then
-					lines[#lines + 1] = line
-					line = word
-				else
-					line = candidate
-				end
-			end
-			if line ~= "" then lines[#lines + 1] = line end
+	for _, line in ipairs(split(ui.storage.read("rewards") or "", "\n")) do
+		local other = line:match("^([^\t]*)")
+		if other and other ~= key and (other:match("^(.*):%d+$") or other) == set then lines[#lines + 1] = line end
+	end
+	lines[#lines + 1] = key .. (#names > 0 and ("\t" .. table.concat(names, "\t")) or "")
+	ui.storage.write("rewards", table.concat(lines, "\n"))
+end
+
+-- ------------------------------------------------------------------ role switch
+local role
+local function become(which)
+	if role then return role == which end
+	role = which
+	if which == "info" then
+		BUILD_INFO()
+		local stock_show = info_show
+		info_show = function(token, facts, cells, refresh)
+			stock_show(token, facts, cells, refresh)
+			if not refresh then pcall(relay, facts) end
 		end
+	else
+		BUILD_TERMINAL()
 	end
-	if #lines > limit then
-		local last = lines[limit]
-		while last ~= "" and text_width(last .. "...") > room do
-			last = last:sub(1, -2)
-		end
-		lines[limit] = last:gsub("%s+$", "") .. "..."
-		for index = #lines, limit + 1, -1 do lines[index] = nil end
+	return true
+end
+
+local function stub(which, name)
+	local self
+	self = function(...)
+		if become(which) and _ENV[name] ~= self then return _ENV[name](...) end
 	end
-	return lines
+	_ENV[name] = self
 end
 
-local function markup(lines)
-	local pieces = {}
-	for index, line in ipairs(lines) do
-		local color = index == 1 and Theme.color.text or "#A3ADBA"
-		pieces[#pieces + 1] = string.format("<font color=%s>%s</font>", color, escape(line))
-	end
-	return table.concat(pieces, "<br>")
+for _, name in ipairs({ "mission_terminal_configure", "mission_terminal_apply", "mission_terminal_sliders" }) do
+	stub("terminal", name)
 end
-
--- ------------------------------------------------------------------ rows
-local rows = {}
-for index = 1, MAX_OFFERS do
-	local loaded = ui.load("row.xml")
-	ui.add(list, loaded)
-	local root = ui.find(loaded, "offer_row") or loaded
-	rows[index] = {
-		root = root,
-		icon = ui.find(loaded, "row_icon"),
-		text = ui.find(loaded, "row_text"),
-	}
-	ui.visible(root, false)
-end
-
-local offers = {}
-local function show_offers()
-	local room = width - Window.CONTENT_SIDES - 8 - TEXT_ROOM_PAD
-	for index, row in ipairs(rows) do
-		local offer = offers[index]
-		if offer and offer.reference ~= 0 then
-			local summary = plain(offer.description)
-			ui.bind(row.root, offer.reference)
-			ui.action(row.root, "game.mission_terminal.choose", offer.reference, "left")
-			ui.selected(row.root, offer.selected)
-			ui.content(row.icon, true)
-			ui.icon(row.icon, offer.icon)
-			ui.tooltip(row.root, summary)
-			local lines = wrap(summary, room, LINES)
-			if #lines == 0 then lines = { "Mission " .. index } end
-			ui.text(row.text, table.concat(lines, "\n"))
-			pcall(ui.aoml, row.text, "", markup(lines), false)
-			ui.visible(row.root, true)
-		else
-			ui.visible(row.root, false)
-		end
-	end
-end
-
--- ------------------------------------------------------------------ window
-local frame = Window.create({
-	template = Theme.WINDOW_TEMPLATE,
-	title = "Mission Terminal",
-	remember_open = false,
-	content = content,
-	width = width,
-	resizable = false,
-	horizontal = "center",
-	vertical = "center",
-	layout = function(window)
-		ui.size(window.root, width, -1)
-		ui.size(content, width - Window.CONTENT_SIDES, -1)
-		window:fit_title(width, true)
-	end,
-})
-ui.root(frame.root)
-
-local function advanced_visibility()
-	ui.visible(advanced_rows, show_advanced)
-	ui.text(advanced, show_advanced and "Fewer options" or "More options")
-end
-ui.on_click(advanced, function()
-	show_advanced = not show_advanced
-	ui.preference.write("show_advanced_options", tostring(show_advanced), "bool")
-	advanced_visibility()
-end)
-advanced_visibility()
-
-function mission_terminal_configure(label_request, accept_label, labels)
-	request_label = label_request ~= "" and label_request or request_label
-	ui.text(request_text, request_label)
-	if accept_label ~= "" then ui.text(find("accept_label"), accept_label) end
-	local widest = 0
-	for index, name in ipairs(slider_rows) do
-		local minimum = find("row_" .. name .. "_min")
-		local maximum = find("row_" .. name .. "_max")
-		ui.text(minimum, labels[index].minimum)
-		ui.text(maximum, labels[index].maximum)
-		widest = math.max(widest, ui.text_width(minimum), ui.text_width(maximum))
-		ui.progress(sliders[index], labels[index].progress)
-	end
-	local column = math.ceil(widest) + 5
-	for _, name in ipairs(slider_rows) do
-		for _, bound in ipairs({ "_min", "_max" }) do
-			local label = find("row_" .. name .. bound)
-			ui.size(label, column, 18)
-			ui.maximum(label, column, -1)
-		end
-	end
-	width = math.max(WIDTH, column * 2 + 102 + 21)
-	frame:resize(width, -1)
-	show_offers()
-end
-
-function mission_terminal_sliders(values)
-	for index, value in ipairs(values) do
-		ui.progress(sliders[index], value)
-	end
-end
-
-local function command(view, name, reference)
-	ui.bind(view, reference)
-	ui.action(view, name, reference, "left")
-end
-
-local function apply_reward(reward)
-	ui.selected(mode_random, not reward.pinned_mode)
-	ui.selected(mode_pinned, reward.pinned_mode)
-	command(mode_random, "game.mission_terminal.random", reward.random)
-	command(mode_pinned, "game.mission_terminal.pinned", reward.pinned)
-	ui.visible(reward_row, reward.pinned_mode)
-	ui.visible(row_difficulty, not reward.pinned_mode)
-	command(reward_slot, "game.mission_terminal.choose_reward", reward.choose)
-	ui.icon(reward_slot, reward.icon)
-	ui.content(reward_slot, reward.has_pin)
-	ui.text(reward_name, reward.has_pin and reward.name or "No reward chosen")
-	ui.text(reward_ql, reward.has_pin and ("QL " .. reward.ql) or "Click the slot to choose one")
-	ui.visible(reward_clear, reward.has_pin)
-	ui.visible(reward_cost, reward.has_pin and reward.cost > 0)
-	ui.text(reward_cost, "Each roll costs " .. Theme.thousands(reward.cost) .. " credits")
-	command(reward_clear, "game.mission_terminal.clear_reward", reward.clear)
-	ui.text(request_text, reward.pinned_mode and "Request chain" or request_label)
-end
-
--- ------------------------------------------------------------------ diagnostic
-local replies = 0
-local function log_reply(state, list_offers, reward)
-	replies = replies + 1
-	local out = { string.format("reply %d  offers=%d  selected=%s", replies, #list_offers, tostring(state.selected)) }
-	for index, offer in ipairs(list_offers) do
-		out[#out + 1] = string.format("#%d ref=%s icon=%s selected=%s", index, tostring(offer.reference),
-			tostring(offer.icon), tostring(offer.selected))
-		out[#out + 1] = "  " .. (offer.description or ""):gsub("\r", ""):gsub("\n", "\\n\n  ")
-	end
-	out[#out + 1] = string.format("reward pinned_mode=%s has_pin=%s name=%s ql=%s icon=%s cost=%s",
-		tostring(reward.pinned_mode), tostring(reward.has_pin), tostring(reward.name), tostring(reward.ql),
-		tostring(reward.icon), tostring(reward.cost))
-	pcall(ui.storage.write, "terminal_log", table.concat(out, "\n"))
-end
-
-function mission_terminal_apply(state, list_offers, reward)
-	pcall(log_reply, state, list_offers, reward)
-	offers = list_offers
-	ui.visible(empty, #offers == 0)
-	show_offers()
-	command(request, "game.mission_terminal.request", state.request)
-	ui.enabled(request, not reward.pinned_mode or reward.has_pin)
-	apply_reward(reward)
-	command(accept, "game.mission_terminal.accept", state.accept)
-	ui.enabled(accept, state.selected)
-	command(cancel, "game.mission_terminal.cancel", state.cancel)
+for _, name in ipairs({ "info_show", "info_navigate", "info_update", "info_impact_width" }) do
+	stub("info", name)
 end
