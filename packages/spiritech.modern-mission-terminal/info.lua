@@ -1,12 +1,11 @@
--- Stock Info window (client UI/Packages/Info/main.lua, unchanged), built only in the Info
--- instance of this package; see main.lua.
+-- Info window, built only in the Info instance of this package (see main.lua).
+-- Stock logic (client UI/Packages/Info/main.lua) restyled: flat frame with ◄ ► in the title
+-- bar (info_frame.xml), Modern palette, item facts show their name beside a 36px icon.
 function BUILD_INFO()
 	local Window = ui.require("core.window")
 	local content = ui.load("content.xml")
 	local lines = ui.find(content, "info_lines")
 	local scroll = ui.find(content, "info_scroll")
-	local back = ui.find(content, "info_back")
-	local forward = ui.find(content, "info_forward")
 	local history, current = {}, 0
 	local views, rows, column_widths = {}, {}, {}
 	local pending_scroll, width, needed_width = nil, 0, nil
@@ -14,13 +13,16 @@ function BUILD_INFO()
 	local before_impact, applied_impact, manually_resized = nil, nil, false
 	local history_limit, cell_gap, note_gap, indent_width = 32, 16, 4, 20
 	local colors = {
-		title = "#F2F25C",
-		highlight = "#FFFFFF",
-		heading = "#3DE33D",
-		detail = "#9CD69C",
-		link = "#7FD4FF",
+		title = "#E8ECF1",
+		highlight = "#E8ECF1",
+		heading = "#8B95A3",
+		detail = "#D5DAE1",
+		link = "#4FB3BF",
+		document = "#C7CDD5",
+		item = "#E8ECF1",
 	}
 	local frame = Window.create({
+		template = "info_frame.xml",
 		content = content,
 		title = "Info",
 		remember_open = false,
@@ -38,8 +40,15 @@ function BUILD_INFO()
 	})
 	ui.root(frame.root)
 	game.info.surface(lines, scroll)
-	ui.enabled(back, false)
-	ui.enabled(forward, false)
+	local back = ui.find(frame.root, "info_back")
+	local forward = ui.find(frame.root, "info_forward")
+	-- Arrows dim when there is nowhere to go.
+	local function arrow_state(view, on)
+		ui.enabled(view, on)
+		pcall(ui.text_color, view, on and "#8B95A3" or "#3A414B")
+	end
+	arrow_state(back, false)
+	arrow_state(forward, false)
 
 	local function rgb(value)
 		return string.format("#%06X", value)
@@ -134,12 +143,15 @@ function BUILD_INFO()
 			ui.aoml(label, "", "<u>" .. escape_markup(fact.text) .. "</u>", false)
 			ui.tooltip(root, fact.text)
 		elseif fact.item then
-			ui.content(root, true)
-			ui.icon(root, fact.icon)
+			local icon = ui.find(root, "icon")
+			ui.content(icon, true)
+			ui.icon(icon, fact.icon)
+			ui.text(ui.find(root, "label"), fact.text)
+			ui.text_color(ui.find(root, "label"), colors.item)
 			ui.tooltip(root, fact.text)
 		elseif not fact.row then
 			ui.text(root, fact.text)
-			ui.text_color(root, fact.document and "#FFFFFF" or fact.link and colors.link or
+			ui.text_color(root, fact.document and colors.document or fact.link and colors.link or
 				fact.rgb >= 0 and rgb(fact.rgb) or colors[fact.tone])
 			if fact.document then
 				game.info.document(root, page, index)
@@ -156,7 +168,7 @@ function BUILD_INFO()
 		end
 		views[#views + 1] = {
 			root = root,
-			wrap = not fact.item and not fact.row,
+			wrap = not fact.row, -- item rows too: their names wrap beside the icon
 			indent = fact.indent * indent_width,
 		}
 	end
@@ -178,8 +190,8 @@ function BUILD_INFO()
 		if not refresh then
 			ui.scroll_top(scroll)
 		end
-		ui.enabled(back, current > 1)
-		ui.enabled(forward, current < #history)
+		arrow_state(back, current > 1)
+		arrow_state(forward, current < #history)
 		for index, fact in ipairs(page.lines) do
 			create_line(page.token, fact, index, page.cells[index])
 		end
@@ -215,7 +227,7 @@ function BUILD_INFO()
 		if #history > history_limit then
 			game.info.release(table.remove(history, 1).token)
 			current = current - 1
-			ui.enabled(back, current > 1)
+			arrow_state(back, current > 1)
 		end
 	end
 

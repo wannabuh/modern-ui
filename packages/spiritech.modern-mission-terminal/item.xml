@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- An item fact (e.g. a mission's item reward): 36px icon with the item's name beside it.
+     The whole row inspects the item. -->
 <root>
-  <ItemSlotView slot_gfx="" icon_fit="center" min_size="Point(48,48)" max_size="Point(48,48)" h_alignment="left" />
+  <View view_layout="horizontal" interactive="true" layout_borders="Rect(0,2,0,3)">
+    <ItemSlotView name="icon" slot_gfx="" fill_color="0xE61B2028" icon_fit="center" icon_inset="2" interactive="false" min_size="Point(36,36)" max_size="Point(36,36)" v_alignment="center" />
+    <TextView name="label" font_size="12" word_wrap="true" interactive="false" v_alignment="center" weight="1" layout_borders="Rect(8,0,0,0)" />
+  </View>
 </root>

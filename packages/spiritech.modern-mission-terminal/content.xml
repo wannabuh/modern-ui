@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Info window body (flat). Back / Forward live in the title bar (info_frame.xml). -->
 <root>
   <View name="info" view_layout="vertical" weight="1">
-    <ScrollView name="info_scroll" capture_input="true" v_scrollbar_mode="auto" scrollbar_width="11" weight="1">
-      <ScrollViewChild name="info_lines" view_layout="vertical" capture_input="true" layout_borders="Rect(8,8,8,8)" />
+    <ScrollView name="info_scroll" capture_input="true" v_scrollbar_mode="auto" scrollbar_width="11" scrollbar_right_inset="1" scrollbar_arrow_gap="1" weight="1">
+      <ScrollViewChild name="info_lines" view_layout="vertical" capture_input="true" layout_borders="Rect(6,6,8,6)" />
     </ScrollView>
-    <View view_layout="horizontal" min_size="Point(-1,28)" max_size="Point(-1,28)" layout_borders="Rect(8,8,8,8)">
-      <HLayoutSpacer />
-      <Button name="info_back" label="Back" font_size="13" min_size="Point(76,28)" max_size="Point(76,28)" v_alignment="center" layout_borders="Rect(0,0,8,0)" />
-      <Button name="info_forward" label="Forward" font_size="13" min_size="Point(76,28)" max_size="Point(76,28)" v_alignment="center" />
-    </View>
   </View>
 </root>
