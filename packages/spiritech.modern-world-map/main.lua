@@ -40,6 +40,9 @@ local menu_character, menu_quest
 local rebuild_menu
 local current_map = ""
 local following = false
+-- Last mission marker position seen (false = none). nil = take the next reading as the
+-- baseline (after login, a map change or a level change, where coordinates differ).
+local mission_seen
 local set_following
 
 -- Map units (pan offsets, view width/height, marker positions) are the current level's image
@@ -275,6 +278,7 @@ local function change_zoom(step)
 	local u, v = centre_share()
 	zoom = chosen
 	game.planet_map.record(zoom)
+	mission_seen = nil
 	view.zoom(scale, 0, 0)
 	pan_to_share(u, v)
 	draw_markers()
@@ -291,7 +295,27 @@ end)
 ui.on_click(zoom_in, function() change_zoom(1) end)
 ui.on_click(zoom_out, function() change_zoom(-1) end)
 ui.on_click(character, function() set_following(not following) end)
-ui.on_click(quest, function() planet_map_centre("quest") end)
+local function show_mission()
+	if following then set_following(false) end -- else following pans straight back to you
+	planet_map_centre("quest")
+end
+
+-- A mission uploaded to the map (marker appears or moves): stop following and centre on it.
+local function watch_mission()
+	if view.read("width") <= 0 then return end
+	local now = false
+	if game.planet_map.point("quest") ~= 0 then
+		now = { game.planet_map.point("quest_x"), game.planet_map.point("quest_y") }
+	end
+	local seen = mission_seen
+	mission_seen = now
+	if seen == nil or not now then return end
+	if not seen or math.abs(now[1] - seen[1]) > 0.5 or math.abs(now[2] - seen[2]) > 0.5 then
+		show_mission()
+	end
+end
+
+ui.on_click(quest, show_mission)
 
 function planet_map_restore(saved_zoom, saved_buttons, saved_first_time)
 	zoom = math.max(0, saved_zoom)
@@ -316,6 +340,7 @@ function planet_map_update(current_revision, count)
 	records = count
 	if revision ~= current_revision then
 		revision = current_revision
+		mission_seen = nil
 		zoom = math.max(0, math.min(zoom, records - 1))
 		if records > 0 then
 			game.planet_map.record(zoom)
@@ -338,6 +363,7 @@ function planet_map_update(current_revision, count)
 		end
 		planet_map_centre("character")
 	end
+	if not centre_pending then watch_mission() end
 	follow()
 	frame:resize(ui.chosen_width(frame.root), ui.chosen_height(frame.root))
 	refresh_buttons()
