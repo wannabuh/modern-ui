@@ -38,6 +38,8 @@ Edit files here, never in `ui-packages/`: the next install overwrites them.
 | `spiritech.modern-wear` | `prk.wear` | Equipment window |
 | `spiritech.modern-trade` | `prk.trade` | Flat trade / shop lists |
 | `spiritech.modern-missions` | `prk.missions` | Mission list with deadline bars |
+| `spiritech.modern-mission-terminal` | `prk.mission-terminal` | Mission terminal: offers as a list, flat controls |
+| `spiritech.modern-info` | `prk.info` | Info window: flat, ◄ ► in the title bar, item names beside icons |
 | `spiritech.modern-team` | `prk.team` | Unit-frame style team window |
 | `spiritech.modern-ncu` | `prk.ncu` | Slim NCU list |
 | `spiritech.ncu-strip` | — | NCU icon strip |
