@@ -14,8 +14,8 @@
 
       <!-- Fill (title band + body), then the outline as its own layer, as in Modern Stats -->
       <View interactive="false" view_layout="vertical" layout_borders="Rect(1,1,1,1)">
-        <View interactive="false" fill_color="0xF214181E" min_size="Point(-1,24)" max_size="Point(-1,24)" />
-        <View interactive="false" fill_color="0xE60D1015" weight="1" />
+        <View interactive="false" fill_color="0xFA14181E" min_size="Point(-1,24)" max_size="Point(-1,24)" />
+        <View interactive="false" fill_color="0xF70D1015" weight="1" />
       </View>
       <View interactive="false" view_layout="vertical">
         <View interactive="false" fill_color="0xFF2A3039" min_size="Point(-1,1)" max_size="Point(-1,1)" />
