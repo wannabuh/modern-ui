@@ -33,7 +33,7 @@ ui.add(content, context_menu)
 local view = game.map_surface
 view.attach(surface, false)
 local opened, buttons, first_time = false, true, true
-local first_pending, centre_pending = false, false
+local centre_pending = false
 local zoom, records, revision, extras = 0, 0, -1, 0
 local frame
 local menu_character, menu_quest
@@ -302,7 +302,6 @@ end
 
 function planet_map_visibility(shown)
 	opened = shown
-	first_pending = shown and first_time
 	centre_pending = shown
 	if not shown then
 		first_time = false
@@ -326,11 +325,10 @@ function planet_map_update(current_revision, count)
 		calibrate_pending = true -- another map: measure its levels once the view has a size
 		publish(false)
 	end
-	if first_pending then
-		first_pending = false
-		frame:resize(411, 433)
-		ui.place(frame.root, 95, 72)
-	elseif centre_pending and view.read("width") > 0 and view.read("height") > 0 then
+	-- No forced "first time" placement: the game clears first_time only when the map is
+	-- closed, so a map left open at logout was reset to 411x433 at 95,72 on every login.
+	-- Window.create already uses those defaults when nothing is saved.
+	if centre_pending and view.read("width") > 0 and view.read("height") > 0 then
 		centre_pending = false
 		if calibrate_pending and records > 0 then
 			calibrate()
