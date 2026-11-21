@@ -26,7 +26,20 @@ local function host(name, ...)
 	end
 	if name == "ui.time" then MOCK.now = MOCK.now + 16; return MOCK.now end
 	if name == "ui.storage.read" then return MOCK.storage[a[1]] or "" end
-	if name == "ui.storage.write" then MOCK.storage[a[1]] = a[2]; return end
+	if name == "ui.storage.write" then
+		-- Documented limits (docs/lua-api/ui-storage.md); exceeding one raises a Lua error.
+		assert(#a[1] >= 1 and #a[1] <= 128, "storage key must be 1..128 bytes: " .. a[1])
+		assert(#a[2] <= 4096, "storage value over 4096 bytes (" .. #a[2] .. ") for " .. a[1])
+		local value = a[2] ~= "" and a[2] or nil
+		if value and MOCK.storage[a[1]] == nil then
+			local n = 0; for _ in pairs(MOCK.storage) do n = n + 1 end
+			assert(n < 1024, "storage over 1024 keys")
+		end
+		MOCK.storage[a[1]] = value
+		local total = 0; for _, v in pairs(MOCK.storage) do total = total + #v end
+		assert(total <= 256 * 1024, "storage over 256 KiB")
+		return
+	end
 	if name == "ui.storage.count" then local n = 0; for _ in pairs(MOCK.storage) do n = n + 1 end; return n end
 	if name == "ui.preference.read" or name == "ui.preference.read_array_encoded" then return MOCK.preferences[a[1]] or "" end
 	if name == "ui.preference.write" then MOCK.preferences[a[1]] = a[2]; return end

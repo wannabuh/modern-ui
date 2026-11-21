@@ -43,6 +43,50 @@ ui.define("inventory.organizer", function()
 		return list
 	end
 
+	-- Package storage allows 4096 bytes per value and raises a Lua error past that (which shuts
+	-- the whole inventory down until relog). Line lists that grow with the inventory (the "seen"
+	-- baseline above all) are spread over <key>, <key>#2, <key>#3 ... at line boundaries, and a
+	-- failed write is dropped instead of breaking the window.
+	local PART_BYTES = 4000
+
+	local function fetch(key)
+		local first_ok, first = pcall(ui.storage.read, key)
+		if not first_ok or first == "" then return "" end
+		local parts, index = { first }, 2
+		while true do
+			local ok, part = pcall(ui.storage.read, key .. "#" .. index)
+			if not ok or part == "" then break end
+			parts[#parts + 1], index = part, index + 1
+		end
+		return table.concat(parts, "\n")
+	end
+
+	local function store(key, text)
+		local parts, current, size = {}, {}, 0
+		for raw in (text or ""):gmatch("[^\n]+") do
+			local line = #raw > PART_BYTES and raw:sub(1, PART_BYTES) or raw
+			if size > 0 and size + 1 + #line > PART_BYTES then
+				parts[#parts + 1], current, size = table.concat(current, "\n"), {}, 0
+			end
+			current[#current + 1] = line
+			size = size + (size > 0 and 1 or 0) + #line
+		end
+		if size > 0 then parts[#parts + 1] = table.concat(current, "\n") end
+		local ok = pcall(ui.storage.write, key, parts[1] or "")
+		if not ok then return end
+		for index = 2, #parts do
+			if not pcall(ui.storage.write, key .. "#" .. index, parts[index]) then return end
+		end
+		local index = #parts + 1
+		if index < 2 then index = 2 end
+		while true do
+			local read_ok, left = pcall(ui.storage.read, key .. "#" .. index)
+			if not read_ok or left == "" then break end
+			pcall(ui.storage.write, key .. "#" .. index, "")
+			index = index + 1
+		end
+	end
+
 	local function key_of(entry)
 		return entry.name .. "|" .. tostring(entry.quality)
 	end
@@ -141,13 +185,13 @@ ui.define("inventory.organizer", function()
 	end
 
 	function Organizer:load()
-		local bag_sort = ui.storage.read(self:storage_key("bag_sort"))
+		local bag_sort = fetch(self:storage_key("bag_sort"))
 		if BAG_SORTS[bag_sort] then self.bag_sort = bag_sort end
-		self.custom = split_lines(ui.storage.read(self:storage_key("categories")))
+		self.custom = split_lines(fetch(self:storage_key("categories")))
 		self.tags = {}
 		for _, category in ipairs(self:taggable()) do
 			local set = {}
-			for _, name in ipairs(split_lines(ui.storage.read(self:storage_key("tag/" .. category)))) do
+			for _, name in ipairs(split_lines(fetch(self:storage_key("tag/" .. category)))) do
 				set[name] = true
 			end
 			self.tags[category] = set
@@ -166,12 +210,12 @@ ui.define("inventory.organizer", function()
 		local names = {}
 		for name in pairs(self.tags[category] or {}) do names[#names + 1] = name end
 		table.sort(names)
-		ui.storage.write(self:storage_key("tag/" .. category), table.concat(names, "\n"))
+		store(self:storage_key("tag/" .. category), table.concat(names, "\n"))
 	end
 
 	function Organizer:save_categories()
 		if not self.character then return end
-		ui.storage.write(self:storage_key("categories"), table.concat(self.custom, "\n"))
+		store(self:storage_key("categories"), table.concat(self.custom, "\n"))
 	end
 
 	function Organizer:taggable()
@@ -200,7 +244,7 @@ ui.define("inventory.organizer", function()
 				table.remove(self.custom, index)
 				self.tags[name] = nil
 				self:close_panel(name)
-				if self.character then ui.storage.write(self:storage_key("tag/" .. name), "") end
+				if self.character then store(self:storage_key("tag/" .. name), "") end
 				self:save_categories()
 				if self.category == name then self.category = "All" end
 				self:build_tabs()
@@ -309,11 +353,11 @@ ui.define("inventory.organizer", function()
 		local lines = {}
 		for key, count in pairs(self.baseline) do lines[#lines + 1] = key .. "\t" .. count end
 		table.sort(lines)
-		ui.storage.write(self:storage_key("seen"), table.concat(lines, "\n"))
+		store(self:storage_key("seen"), table.concat(lines, "\n"))
 	end
 
 	function Organizer:load_baseline()
-		local stored = ui.storage.read(self:storage_key("seen"))
+		local stored = fetch(self:storage_key("seen"))
 		if stored == "" then return nil end
 		local baseline = {}
 		for _, line in ipairs(split_lines(stored)) do
@@ -426,7 +470,7 @@ ui.define("inventory.organizer", function()
 	--   inv/<character>/bag_custom  names you gave (dropped again when renamed / reset)
 	function Organizer:read_set(suffix)
 		local set = {}
-		for _, name in ipairs(split_lines(ui.storage.read(self:storage_key(suffix)))) do set[name] = true end
+		for _, name in ipairs(split_lines(fetch(self:storage_key(suffix)))) do set[name] = true end
 		return set
 	end
 
@@ -434,7 +478,7 @@ ui.define("inventory.organizer", function()
 		local names = {}
 		for name in pairs(set) do names[#names + 1] = name end
 		table.sort(names)
-		ui.storage.write(self:storage_key(suffix), table.concat(names, "\n"))
+		store(self:storage_key(suffix), table.concat(names, "\n"))
 	end
 
 	-- A bag window showed `name`; `previous` is its earlier title when it was just renamed.
@@ -674,13 +718,13 @@ ui.define("inventory.organizer", function()
 					panel.columns, panel.mode, panel.list_width)
 			end
 		end
-		ui.storage.write(self:storage_key("panels"), table.concat(lines, "\n"))
+		store(self:storage_key("panels"), table.concat(lines, "\n"))
 	end
 
 	function Organizer:restore_panels()
 		if self.panels_restored or not self.panel_host or not self.character or not self.active then return end
 		self.panels_restored = true
-		for _, line in ipairs(split_lines(ui.storage.read(self:storage_key("panels")))) do
+		for _, line in ipairs(split_lines(fetch(self:storage_key("panels")))) do
 			local name, x, y, columns, rest = line:match("^(.-)\t(-?%d+)\t(-?%d+)\t(%d+)(.*)$")
 			local mode, width = (rest or ""):match("^\t(%a+)\t(%d+)$")
 			if name and self:category_exists(name) then
@@ -1169,7 +1213,7 @@ ui.define("inventory.organizer", function()
 	function Organizer:set_bag_sort(sort)
 		if not BAG_SORTS[sort] or sort == self.bag_sort then return end
 		self.bag_sort = sort
-		if self.character then ui.storage.write(self:storage_key("bag_sort"), sort) end
+		if self.character then store(self:storage_key("bag_sort"), sort) end
 		self.options.reconcile()
 	end
 

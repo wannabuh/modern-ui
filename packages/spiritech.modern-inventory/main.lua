@@ -291,7 +291,7 @@ ui.visible(frame.root, true)
 local renamable, name_requests = false, 0
 local renamable_title -- this bag window's current title
 for _, key in ipairs({ "diag_names", "diag_icons_1", "diag_icons_2", "diag_session" }) do
-	if ui.storage.read(key) ~= "" then ui.storage.write(key, "") end -- old diagnostics
+	if ui.storage.read(key) ~= "" then pcall(ui.storage.write, key, "") end -- old diagnostics
 end
 local function request_name(kind)
 	name_requests = name_requests + 1
@@ -365,7 +365,7 @@ local function save_window(force)
 	local now = ui.time()
 	if not force and now - last_save_time < 400 then return end -- at most a few writes a second
 	last_saved, last_save_time = value, now
-	ui.storage.write(key, value)
+	pcall(ui.storage.write, key, value) -- a full store must not break the window
 end
 
 -- Open/closed state, for the main inventory only (bags and bank are opened by the server).
@@ -416,7 +416,7 @@ ui.on_visibility(container, function(visible)
 	-- Only record your own open/close, not the game hiding everything on logout or zoning
 	-- (the same check the game's own window placement uses).
 	local open = window_restored and ui.is_available(container) and open_key()
-	if open then ui.storage.write(open, visible and "true" or "false") end
+	if open then pcall(ui.storage.write, open, visible and "true" or "false") end
 end)
 local base_capture = frame.placement.capture
 frame.placement.capture = function(self, ...)
@@ -481,7 +481,7 @@ function inventory_apply(snapshot, container, title, first_free)
 		window_key_title = title
 		local new = window_key()
 		if old and new and ui.storage.read(new) == "" and ui.storage.read(old) ~= "" then
-			ui.storage.write(new, ui.storage.read(old))
+			pcall(ui.storage.write, new, ui.storage.read(old))
 		end
 		last_saved = nil
 	end
