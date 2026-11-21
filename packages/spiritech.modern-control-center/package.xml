@@ -4,7 +4,7 @@
      tells each instance which half it is; main.lua / hotbar.lua return early otherwise.
      Select this package for BOTH "Control center" and "Shortcut bars" in
      Options → Interface & HUD → UI packages. -->
-<Package id="spiritech.modern-control-center" name="Modern Control Center" version="1.1.0" apiVersion="0.1.0">
+<Package id="spiritech.modern-control-center" name="Modern Control Center" version="1.2.0" apiVersion="0.1.0">
   <Provides role="prk.control-center" />
   <Provides role="prk.hotbar" />
   <Requires package="spiritech.modern-common" />
