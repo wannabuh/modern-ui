@@ -575,6 +575,15 @@ function inventory_credits_sent()
 	choose_credits("")
 end
 
+-- Client 0.3.4+: the player moved an item between cells by hand. The game calls this entry
+-- point and shuts the package down if it is missing. As in the stock window, a column
+-- sort gives way to the manual order (ours is normally already manual).
+function inventory_rearranged()
+	if list.sort ~= "" then
+		list:set_sort("", false)
+	end
+end
+
 function inventory_selection(value, split, amount)
 	selected, splitting, split_count = value, split, amount
 	reconcile()

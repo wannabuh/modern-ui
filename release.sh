@@ -47,6 +47,7 @@ done
 for req in $(grep -ohP 'Requires package="\K[^"]+' packages/*/package.xml | sort -u); do
   printf '%s\n' "${ids[@]}" | grep -qx "$req" || { echo "required package $req is not bundled" >&2; fail=1; }
 done
+tools/check_callbacks.sh || fail=1
 (( fail == 0 )) || exit 1
 
 # Build the zip from a staging copy so LICENSE sits inside each package folder.
