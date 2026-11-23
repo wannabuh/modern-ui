@@ -32,6 +32,26 @@
         <ScrollViewChild name="filtered_grid" view_layout="grid" grid_columns="1" min_columns="1" grid_spacing="2" h_alignment="center" layout_borders="Rect(0,4,0,0)" />
       </ScrollView>
       <View name="inventory_list" view_layout="vertical" visible="false" />
+      <!-- Bank groups (list mode): named sections that fold; see groups.lua. -->
+      <View name="grouped_view" view_layout="vertical" visible="false">
+        <View name="group_organize_bar" view_layout="horizontal" visible="false" fill_color="0x264FB3BF" min_size="Point(-1,22)" max_size="Point(-1,22)" layout_borders="Rect(2.5,2,2.5,2)">
+          <TextView interactive="false" value="Click an item to choose its group" font_size="11" color="E8ECF1" v_alignment="center" layout_borders="Rect(6,0,0,0)" />
+          <HLayoutSpacer />
+          <TextButton name="group_organize_done" label="Done" font_size="11" color="4FB3BF" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(8,0,6,0)" />
+        </View>
+        <View name="group_name_row" view_layout="horizontal" visible="false" min_size="Point(-1,22)" max_size="Point(-1,22)" layout_borders="Rect(2.5,2,2.5,2)">
+          <View view_layout="stacked" weight="1" min_size="Point(40,22)" max_size="Point(-1,22)">
+            <View interactive="false" fill_color="0xFF1B2028" />
+            <TextInputView name="group_name" placeholder="Group name" font_size="12" color="E8ECF1" draw_border="false" draw_background="false" max_length="32" min_size="Point(-1,22)" max_size="Point(-1,22)" v_alignment="center" layout_borders="Rect(6,0,6,0)" />
+          </View>
+          <TextButton name="group_name_confirm" label="OK" font_size="11" color="4FB3BF" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(8,0,0,0)" />
+          <TextButton name="group_name_cancel" label="Cancel" font_size="11" color="A3ADBA" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(8,0,2,0)" />
+        </View>
+        <ScrollView name="grouped_content" capture_input="true" interactive="true" v_scrollbar_mode="auto" scrollbar_width="11" scrollbar_right_inset="1" scrollbar_arrow_gap="1" weight="1">
+          <ScrollViewChild name="grouped_rows" view_layout="vertical" />
+        </ScrollView>
+        <View name="group_menu" min_size="Point(0,0)" max_size="Point(0,0)" />
+      </View>
       <TextView name="empty_note" interactive="false" visible="false" value="" font_size="11" color="8B95A3" h_alignment="center" v_alignment="center" />
       <!-- Organize mode: catches clicks over the grid so they tag items instead of using them. -->
       <View name="organize_overlay" capture_input="true" visible="false" fill_color="0x144FB3BF" />

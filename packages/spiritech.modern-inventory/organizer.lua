@@ -91,6 +91,9 @@ ui.define("inventory.organizer", function()
 		return entry.name .. "|" .. tostring(entry.quality)
 	end
 
+	-- Shared with groups.lua (bank groups), which keeps its lists the same way.
+	Organizer.fetch, Organizer.store = fetch, store
+
 	function Organizer.create(content, options)
 		local self = setmetatable({}, Organizer)
 		self.options = options -- { reconcile = fn, resize = fn }

@@ -5,6 +5,7 @@
   <Script src="snap.lua" />
   <Script src="reqs.lua" />
   <Script src="organizer.lua" />
+  <Script src="groups.lua" />
   <Script src="main.lua" />
   <InteractionScript src="interaction.lua" />
 </Package>

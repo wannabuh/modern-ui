@@ -145,6 +145,22 @@ organizer = Organizer.create(content, {
 	end,
 })
 
+-- Bank groups (list mode): folding sections instead of one long list. See groups.lua.
+local grouped_view = ui.find(content, "grouped_view")
+local grouped_content = ui.find(content, "grouped_content")
+local organize_index -- the title menu's "Organize groups" item (its check follows the mode)
+local groups = ui.require("inventory.groups").create(content, {
+	organizer = organizer,
+	reconcile = function() if reconcile then reconcile() end end,
+	selected = is_selected,
+	faded = faded,
+	tint = tint,
+	organizing = function(on)
+		if organize_index then ui.menu.checked(frame.icon, organize_index, on) end
+	end,
+})
+local grouped_style = { name_width = 200 }
+
 local function style_list()
 	for _, row in ipairs(list.rows) do organizer:style_list_row(main_list, row) end
 	if list.prototype then organizer:style_list_row(main_list, list.prototype) end
@@ -157,7 +173,18 @@ end)
 reconcile = function()
 	if organizer.active then organizer:refresh_panels(entries) end
 	local plain = organizer:is_plain()
-	if mode == "list" then
+	local grouping = mode == "list" and groups:active()
+	ui.visible(grouped_view, grouping)
+	ui.visible(list_host, mode == "list" and not grouping)
+	if grouping then
+		ui.visible(filtered_scroll, false)
+		local shown = organizer:entries_for(entries, "All", "") -- occupied, in the bag sort order
+		local actual = math.max(ui.width(grouped_content), ui.chosen_width(frame.root) - 19)
+		if actual > 0 then grouped_style.name_width = math.max(60, actual - 12 - 2 * list.style.gap - LIST_ICON) end
+		grouped_style.three = organizer:needs_three(shown, grouped_style.name_width - 6)
+		groups:show(shown, grouped_style, grouped_style.three and 46 or 32)
+		organizer:show_empty_note(1)
+	elseif mode == "list" then
 		ui.visible(filtered_scroll, false)
 		local shown = plain and occupied or organizer:select_entries(entries)
 		-- Name room from the list's real on-screen width (the layout width can lag behind a
@@ -240,6 +267,7 @@ local function set_mode(value)
 	end
 	cells:clear()
 	list:clear()
+	if value ~= "list" then groups:set_organizing(false) end
 	mode = value
 	selected, splitting, split_count = -1, -1, ""
 	ui.visible(grid_scroll, mode == "grid")
@@ -300,6 +328,7 @@ end
 
 local function build_title_menu()
 	ui.menu.clear(frame.icon)
+	organize_index = nil
 	ui.menu.add(frame.icon, "List Mode", mode == "list", function()
 		set_mode(mode == "list" and "grid" or "list")
 	end)
@@ -317,6 +346,20 @@ local function build_title_menu()
 				organizer:set_bag_sort(sort)
 				build_title_menu() -- move the check mark
 			end)
+		end
+		if groups.window then
+			ui.menu.separator(frame.icon)
+			ui.menu.add(frame.icon, "Show groups", groups:active(), function()
+				if groups.on then groups:set_organizing(false) end
+				groups:set_on(not groups.on)
+				build_title_menu()
+			end)
+			if groups:active() then
+				organize_index = ui.menu.add(frame.icon, "Organize groups", groups.organizing, function()
+					if mode ~= "list" then set_mode("list") end
+					groups:set_organizing(not groups.organizing)
+				end)
+			end
 		end
 	end
 	if organizer.active then
@@ -436,6 +479,8 @@ function inventory_configure(configuration)
 	if not organizer.active and mode ~= "list" and ui.preference.read("listview_config.listview_mode") == "" then
 		set_mode("list")
 	end
+	-- The bank's list can be split into groups (see groups.lua).
+	groups:set_window(configuration.title == "Bank" and configuration.slot_count == true)
 	renamable = configuration.renamable == true
 	renamable_title = renamable and configuration.title or nil
 	if renamable then
@@ -463,6 +508,7 @@ end
 
 function inventory_apply(snapshot, container, title, first_free)
 	list:drop_target(first_free)
+	ui.bind(grouped_content, first_free) -- drops on the grouped bank list land in a free slot
 	if request_close then
 		ui.bind(frame.close_button, container)
 		ui.action(frame.close_button, "game.inventory.request_close", container, "left")

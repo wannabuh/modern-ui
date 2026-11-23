@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- One bank group: a header (click to fold, right-click for options) over its item rows. -->
+<root>
+  <View name="group_section" view_layout="vertical">
+    <View name="group_header" view_layout="horizontal" capture_input="true" fill_color="0xFF1B2028" min_size="Point(-1,22)" max_size="Point(-1,22)" layout_borders="Rect(0,2,0,1)" tooltip="Click to fold · right-click for options">
+      <TextView name="group_arrow" interactive="false" value="▼" font_size="9" color="8B95A3" v_alignment="center" layout_borders="Rect(6,0,6,0)" />
+      <TextView name="group_label" interactive="false" value="" font_size="12" color="E8ECF1" v_alignment="center" />
+      <TextView name="group_count" interactive="false" value="" font_size="11" color="8B95A3" v_alignment="center" layout_borders="Rect(6,0,0,0)" />
+      <HLayoutSpacer />
+    </View>
+    <View name="group_body" view_layout="vertical" />
+  </View>
+</root>
