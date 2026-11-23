@@ -8,7 +8,7 @@ local core = client .. "/UI/Packages/Core/"
 local repo = package_dir:match("^(.*)/packages/") or "."
 
 MOCK = { storage = {}, preferences = {}, calls = {}, now = 1000000, subscriptions = {}, log = false,
-	updates = nil, views = 0, numbers = 100 }
+	updates = nil, views = 0, numbers = 100, handlers = {} }
 local found = {}
 local function new_view()
 	MOCK.views = MOCK.views + 1
@@ -18,7 +18,17 @@ local function host(name, ...)
 	local a = { ... }
 	MOCK.calls[name] = (MOCK.calls[name] or 0) + 1
 	if MOCK.log then print("host", name, ...) end
-	if name == "xml.load" or name:match("^ui%.create") then return new_view() end
+	-- Input handlers by kind and view, so scenarios can click / type / right-click.
+	if name == "ui.click" or name == "ui.on_text_changed" or name == "ui.on_repeat" then
+		MOCK.handlers[name] = MOCK.handlers[name] or {}; MOCK.handlers[name][a[1]] = a[2]
+	elseif name == "ui.on_pointer_release" then
+		MOCK.handlers[name] = MOCK.handlers[name] or {}; MOCK.handlers[name][a[1]] = a[3]
+	end
+	if MOCK.hook then -- scenarios can watch (and answer) host calls
+		local answer = MOCK.hook(name, ...)
+		if answer ~= nil then return answer end
+	end
+	if name == "xml.load" or name == "ui.shared_layout" or name:match("^ui%.create") then return new_view() end
 	if name == "ui.find" then
 		local key = tostring(a[1]) .. "/" .. tostring(a[2])
 		found[key] = found[key] or new_view()
@@ -54,7 +64,11 @@ local function host(name, ...)
 	end
 	if name == "ui.menu.checked" then if MOCK.menu and MOCK.menu[a[2]] then MOCK.menu[a[2]].checked = a[3] end; return end
 	if name == "ui.icon" then MOCK.icons = MOCK.icons or {}; MOCK.icons[#MOCK.icons + 1] = a[2]; return end
-	if name == "game.character.subscribe" then MOCK.subscriptions[#MOCK.subscriptions + 1] = a[3]; return 1 end
+	if name == "game.character.subscribe" then
+		MOCK.subscriptions[#MOCK.subscriptions + 1] = a[3]
+		MOCK.subscribed = MOCK.subscribed or {}; MOCK.subscribed[#MOCK.subscribed + 1] = { stats = a[2], callback = a[3] }
+		return #MOCK.subscriptions
+	end
 	if name:match("^ui%.is_") then return true end
 	if name:match("width") or name:match("height") or name:match("offset") or name:match("^ui%.x$")
 		or name:match("^ui%.y$") or name:match("_x$") or name:match("_y$") or name:match("count$") then return MOCK.numbers end
