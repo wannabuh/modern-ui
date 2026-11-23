@@ -45,6 +45,15 @@ local function host(name, ...)
 	if name == "ui.preference.write" then MOCK.preferences[a[1]] = a[2]; return end
 	if name == "ui.on_update" then MOCK.updates = a[1]; return end
 	if name == "ui.stop_updates" then MOCK.updates = nil; return end
+	if name == "game.effects.subscribe" then
+		MOCK.effects = MOCK.effects or {}; MOCK.effects[#MOCK.effects + 1] = a[2]; return 100 + #MOCK.effects
+	end
+	if name == "ui.menu.add" then
+		MOCK.menu = MOCK.menu or {}; MOCK.menu[#MOCK.menu + 1] = { label = a[2], checked = a[3], invoke = a[4] }
+		return #MOCK.menu
+	end
+	if name == "ui.menu.checked" then if MOCK.menu and MOCK.menu[a[2]] then MOCK.menu[a[2]].checked = a[3] end; return end
+	if name == "ui.icon" then MOCK.icons = MOCK.icons or {}; MOCK.icons[#MOCK.icons + 1] = a[2]; return end
 	if name == "game.character.subscribe" then MOCK.subscriptions[#MOCK.subscriptions + 1] = a[3]; return 1 end
 	if name:match("^ui%.is_") then return true end
 	if name:match("width") or name:match("height") or name:match("offset") or name:match("^ui%.x$")
