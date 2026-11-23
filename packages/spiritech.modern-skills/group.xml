@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <View name="skill_group" view_layout="vertical" visible="false" />
+</root>

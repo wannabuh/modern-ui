@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modern Skills, expanded view: IP header, then categories | skills | details, then a footer.
+     Starting sizes; main.lua resizes body, list and columns to the window (see apply_layout). -->
+<root>
+  <View name="skills" view_layout="stacked">
+    <View name="skills_content" view_layout="vertical" layout_borders="Rect(2,2,2,0)">
+      <!-- Header: remaining IP, native status, suggestion -->
+      <View view_layout="horizontal" min_size="Point(-1,36)" max_size="Point(-1,36)" fill_color="0xFF1B2028">
+        <View view_layout="vertical" min_size="Point(150,36)" max_size="Point(150,36)" v_alignment="center" layout_borders="Rect(8,0,0,0)">
+          <TextView value="IMPROVEMENT POINTS" interactive="false" font_size="9" color="5E6875" />
+          <TextView name="remaining_ip" value="--" font_size="17" color="E8ECF1" />
+        </View>
+        <TextView name="status" value="" font_size="11" color="8B95A3" word_wrap="true" weight="1" min_size="Point(100,32)" max_size="Point(-1,32)" v_alignment="center" layout_borders="Rect(6,0,6,0)" />
+        <Button name="suggest_ip" label="Suggest IP" font_size="12" min_size="Point(96,24)" max_size="Point(96,24)" v_alignment="center" layout_borders="Rect(0,0,6,0)" />
+      </View>
+      <View name="body" view_layout="horizontal" min_size="Point(-1,378)" max_size="Point(-1,378)" layout_borders="Rect(0,6,0,0)">
+        <!-- Categories -->
+        <View name="category_column" view_layout="vertical" min_size="Point(150,378)" max_size="Point(150,378)" fill_color="0x99111419">
+          <ScrollView name="category_scroll" v_scrollbar_mode="auto" scrollbar_width="8" weight="1">
+            <ScrollViewChild name="category_host" view_layout="vertical" layout_borders="Rect(0,4,0,4)" />
+          </ScrollView>
+        </View>
+        <!-- Skills of the selected category -->
+        <View name="info_area" view_layout="vertical" min_size="Point(276,378)" max_size="Point(276,378)" layout_borders="Rect(6,0,6,0)">
+          <ScrollView name="skill_scroll" v_scrollbar_mode="auto" scrollbar_width="8" weight="1">
+            <ScrollViewChild name="group_host" view_layout="vertical" />
+          </ScrollView>
+        </View>
+        <!-- Details of the selected skill, or the staged suggestion -->
+        <View name="details_column" view_layout="stacked" min_size="Point(190,378)" max_size="Point(190,378)" fill_color="0x99111419">
+          <View name="details" view_layout="vertical" layout_borders="Rect(8,6,8,6)">
+            <TextView name="stat_name" value="" font_size="14" color="E8ECF1" word_wrap="true" max_size="Point(174,-1)" layout_borders="Rect(0,0,0,6)" />
+            <View view_layout="horizontal" min_size="Point(-1,18)" max_size="Point(-1,18)"><TextView value="Base" interactive="false" font_size="11" color="8B95A3" /><HLayoutSpacer /><TextView name="base" font_size="12" color="E8ECF1" /></View>
+            <View view_layout="horizontal" min_size="Point(-1,18)" max_size="Point(-1,18)"><TextView value="Buffed" interactive="false" font_size="11" color="8B95A3" /><HLayoutSpacer /><TextView name="buffed" font_size="12" color="E8ECF1" /></View>
+            <View view_layout="horizontal" min_size="Point(-1,18)" max_size="Point(-1,18)"><TextView value="Maximum" interactive="false" font_size="11" color="8B95A3" /><HLayoutSpacer /><TextView name="maxskill" font_size="12" color="E8ECF1" /></View>
+            <View interactive="false" fill_color="0xFF232831" min_size="Point(-1,1)" max_size="Point(-1,1)" layout_borders="Rect(0,4,0,4)" />
+            <View view_layout="horizontal" min_size="Point(-1,18)" max_size="Point(-1,18)"><TextView value="Unsaved" interactive="false" font_size="11" color="8B95A3" /><HLayoutSpacer /><TextView name="pointdelta" font_size="12" color="E8ECF1" /></View>
+            <View view_layout="horizontal" min_size="Point(-1,18)" max_size="Point(-1,18)"><TextView value="Next point" interactive="false" font_size="11" color="8B95A3" /><HLayoutSpacer /><TextView name="unitcost" font_size="12" color="E8ECF1" /></View>
+            <View view_layout="horizontal" min_size="Point(-1,18)" max_size="Point(-1,18)"><TextView value="Total cost" interactive="false" font_size="11" color="8B95A3" /><HLayoutSpacer /><TextView name="totalcost" font_size="12" color="E8ECF1" /></View>
+            <ScrollView v_scrollbar_mode="auto" scrollbar_width="8" weight="1" layout_borders="Rect(0,8,0,4)">
+              <ScrollViewChild view_layout="vertical"><TextView name="stat_description" value="" font_size="11" color="A3ADBA" word_wrap="true" max_size="Point(164,-1)" /></ScrollViewChild>
+            </ScrollView>
+            <View name="reset_area" view_layout="vertical" min_size="Point(-1,44)" max_size="Point(-1,44)">
+              <TextView name="reset_points" value="" font_size="10" color="8B95A3" />
+              <Button name="reset_skill" label="Reset this skill" font_size="12" min_size="Point(-1,22)" max_size="Point(-1,22)" layout_borders="Rect(0,4,0,0)" />
+            </View>
+          </View>
+          <View name="suggestion_result" visible="false" view_layout="vertical" layout_borders="Rect(8,6,8,6)">
+            <TextView value="Suggested improvements are staged. Review them, then Save to keep them." font_size="11" color="A3ADBA" word_wrap="true" max_size="Point(174,-1)" />
+            <ScrollView v_scrollbar_mode="auto" scrollbar_width="8" weight="1" layout_borders="Rect(0,6,0,0)">
+              <ScrollViewChild name="suggestion_rows" view_layout="vertical" />
+            </ScrollView>
+          </View>
+        </View>
+      </View>
+      <!-- Footer -->
+      <View view_layout="horizontal" min_size="Point(-1,30)" max_size="Point(-1,30)" layout_borders="Rect(0,6,0,0)">
+        <Button name="reset_all" label="Reset all skills" font_size="12" min_size="Point(150,24)" max_size="Point(150,24)" />
+        <HLayoutSpacer />
+        <Button name="accept" label="Save" font_size="12" min_size="Point(90,24)" max_size="Point(90,24)" layout_borders="Rect(0,0,6,0)" />
+        <Button name="quit" label="Close" font_size="12" min_size="Point(70,24)" max_size="Point(70,24)" />
+      </View>
+    </View>
+  </View>
+</root>

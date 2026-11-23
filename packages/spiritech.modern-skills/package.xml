@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package id="spiritech.modern-skills" name="Modern Skills" version="1.2.1" apiVersion="0.1.0">
+  <Provides role="prk.skills" />
+  <Requires package="spiritech.modern-common" />
+  <Script src="main.lua" />
+  <InteractionScript src="interaction.lua" />
+</Package>

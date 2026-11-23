@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Favorites view: just the starred skills, with - / +, remaining IP and Save. -->
+<root>
+  <View name="skills_favorites" view_layout="vertical" visible="false">
+    <View view_layout="horizontal" min_size="Point(-1,26)" max_size="Point(-1,26)" fill_color="0xFF1B2028">
+      <TextView value="IP" interactive="false" font_size="10" color="5E6875" v_alignment="center" layout_borders="Rect(8,0,0,0)" />
+      <HLayoutSpacer />
+      <TextView name="remaining_ip" value="--" font_size="15" color="E8ECF1" v_alignment="center" layout_borders="Rect(0,0,8,0)" />
+    </View>
+    <View name="favorite_rows" view_layout="vertical" layout_borders="Rect(2,4,2,0)" />
+    <TextView name="favorites_empty" interactive="false" visible="false" value="Star skills (★) in the full view to list them here." font_size="11" color="8B95A3" word_wrap="true" max_size="Point(250,-1)" layout_borders="Rect(8,8,8,0)" />
+    <View view_layout="horizontal" min_size="Point(-1,30)" max_size="Point(-1,30)" layout_borders="Rect(2,6,2,0)">
+      <Button name="full_view" label="Full view" font_size="12" min_size="Point(80,24)" max_size="Point(80,24)" />
+      <HLayoutSpacer />
+      <Button name="accept" label="Save" font_size="12" min_size="Point(80,24)" max_size="Point(80,24)" layout_borders="Rect(0,0,6,0)" />
+      <Button name="quit" label="Close" font_size="12" min_size="Point(64,24)" max_size="Point(64,24)" />
+    </View>
+  </View>
+</root>

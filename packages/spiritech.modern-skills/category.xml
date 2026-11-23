@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- One category: its button, plus (compact view) its skill rows underneath. -->
+<root>
+  <View name="category" view_layout="vertical">
+    <Button name="category_button" flat="true" view_layout="horizontal" capture_input="true" selection_color="23414A" min_size="Point(-1,24)" max_size="Point(-1,24)">
+      <View name="category_marker" interactive="false" fill_color="0xFF4FB3BF" visible="false" min_size="Point(2,16)" max_size="Point(2,16)" v_alignment="center" />
+      <TextView name="category_label" interactive="false" value="" font_size="12" color="A3ADBA" v_alignment="center" layout_borders="Rect(8,0,0,0)" />
+    </Button>
+    <View name="compact_rows" view_layout="vertical" visible="false" layout_borders="Rect(6,0,0,4)" />
+  </View>
+</root>

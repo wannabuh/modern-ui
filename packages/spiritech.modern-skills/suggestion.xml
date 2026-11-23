@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <View view_layout="horizontal" min_size="Point(-1,18)" max_size="Point(-1,18)">
+    <TextView name="name" font_size="11" color="E8ECF1" />
+    <HLayoutSpacer />
+    <TextView name="delta" font_size="11" color="F0C060" layout_borders="Rect(0,0,4,0)" />
+  </View>
+</root>

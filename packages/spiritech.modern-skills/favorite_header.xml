@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Grouped favorites: one header per category. Height must match GROUP_HEADER in main.lua. -->
+<root>
+  <View name="favorite_header" view_layout="vertical" interactive="false" min_size="Point(200,20)" max_size="Point(-1,20)">
+    <TextView name="label" interactive="false" value="" font_size="10" color="7A8594" min_size="Point(190,14)" max_size="Point(-1,14)" layout_borders="Rect(6,5,0,1)" />
+  </View>
+</root>

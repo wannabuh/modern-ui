@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Native reset / discard question, drawn over the window. Names are the stock ones. -->
+<root>
+  <View name="confirmation" capture_input="true" interactive="true" view_layout="stacked" visible="false" fill_color="0x99000000">
+    <View name="confirmation_window" view_layout="stacked" min_size="Point(260,-1)" max_size="Point(260,-1)" h_alignment="center" v_alignment="center">
+      <View interactive="false" fill_color="0xFF2A3039" />
+      <View view_layout="vertical" layout_borders="Rect(1,1,1,1)" fill_color="0xFC0D1015">
+        <View view_layout="horizontal" min_size="Point(-1,24)" max_size="Point(-1,24)" fill_color="0xFF14181E">
+          <TextView name="window_title" value="" font_size="12" color="E8ECF1" v_alignment="center" weight="1" layout_borders="Rect(8,0,0,0)" />
+          <TextButton name="close" label="×" font_size="14" color="A3ADBA" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(0,0,8,0)" />
+        </View>
+        <View view_layout="vertical" layout_borders="Rect(10,10,10,10)">
+          <TextView name="message" value="" font_size="12" color="E8ECF1" word_wrap="true" min_size="Point(238,-1)" max_size="Point(238,-1)" />
+          <View view_layout="horizontal" min_size="Point(-1,26)" max_size="Point(-1,26)" layout_borders="Rect(0,10,0,0)">
+            <HLayoutSpacer />
+            <Button name="confirm" label="Confirm" font_size="12" min_size="Point(80,24)" max_size="Point(-1,24)" layout_borders="Rect(0,0,6,0)" />
+            <Button name="cancel" label="Cancel" font_size="12" min_size="Point(80,24)" max_size="Point(-1,24)" />
+          </View>
+        </View>
+      </View>
+    </View>
+  </View>
+</root>

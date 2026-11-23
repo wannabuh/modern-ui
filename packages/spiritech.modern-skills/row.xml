@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- One skill: star | name | unsaved change | value | cap bar | - + . Width / bar are set from main.lua. -->
+<root>
+  <Button name="skill_row" flat="true" view_layout="horizontal" capture_input="true" selection_color="23414A" min_size="Point(264,24)" max_size="Point(264,24)">
+    <TextButton name="star" label="★" font_size="11" color="3A414C" hover_color="F0C060" pressed_color="F0C060" min_size="Point(16,18)" max_size="Point(16,18)" v_alignment="center" layout_borders="Rect(4,0,0,0)" tooltip="Favorite: show this skill in Favorites" />
+    <TextView name="name" interactive="false" value="" font_size="12" color="E8ECF1" weight="1" min_size="Point(40,18)" max_size="Point(-1,18)" v_alignment="center" layout_borders="Rect(2,0,0,0)" />
+    <TextView name="delta" interactive="false" value="" font_size="10" color="F0C060" text_alignment="right" min_size="Point(32,18)" max_size="Point(32,18)" v_alignment="center" />
+    <TextView name="value" interactive="false" value="" font_size="12" color="E8ECF1" text_alignment="right" min_size="Point(40,18)" max_size="Point(40,18)" v_alignment="center" layout_borders="Rect(0,0,6,0)" />
+    <View name="bar" interactive="false" view_layout="stacked" min_size="Point(48,4)" max_size="Point(48,4)" v_alignment="center" layout_borders="Rect(0,0,6,0)">
+      <View interactive="false" fill_color="0xFF1B2028" />
+      <View name="bar_fill" interactive="false" fill_color="0xFF3E8C96" h_alignment="left" min_size="Point(0,4)" max_size="Point(0,4)" />
+    </View>
+    <Button name="decrease" flat="true" label="−" font_size="13" selection_color="5A4A20" repeat_delay_ms="500" repeat_interval_ms="50" min_size="Point(20,20)" max_size="Point(20,20)" v_alignment="center" tooltip="Undo an unsaved improvement. Hold to repeat; Shift-click to undo all unsaved improvements to this skill." />
+    <Button name="increase" flat="true" label="+" font_size="13" selection_color="5A4A20" repeat_delay_ms="500" repeat_interval_ms="50" min_size="Point(20,20)" max_size="Point(20,20)" v_alignment="center" layout_borders="Rect(2,0,2,0)" tooltip="Improve this skill. Hold to repeat; Shift-click to raise as far as the skill cap and available IP allow." />
+  </Button>
+</root>

@@ -12,7 +12,7 @@ declare -A dir=(
   [prk.actions]=Actions [prk.chat]=Chat [prk.chat-frame]=ChatFrame [prk.compass]=Compass
   [prk.control-center]=ControlCenter [prk.hotbar]=Hotbar [prk.info]=Info [prk.inventory]=Inventory
   [prk.playfield-map]=PlayfieldMap [prk.planet-map]=PlanetMap [prk.missions]=Missions
-  [prk.mission-terminal]=MissionTerminal [prk.ncu]=Ncu [prk.stats]=Stats [prk.status-bars]=StatusBars
+  [prk.mission-terminal]=MissionTerminal [prk.ncu]=Ncu [prk.skills]=Skills [prk.stats]=Stats [prk.status-bars]=StatusBars
   [prk.target-panels]=TargetPanels [prk.target-ncu]=TargetNcu [prk.team]=Team
   [prk.timer-bars]=TimerBars [prk.trade]=Trade [prk.wear]=Wear
 )

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Compact view: IP, the categories with the open one's skills under it, then the buttons. -->
+<root>
+  <View name="skills_compact" view_layout="vertical" visible="false" min_size="Point(220,456)" max_size="Point(220,456)">
+    <View view_layout="horizontal" min_size="Point(-1,26)" max_size="Point(-1,26)" fill_color="0xFF1B2028">
+      <TextView value="IP" interactive="false" font_size="10" color="5E6875" v_alignment="center" layout_borders="Rect(8,0,0,0)" />
+      <HLayoutSpacer />
+      <TextView name="remaining_ip" value="--" font_size="15" color="E8ECF1" v_alignment="center" layout_borders="Rect(0,0,8,0)" />
+    </View>
+    <ScrollView v_scrollbar_mode="auto" scrollbar_width="8" weight="1" layout_borders="Rect(0,4,0,4)">
+      <ScrollViewChild name="category_host" view_layout="vertical" />
+    </ScrollView>
+    <Button name="reset_all" label="Reset all skills" font_size="12" min_size="Point(-1,22)" max_size="Point(-1,22)" layout_borders="Rect(0,0,0,4)" />
+    <View view_layout="horizontal" min_size="Point(-1,24)" max_size="Point(-1,24)">
+      <Button name="accept" label="Save" font_size="12" weight="1" min_size="Point(60,24)" max_size="Point(-1,24)" layout_borders="Rect(0,0,6,0)" />
+      <Button name="quit" label="Close" font_size="12" min_size="Point(70,24)" max_size="Point(70,24)" />
+    </View>
+  </View>
+</root>
