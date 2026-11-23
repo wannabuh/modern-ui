@@ -19,11 +19,16 @@ Placement.screenfit_patched = true
 
 local known = setmetatable({}, { __mode = "k" }) -- every Placement seen in this package
 
-local log_lines = {}
+-- Packages with several instances (every hotbar is its own VM) share one storage, so each
+-- line is tagged with this VM and appended to what the others wrote.
+local vm_tag = (tostring({}):match("0x(%x+)") or "?"):sub(-4)
 local function log(text)
-	log_lines[#log_lines + 1] = string.format("%d %s", ui.time() // 1000 % 100000, text)
-	while #log_lines > 16 do table.remove(log_lines, 1) end
-	pcall(ui.storage.write, "screenfit_log", table.concat(log_lines, "\n"))
+	local ok, current = pcall(ui.storage.read, "screenfit_log")
+	local lines = {}
+	for line in ((ok and current) or ""):gmatch("[^\n]+") do lines[#lines + 1] = line end
+	lines[#lines + 1] = string.format("%d %s %s", ui.time() // 1000 % 100000, vm_tag, text)
+	while #lines > 24 do table.remove(lines, 1) end
+	pcall(ui.storage.write, "screenfit_log", table.concat(lines, "\n"))
 end
 
 local function rect(intended)
@@ -95,8 +100,72 @@ end
 
 function Placement:place()
 	known[self] = true
-	return place(self)
+	local result = place(self)
+	-- Remember the last squeezed spot, so a late echo of it from the game (after the screen
+	-- has grown back) is not taken as a move either.
+	local intended = self.intended
+	if intended and self.display_x and (math.abs(self.display_x - intended.x) > NOISE
+		or math.abs(self.display_y - intended.y) > NOISE) then
+		self.squeezed_x, self.squeezed_y = self.display_x, self.display_y
+	end
+	return result
 end
+
+-- ---------------------------------------------------------------- 1b. game placement requests
+-- Hotbars are placed by the game (ui.on_placement_request), and Core takes every request as
+-- the new intended position. When the screen shrinks the game asks for the squeezed spot,
+-- which then replaced the real one, so the bars stayed squeezed back in fullscreen.
+-- A request that only repeats where the window already is, or the squeezed version of its
+-- intended spot, is not a real move: keep the intended position and just re-place.
+local by_view = {}
+local attach = Placement.attach
+function Placement.attach(view, options)
+	local self = attach(view, options)
+	by_view[view] = self
+	known[self] = true
+	return self
+end
+
+local function extent(view, horizontal, fallback)
+	local chosen = horizontal and ui.chosen_width(view) or ui.chosen_height(view)
+	if chosen > 0 then return chosen end
+	local minimum = horizontal and ui.minimum_width(view) or ui.minimum_height(view)
+	return minimum > 0 and minimum or fallback or 0
+end
+
+local function near(ax, ay, bx, by)
+	return ax and bx and math.abs(ax - bx) <= NOISE and math.abs(ay - by) <= NOISE
+end
+
+local function squeezed(self, x, y)
+	local intended = self and self.intended
+	if not intended or (self.options.embedded and self.options.embedded()) then return false end
+	local view = self.view
+	local parent_width, parent_height = ui.parent_width(view), ui.parent_height(view)
+	local cx, cy = intended.x, intended.y
+	if parent_width > 0 then cx = math.max(0, math.min(cx, parent_width - extent(view, true, intended.width))) end
+	if parent_height > 0 then cy = math.max(0, math.min(cy, parent_height - extent(view, false, intended.height))) end
+	return near(x, y, cx, cy) or near(x, y, self.display_x, self.display_y)
+		or near(x, y, self.squeezed_x, self.squeezed_y)
+end
+
+local request = ui.on_placement_request
+pcall(function()
+	ui.on_placement_request = function(view, callback)
+		return request(view, function(x, y)
+			local self = by_view[view]
+			local ok, keep = pcall(squeezed, self, x, y)
+			if ok and keep then
+				if not near(x, y, self.intended.x, self.intended.y) then
+					log(string.format("request %.0f,%.0f ignored, keep %s", x, y, rect(self.intended)))
+				end
+				return self:place()
+			end
+			log(string.format("request %.0f,%.0f applied (was %s)", x, y, rect(self and self.intended)))
+			return callback(x, y)
+		end)
+	end
+end)
 
 -- ---------------------------------------------------------------- 2. watcher
 local last_check, screen_width, screen_height = 0, nil, nil
