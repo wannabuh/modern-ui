@@ -16,8 +16,14 @@
         <TextButton name="planet_zoom_in" label="+" font_size="18" color="E8ECF1" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" tooltip="More detailed map" />
         <Slider name="planet_zoom" track_height="14" track_slices="Rect(1,5,1,5)" min_size="Point(90,14)" max_size="Point(90,14)" v_alignment="center" layout_borders="Rect(12,0,0,0)" bg_gfx="GFX_GUI_CONTROLCENTER_AGGDEF_SLIDER_BACKGROUND" thumb_gfx="GFX_GUI_CONTROLCENTER_AGGDEF_SLIDER" thumb_width="9" tooltip="Magnify" />
         <View interactive="false" fill_color="0xFF2A3039" min_size="Point(1,16)" max_size="Point(1,16)" v_alignment="center" layout_borders="Rect(12,0,12,0)" />
-        <TextButton name="planet_centre_character" label="Me" font_size="13" color="4FB3BF" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" tooltip="Center on you and follow" />
-        <TextButton name="planet_centre_quest" label="Mission" font_size="13" color="F0C060" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(14,0,0,0)" tooltip="Center on your mission" />
+        <!-- Me / Mission: our own flat icons (assets/, drawn from tools/icons/*.svg at 2x).
+             Me is highlighted while following. -->
+        <Button name="planet_centre_character" flat="true" view_layout="stacked" capture_input="true" selection_color="4FB3BF" min_size="Point(24,22)" max_size="Point(24,22)" v_alignment="center" tooltip="Center on player">
+          <BitmapView name="planet_centre_character_icon" interactive="false" image="package://me.png" min_size="Point(18,18)" max_size="Point(18,18)" h_alignment="center" v_alignment="center" />
+        </Button>
+        <Button name="planet_centre_quest" flat="true" view_layout="stacked" capture_input="true" selection_color="4FB3BF" min_size="Point(24,22)" max_size="Point(24,22)" v_alignment="center" layout_borders="Rect(6,0,0,0)" tooltip="Center on mission">
+          <BitmapView name="planet_centre_quest_icon" interactive="false" image="package://mission.png" min_size="Point(18,18)" max_size="Point(18,18)" h_alignment="center" v_alignment="center" />
+        </Button>
       </View>
     </View>
   </View>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
+  <!-- "Locate me": teal ring with ticks around the map's yellow player dot -->
+  <g stroke="#4FB3BF" stroke-width="2.6" fill="none" stroke-linecap="round">
+    <circle cx="18" cy="18" r="11" />
+    <line x1="18" y1="2.5" x2="18" y2="7.5" />
+    <line x1="18" y1="28.5" x2="18" y2="33.5" />
+    <line x1="2.5" y1="18" x2="7.5" y2="18" />
+    <line x1="28.5" y1="18" x2="33.5" y2="18" />
+  </g>
+  <circle cx="18" cy="18" r="6.2" fill="#0D1015" />
+  <circle cx="18" cy="18" r="4.8" fill="#FFD84A" />
+</svg>

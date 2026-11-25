@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
+  <!-- Mission: a plain "M" in the theme accent (#4FB3BF, as the scrollbars and buttons),
+       centred and filling the icon. Legs are 6 units (3px at 18px) on even coordinates. -->
+  <path d="M4 30 V6 H10 L18 16 L26 6 H32 V30 H26 V15 L18 25 L10 15 V30 Z" fill="#4FB3BF" />
+</svg>

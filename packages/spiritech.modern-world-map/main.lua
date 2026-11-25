@@ -3,11 +3,12 @@
 -- teleport where allowed, saved state), restyled:
 --   * the shared flat frame; title shows the current map
 --   * the old button rows become a 30px toolbar underneath the map:
---       Newland Desert            −  2/5  +   [==slider==]   │  Me  Mission
+--       Newland Desert            −  2/5  +   [==slider==]   │  [you] [mission]
 --   * the game's own player and mission markers; switch maps from the title menu
 -- "Show buttons" (title menu / right-click) still hides the toolbar.
--- "Me" (or "Follow player" in the menu) centres on you and keeps following as you move;
--- dragging the map or clicking "Me" again stops following.
+-- Me (locate icon; or "Follow player" in the menu) centres on you and keeps following as you move;
+-- dragging the map or clicking Me again stops following (Me is highlighted while following). Mission (an M in
+-- the accent blue) centres on your mission.
 -- Two zooms: −/+ switch between the map's images (levels, as the built-in map), the slider
 -- magnifies the current image (1x to 4x). Both keep the spot in the middle of the view put.
 pcall(ui.require, "spiritech.modern-common/screenfit") -- keep window positions through fullscreen changes
@@ -25,6 +26,8 @@ local zoom_level = ui.find(content, "planet_zoom_level")
 local zoom_slider = ui.find(content, "planet_zoom")
 local character = ui.find(content, "planet_centre_character")
 local quest = ui.find(content, "planet_centre_quest")
+-- Me / Mission show our own icons (content.xml, assets/); tooltips "Center on player" /
+-- "Center on mission".
 local location = ui.find(content, "planet_location")
 local location_measure = ui.find(content, "planet_location_measure")
 local location_name, location_fitted = "", nil -- full zone name; "name|width" last fitted
@@ -179,7 +182,11 @@ end
 
 local function enable(button, enabled, color)
 	ui.enabled(button, enabled)
-	ui.text_color(button, enabled and color or "#5E6875")
+	if button == character or button == quest then
+		ui.opacity(button, enabled and 1 or 0.35) -- icon buttons: dim when there's nothing to centre on
+	else
+		ui.text_color(button, enabled and color or "#5E6875")
+	end
 end
 
 local function refresh_buttons()
@@ -197,11 +204,10 @@ local function refresh_buttons()
 	ui.menu.checked(frame.icon, 5, following)
 end
 
--- Follow mode: the "Me" button reads "● Me" while the map follows you.
+-- Follow mode: the Me button is highlighted while the map follows you.
 set_following = function(value)
 	following = value
-	ui.text(character, following and "● Me" or "Me")
-	ui.tooltip(character, following and "Following you (drag the map or click to stop)" or "Center on you and follow")
+	ui.selected(character, following)
 	if following then planet_map_centre("character") end
 	refresh_buttons()
 end
