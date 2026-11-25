@@ -8,8 +8,9 @@
       <View interactive="false" fill_color="0xFF2A3039" />
       <View interactive="false" fill_color="0xE60D1015" layout_borders="Rect(1,1,1,1)" />
       <View view_layout="horizontal" layout_borders="Rect(10,0,10,0)">
-        <TextView name="planet_location" interactive="false" value="" font_size="13" color="E8ECF1" v_alignment="center" tooltip="The zone you are in" />
-        <HLayoutSpacer />
+        <!-- Takes what the controls leave (main.lua shortens long names with an ellipsis). -->
+        <TextView name="planet_location" value="" font_size="13" color="E8ECF1" size_to_text="false" weight="1" min_size="Point(0,18)" max_size="Point(-1,18)" v_alignment="center" tooltip="The zone you are in" />
+        <TextView name="planet_location_measure" interactive="false" visible="false" value="" font_size="13" />
         <TextButton name="planet_zoom_out" label="−" font_size="18" color="E8ECF1" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" tooltip="Less detailed map" />
         <TextView name="planet_zoom_level" interactive="false" value="" font_size="12" color="A3ADBA" v_alignment="center" layout_borders="Rect(10,0,10,0)" />
         <TextButton name="planet_zoom_in" label="+" font_size="18" color="E8ECF1" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" tooltip="More detailed map" />

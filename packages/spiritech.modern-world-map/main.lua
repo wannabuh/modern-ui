@@ -26,6 +26,8 @@ local zoom_slider = ui.find(content, "planet_zoom")
 local character = ui.find(content, "planet_centre_character")
 local quest = ui.find(content, "planet_centre_quest")
 local location = ui.find(content, "planet_location")
+local location_measure = ui.find(content, "planet_location_measure")
+local location_name, location_fitted = "", nil -- full zone name; "name|width" last fitted
 local choices_menu = ui.load("menu.xml")
 local context_menu = ui.load("menu.xml")
 ui.add(content, choices_menu)
@@ -37,6 +39,7 @@ local centre_pending = false
 local zoom, records, revision, extras = 0, 0, -1, 0
 local frame
 local menu_character, menu_quest
+local fit_location
 local rebuild_menu
 local current_map = ""
 local following = false
@@ -368,13 +371,45 @@ function planet_map_update(current_revision, count)
 	frame:resize(ui.chosen_width(frame.root), ui.chosen_height(frame.root))
 	refresh_buttons()
 	draw_markers()
+	fit_location()
+end
+
+-- The zone name gets whatever the toolbar's controls leave; a long one ("Stret East Bank
+-- GOLD" in a narrow window) is cut with an ellipsis so it can't push Me / Mission off the
+-- edge. The width comes from layout, so this runs again on every map update.
+fit_location = function()
+	local room = ui.width(location) or 0
+	local key = location_name .. "|" .. room
+	if key == location_fitted or room <= 0 then
+		if room <= 0 then ui.text(location, location_name) end
+		return
+	end
+	location_fitted = key
+	local function width(text)
+		ui.text(location_measure, text)
+		return ui.text_width(location_measure)
+	end
+	local text = location_name
+	if width(text) > room then
+		local low, high = 0, utf8.len(text) or #text
+		while low < high do
+			local middle = (low + high + 1) // 2
+			local cut = text:sub(1, (utf8.offset(text, middle + 1) or #text + 1) - 1)
+			if width(cut .. "…") <= room then low = middle else high = middle - 1 end
+		end
+		text = text:sub(1, (utf8.offset(text, low + 1) or #text + 1) - 1):gsub("%s+$", "") .. "…"
+	end
+	ui.text(location, text)
+	ui.tooltip(location, location_name ~= "" and ("You are in " .. location_name) or "The zone you are in")
 end
 
 -- The zone you're in, by name (playfields.lua, generated from the client database).
 game.character.subscribe("self", "", function(_, me)
 	local id = me and me.playfield
 	local name = id and PLAYFIELDS and PLAYFIELDS[id]
-	ui.text(location, name or (id and ("Zone " .. id)) or "")
+	location_name = name or (id and ("Zone " .. id)) or ""
+	location_fitted = nil
+	fit_location()
 end)
 
 show_buttons(buttons)
