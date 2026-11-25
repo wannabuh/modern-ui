@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nanoline header (grouped list). Height must match HEADER in main.lua. -->
+<root>
+  <View name="nano_header" view_layout="horizontal" interactive="false" min_size="Point(200,20)" max_size="Point(-1,20)">
+    <TextView name="label" interactive="false" value="" font_size="10" color="7A8594" min_size="Point(150,14)" max_size="Point(-1,14)" v_alignment="bottom" layout_borders="Rect(6,5,0,1)" />
+    <HLayoutSpacer />
+    <TextView name="count" interactive="false" value="" font_size="10" color="5E6875" v_alignment="bottom" layout_borders="Rect(0,5,8,1)" />
+  </View>
+</root>

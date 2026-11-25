@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- One nano: icon | name over "nano cost · NCU · duration" | running time. Bound to the nano
+     (left-click casts). Width is set from main.lua. -->
+<root>
+  <Button name="nano_row" click_sound="false" flat="true" view_layout="horizontal" capture_input="true" selection_color="23414A" min_size="Point(300,32)" max_size="Point(300,32)">
+    <ItemSlotView name="icon" interactive="false" slot_gfx="" icon_fit="center" min_size="Point(26,26)" max_size="Point(26,26)" v_alignment="center" layout_borders="Rect(4,0,6,0)" />
+    <View view_layout="vertical" interactive="false" weight="1" v_alignment="center">
+      <TextView name="name" interactive="false" value="" font_size="12" color="E8ECF1" min_size="Point(40,16)" max_size="Point(-1,16)" />
+      <TextView name="detail" interactive="false" value="" font_size="10" color="8B95A3" min_size="Point(40,13)" max_size="Point(-1,13)" />
+    </View>
+    <TextView name="running" interactive="false" value="" font_size="10" color="4FB3BF" text_alignment="right" v_alignment="center" layout_borders="Rect(4,0,6,0)" />
+  </Button>
+</root>

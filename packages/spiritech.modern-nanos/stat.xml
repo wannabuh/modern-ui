@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <View name="stat" view_layout="horizontal" min_size="Point(-1,17)" max_size="Point(-1,17)">
+    <TextView name="label" interactive="false" value="" font_size="11" color="8B95A3" />
+    <HLayoutSpacer />
+    <TextView name="value" interactive="false" value="" font_size="12" color="E8ECF1" />
+  </View>
+</root>

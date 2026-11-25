@@ -1,0 +1,3 @@
+<root>
+  <ItemSlotView name="nano_slot" click_sound="false" slot_gfx="GFX_GUI_MULTILISTVIEW_SLOT_32_CLOSED" icon_inset="3" icon_fit="center" min_size="Point(38,38)" max_size="Point(38,38)" h_alignment="left" />
+</root>

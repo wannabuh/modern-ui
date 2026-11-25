@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modern Nano Programs: toolbar (search + school tabs), then the list | details, then a
+     status line. Table and Grid views (title menu) replace list + details. -->
+<root>
+  <View name="nano_programs" view_layout="vertical">
+    <View name="toolbar" view_layout="horizontal" min_size="Point(-1,24)" max_size="Point(-1,24)" layout_borders="Rect(2,2,2,4)">
+      <View view_layout="stacked" weight="1" min_size="Point(120,22)" max_size="Point(-1,22)">
+        <View interactive="false" fill_color="0xFF1B2028" />
+        <TextInputView name="search" placeholder="Search name or nanoline" font_size="12" color="E8ECF1" draw_border="false" draw_background="false" max_length="64" min_size="Point(-1,22)" max_size="Point(-1,22)" v_alignment="center" layout_borders="Rect(6,0,6,0)" />
+      </View>
+      <View name="school_tabs" view_layout="horizontal" min_size="Point(-1,22)" max_size="Point(-1,22)" layout_borders="Rect(6,0,0,0)">
+        <TextButton name="school_0" label="All" font_size="11" color="A3ADBA" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(4,0,4,0)" />
+        <TextButton name="school_1" label="Combat" font_size="11" color="A3ADBA" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(4,0,4,0)" />
+        <TextButton name="school_2" label="Medical" font_size="11" color="A3ADBA" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(4,0,4,0)" />
+        <TextButton name="school_3" label="Protection" font_size="11" color="A3ADBA" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(4,0,4,0)" />
+        <TextButton name="school_4" label="Psi" font_size="11" color="A3ADBA" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(4,0,4,0)" />
+        <TextButton name="school_5" label="Space" font_size="11" color="A3ADBA" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(4,0,2,0)" />
+      </View>
+    </View>
+    <View name="body" view_layout="horizontal" weight="1">
+      <!-- Modern list -->
+      <ScrollView name="nano_scroll" capture_input="true" v_scrollbar_mode="auto" scrollbar_width="8" weight="1">
+        <ScrollViewChild name="nano_rows" view_layout="vertical" />
+      </ScrollView>
+      <!-- Stock table / grid views -->
+      <View name="nano_list" view_layout="vertical" visible="false" weight="1" />
+      <ScrollView name="nano_grid_scroll" visible="false" capture_input="true" v_scrollbar_mode="auto" scrollbar_width="11" scrollbar_right_inset="1" scrollbar_arrow_gap="1" weight="1">
+        <ScrollViewChild name="nano_grid" view_layout="grid" grid_columns="60" min_columns="1" grid_spacing="4" h_alignment="left" layout_borders="Rect(0,4,0,0)" />
+      </ScrollView>
+      <!-- Details of the right-clicked nano -->
+      <View name="details_column" view_layout="vertical" min_size="Point(220,-1)" max_size="Point(220,-1)" fill_color="0x99111419" layout_borders="Rect(6,0,0,0)">
+        <ScrollView v_scrollbar_mode="auto" scrollbar_width="8" weight="1">
+          <ScrollViewChild name="details" view_layout="vertical" layout_borders="Rect(8,6,8,6)">
+            <TextView name="detail_hint" value="Right-click a nano to see its details here. Left-click casts it." font_size="11" color="8B95A3" word_wrap="true" max_size="Point(196,-1)" />
+            <View name="detail_body" view_layout="vertical" visible="false">
+              <TextView name="detail_name" value="" font_size="14" color="E8ECF1" word_wrap="true" max_size="Point(196,-1)" />
+              <TextView name="detail_sub" value="" font_size="10" color="8B95A3" layout_borders="Rect(0,2,0,6)" />
+              <TextView name="detail_running" value="" font_size="11" color="4FB3BF" visible="false" layout_borders="Rect(0,0,0,6)" />
+              <View name="detail_stats" view_layout="vertical" />
+              <View interactive="false" fill_color="0xFF232831" min_size="Point(-1,1)" max_size="Point(-1,1)" layout_borders="Rect(0,6,0,6)" />
+              <TextView value="NANOLINE" interactive="false" font_size="9" color="5E6875" />
+              <TextView name="detail_line" value="" font_size="12" color="E8ECF1" word_wrap="true" max_size="Point(196,-1)" layout_borders="Rect(0,2,0,2)" />
+              <TextView name="detail_rank" value="" font_size="10" color="8B95A3" layout_borders="Rect(0,0,0,4)" />
+              <View name="detail_line_rows" view_layout="vertical" />
+            </View>
+          </ScrollViewChild>
+        </ScrollView>
+      </View>
+    </View>
+    <View view_layout="horizontal" min_size="Point(-1,18)" max_size="Point(-1,18)" layout_borders="Rect(2,2,2,0)">
+      <TextView name="status" value="" font_size="10" color="8B95A3" v_alignment="center" />
+      <HLayoutSpacer />
+      <TextView value="Left-click casts · right-click for details" interactive="false" font_size="10" color="5E6875" v_alignment="center" />
+    </View>
+    <View name="sort_menu" min_size="Point(0,0)" max_size="Point(0,0)" />
+  </View>
+</root>

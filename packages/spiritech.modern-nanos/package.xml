@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package id="spiritech.modern-nanos" name="Modern Nano Programs" version="1.2.1" apiVersion="0.2.0">
+  <Provides role="prk.nano-programs" />
+  <Requires package="spiritech.modern-common" />
+  <Script src="presentation.lua" />
+  <Script src="main.lua" />
+  <InteractionScript src="interaction.lua" />
+</Package>
