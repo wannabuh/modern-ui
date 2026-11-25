@@ -1,10 +1,13 @@
 -- Modern Map: square, title-less local map (role prk.playfield-map).
 -- Based on the built-in PlayfieldMap package; keeps its native callback contract.
+-- Left-drag pans the map; it re-centres on you as soon as you move. The info strip under
+-- the map (coordinates / heading) drags the window.
 pcall(ui.require, "spiritech.modern-common/screenfit") -- keep window positions through fullscreen changes
 local Window = ui.require("core.window")
 
 -- Plate = 3px border on left/top/right, map square, 18px info strip. Matches content.xml.
 local EXTRA_WIDTH, EXTRA_HEIGHT = 6, 21
+local BORDER, STRIP = 3, 18 -- plate border above the map; the info strip under it (the drag handle)
 local CONTROLS_HEIGHT = 140 -- pfmap_controls (136) + its top gap (4)
 local DEFAULT_SIZE, MINIMUM_SIZE = 220, 120 -- side of the square map itself
 local EDGE = 0.92 -- off-map markers are pinned at this fraction of the half-width
@@ -74,6 +77,14 @@ local function layout(window, width, height)
 	ui.size(plate, window_width(), size + EXTRA_HEIGHT)
 	ui.size(content, window_width(), window_height())
 	window:fit_title(window_width(), false)
+	-- Core drags the window from anywhere inside window_titlebar, so it covers just the info
+	-- strip under the map (BORDER + map, STRIP tall). Presses on the map itself then reach
+	-- the map, which pans.
+	local titlebar = ui.find(window.root, "window_titlebar")
+	ui.align(titlebar, "start", "start")
+	ui.limits(titlebar, window_width(), STRIP, window_width(), STRIP)
+	ui.size(titlebar, window_width(), STRIP)
+	ui.place(titlebar, 0, BORDER + size)
 	if shown_size ~= size then
 		follow_pending = true
 	end
@@ -202,14 +213,15 @@ local function show_heading(facing)
 end
 
 function playfield_map_markers(readings)
-	-- Visible circle, in map content coordinates.
-	-- The map keeps the player centred, so use the player's marker as the centre.
+	-- Visible circle, in map content coordinates, around the centre of what is shown: the
+	-- player while the map follows you, wherever you dragged it otherwise.
 	local width, height = view.read("width"), view.read("height")
 	local half = math.min(width, height) / 2
-	local cx, cy, player_facing
+	local cx, cy = view.read("x") + width / 2, view.read("y") + height / 2
+	local player_facing
 	for _, marker in ipairs(readings) do
 		if marker.kind == "player" then
-			cx, cy, player_facing = marker.x, marker.y, marker.facing
+			player_facing = marker.facing
 			break
 		end
 	end

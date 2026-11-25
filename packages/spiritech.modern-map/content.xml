@@ -18,7 +18,8 @@
       <!-- Square map with an info strip underneath (the strip and border are the drag handles) -->
       <View view_layout="vertical" layout_borders="Rect(3,3,3,0)">
         <View name="pfmap_view" view_layout="stacked">
-          <PannedSurfaceView name="pfmap_surface" capture_input="true" pointer_pan="false" />
+          <!-- Left-drag pans the map (as the built-in map); it follows you again once you move. -->
+          <PannedSurfaceView name="pfmap_surface" capture_input="true" pointer_pan="true" />
           <View name="pfmap_unavailable" interactive="false" view_layout="vertical" h_alignment="center" v_alignment="center" visible="false">
             <TextView value="Map not available" font_size="11" color="8B95A3" h_alignment="center" />
           </View>

@@ -2,8 +2,8 @@
 <!--
   Title-less frame for Modern Map. Core/window.lua looks up every named view
   below, so they must exist; the visible chrome is drawn by content.xml.
-  window_titlebar fills the whole frame, so any spot not claimed by the map
-  surface (the dark border around the ring) drags the window.
+  window_titlebar is the window's drag handle; main.lua sizes and places it over the
+  info strip under the map, so presses on the map pan the map instead.
 -->
 <root>
   <View name="window" capture_input="true" color="Default" composite_layer="true" interaction_scope="true" view_layout="stacked">
