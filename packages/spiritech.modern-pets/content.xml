@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <View name="pet_content" view_layout="vertical" layout_borders="Rect(0,2,0,2)">
+    <View name="pet_rows" view_layout="vertical" />
+    <TextView name="pet_empty" interactive="false" visible="false" value="No pets" font_size="11" color="5E6875" min_size="Point(-1,24)" max_size="Point(-1,24)" v_alignment="center" layout_borders="Rect(8,0,8,0)" />
+  </View>
+</root>

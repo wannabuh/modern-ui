@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Host for the shared Core table (header hidden from Lua). The window is sized to fit
-     every row, so the table's always-on scrollbar is never needed; the cover hides it. -->
+<!-- Modern NCU list (lua/ncu_list.lua): host for the shared Core table (header hidden from
+     Lua). Windows are sized to fit every row, so the table's always-on scrollbar is never
+     needed; the cover hides it. Used by Modern NCU and Modern Target NCU. -->
 <root>
   <View name="ncu_content_root" view_layout="stacked">
     <!-- Time-left bars, one per row, placed from Lua behind the rows -->
     <View name="ncu_bars" interactive="false" view_layout="stacked" />
     <View name="ncu_list" view_layout="vertical" />
     <View name="ncu_scrollbar_cover" interactive="false" fill_color="0xFF0D1015" h_alignment="right" min_size="Point(12,-1)" max_size="Point(12,-1)" />
+    <!-- Shown instead of rows when nothing is running -->
+    <TextView name="ncu_empty" interactive="false" visible="false" value="" font_size="11" color="5E6875" v_alignment="center" layout_borders="Rect(8,0,8,0)" />
     <!-- Hidden, used only to measure names at the table's font size -->
     <TextView name="ncu_measure" interactive="false" visible="false" value="" font_size="12" />
   </View>

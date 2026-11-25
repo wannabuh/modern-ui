@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- One pet: flat health bar (name + level on the left, health on the right), then flat
+     Attack / Heal, Follow and Wait buttons; the pet's nano programs underneath. A teal edge
+     and tint mark the pet you have targeted. Click the bar to target the pet (native). -->
+<root>
+  <View name="pet_row" view_layout="vertical" capture_input="true" interactive="true">
+    <View view_layout="stacked" min_size="Point(-1,28)" max_size="Point(-1,28)">
+      <View name="row_target" interactive="false" visible="false" fill_color="0x1F4FB3BF" />
+      <View name="row_target_edge" interactive="false" visible="false" fill_color="0xFF4FB3BF" h_alignment="start" min_size="Point(3,-1)" max_size="Point(3,-1)" />
+      <View view_layout="horizontal" layout_borders="Rect(6,0,6,0)">
+        <View name="pet_bar" view_layout="stacked" interactive="true" capture_input="true" weight="1" min_size="Point(60,20)" max_size="Point(-1,20)" v_alignment="center">
+          <View interactive="false" fill_color="0xFF2A3039" />
+          <View interactive="false" fill_color="0xE60D1015" layout_borders="Rect(1,1,1,1)" />
+          <View name="pet_fill" interactive="false" fill_color="0xFF3E8A58" h_alignment="start" layout_borders="Rect(1,1,1,1)" />
+          <View interactive="false" view_layout="horizontal" layout_borders="Rect(6,0,6,0)">
+            <TextView name="pet_name" interactive="false" value="" font_size="12" color="E8ECF1" v_alignment="center" />
+            <TextView name="pet_level" interactive="false" value="" font_size="10" color="A3ADBA" v_alignment="center" layout_borders="Rect(5,0,0,0)" />
+            <HLayoutSpacer />
+            <TextView name="pet_health" interactive="false" value="" font_size="10" color="FFFFFF" v_alignment="center" />
+          </View>
+        </View>
+        <View name="pet_buttons" view_layout="horizontal" v_alignment="center">
+          <Button name="pet_primary" flat="true" view_layout="stacked" capture_input="true" selection_color="4FB3BF" min_size="Point(54,20)" max_size="Point(54,20)" v_alignment="center" layout_borders="Rect(4,0,0,0)">
+            <View name="pet_primary_fill" interactive="false" fill_color="0xFF6B2A2A" />
+            <TextView name="pet_primary_label" interactive="false" value="Attack" font_size="11" color="FFFFFF" h_alignment="center" v_alignment="center" />
+          </Button>
+          <Button name="pet_follow" flat="true" view_layout="stacked" capture_input="true" selection_color="4FB3BF" min_size="Point(50,20)" max_size="Point(50,20)" v_alignment="center" layout_borders="Rect(2,0,0,0)" tooltip="Commands the pet to stop its current action, and follow you">
+            <View interactive="false" fill_color="0xFF2A3039" />
+            <TextView interactive="false" value="Follow" font_size="11" color="E8ECF1" h_alignment="center" v_alignment="center" />
+          </Button>
+          <Button name="pet_wait" flat="true" view_layout="stacked" capture_input="true" selection_color="4FB3BF" min_size="Point(44,20)" max_size="Point(44,20)" v_alignment="center" layout_borders="Rect(2,0,0,0)" tooltip="Commands the pet to stop its current action, and wait for a new command">
+            <View interactive="false" fill_color="0xFF2A3039" />
+            <TextView interactive="false" value="Wait" font_size="11" color="E8ECF1" h_alignment="center" v_alignment="center" />
+          </Button>
+        </View>
+      </View>
+    </View>
+    <View name="pet_ncu_strip" view_layout="grid" visible="false" min_columns="1" grid_columns="40" grid_spacing="1" h_alignment="left" layout_borders="Rect(6,0,6,3)" />
+    <View interactive="false" fill_color="0xFF1A1F27" min_size="Point(-1,1)" max_size="Point(-1,1)" />
+  </View>
+</root>
