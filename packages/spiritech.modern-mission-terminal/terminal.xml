@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Modern Mission Terminal: offers as a list (icon + the server's summary text), then the
-     stock controls in the flat palette. Slider names match the stock window. -->
+     stock controls in the flat palette. Slider names match the stock window. To the right,
+     the offer map (title menu: Show map): numbered markers on the planet map. -->
 <root>
+  <View name="mission_frame" view_layout="horizontal">
   <View name="mission_terminal" view_layout="vertical" layout_borders="Rect(4,4,4,4)">
-    <View name="offer_list" view_layout="vertical" />
     <TextView name="offer_empty" interactive="false" value="Request missions to see offers" font_size="11" color="8B95A3" h_alignment="center" min_size="Point(-1,40)" max_size="Point(-1,40)" text_alignment="center" />
+    <!-- Offers scroll when the window is shorter than the list (the window is resizable). -->
+    <ScrollView name="offer_scroll" v_scrollbar_mode="auto" scrollbar_width="8" weight="1" min_size="Point(-1,70)">
+      <ScrollViewChild name="offer_list" view_layout="vertical" />
+    </ScrollView>
     <View view_layout="horizontal" min_size="Point(-1,22)" max_size="Point(-1,22)" layout_borders="Rect(0,6,0,0)">
       <Button name="mode_random" flat="true" view_layout="stacked" capture_input="true" selection_color="4FB3BF" weight="1" min_size="Point(40,20)" max_size="Point(-1,20)" v_alignment="center" tooltip="Missions reward a random item">
         <View interactive="false" fill_color="0xFF2A3039" />
@@ -84,5 +89,25 @@
       </Button>
     </View>
     <TextView name="offer_measure" interactive="false" visible="false" value="" font_size="12" />
+  </View>
+  <!-- Divider (map shown only): drag to share the width between the list and the map. -->
+  <View name="list_splitter" view_layout="stacked" interactive="true" capture_input="true" visible="false" min_size="Point(6,-1)" max_size="Point(6,-1)" tooltip="Drag to resize the list">
+    <View name="list_splitter_line" interactive="false" fill_color="0xFF232831" min_size="Point(1,-1)" max_size="Point(1,-1)" h_alignment="center" />
+  </View>
+  <!-- Offer map: the game draws the planet; markers come from main.lua. Wheel zooms, drag pans,
+       clicking a marker chooses its offer. -->
+  <View name="offer_map" view_layout="vertical" visible="false" weight="1" min_size="Point(200,100)" layout_borders="Rect(0,4,4,4)">
+    <View view_layout="stacked" weight="1">
+      <View interactive="false" fill_color="0xFF0B0E12" />
+      <PannedSurfaceView name="offer_map_tiles" capture_input="true" pointer_pan="true" />
+    </View>
+    <View view_layout="horizontal" min_size="Point(-1,24)" max_size="Point(-1,24)" fill_color="0xFF1B2028">
+      <TextView interactive="false" value="Wheel to zoom · drag to pan · click a marker to choose" font_size="10" color="5E6875" v_alignment="center" layout_borders="Rect(8,0,0,0)" />
+      <HLayoutSpacer />
+      <TextButton name="offer_map_fit" label="Fit" font_size="11" color="A3ADBA" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(0,0,10,0)" tooltip="Show every offer" />
+      <TextButton name="offer_map_zoom_out" label="−" font_size="15" color="A3ADBA" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(0,0,8,0)" tooltip="Zoom out" />
+      <TextButton name="offer_map_zoom_in" label="+" font_size="15" color="A3ADBA" hover_color="FFFFFF" pressed_color="4FB3BF" v_alignment="center" layout_borders="Rect(0,0,8,0)" tooltip="Zoom in" />
+    </View>
+  </View>
   </View>
 </root>

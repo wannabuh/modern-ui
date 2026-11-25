@@ -129,7 +129,8 @@ function Reqs.damage(name, ql)
 	return text
 end
 
--- Display parts for an item: { {text=, met=true/false/nil}, ... } (at most MAX_SHOWN skills).
+-- Display parts for an item: { {text=, met=true/false/nil, label=, need=, have=}, ... } (at most
+-- MAX_SHOWN skills); the profession part (first, if any) has profession=true and tooltip=.
 function Reqs.parts(name, ql)
 	local list = lookup(name, ql or 1)
 	if not list then return nil end
@@ -140,13 +141,13 @@ function Reqs.parts(name, ql)
 		if my_profession then met = ("/" .. profs .. "/"):find("/" .. my_profession .. "/", 1, true) ~= nil end
 		local count = select(2, profs:gsub("/", "")) + 1
 		parts[#parts + 1] = { text = count > 2 and (count .. " professions") or profs, met = met,
-			tooltip = profs }
+			tooltip = profs, profession = true }
 	end
 	for index, req in ipairs(list) do
 		if index > Reqs.MAX_SHOWN then break end
 		local have, met = current(req.stat), nil
 		if have ~= nil then met = have >= req.need end -- nil = unknown (shown neutral)
-		parts[#parts + 1] = { text = req.label .. " " .. req.need, met = met }
+		parts[#parts + 1] = { text = req.label .. " " .. req.need, met = met, label = req.label, need = req.need, have = have }
 	end
 	return parts
 end

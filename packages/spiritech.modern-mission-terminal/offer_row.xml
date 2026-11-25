@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- One mission offer (40px incl. 2px gap): 32px icon | one or two lines of the server's mission summary.
+<!-- One mission offer (92px incl. 2px gap): 32px icon (with its map marker's number) | up to five lines:
+     summary, rewards, class (when restricted), requirements, QL · location · pay | the reward items' icons (up to two).
+     Width is set from main.lua.
      Click selects the offer; inspecting (modifier + click) stays native. -->
 <root>
-  <Button name="offer_row" flat="true" view_layout="stacked" capture_input="true" selection_color="4FB3BF" min_size="Point(-1,40)" max_size="Point(-1,40)" layout_borders="Rect(0,0,0,2)">
+  <Button name="offer_row" flat="true" view_layout="stacked" capture_input="true" selection_color="4FB3BF" min_size="Point(-1,92)" max_size="Point(-1,92)" layout_borders="Rect(0,0,0,2)">
     <View name="row_bg" interactive="false" fill_color="0xFF12161C" />
     <View interactive="false" view_layout="horizontal" layout_borders="Rect(4,0,6,0)">
-      <ItemSlotView name="row_icon" interactive="false" slot_gfx="" icon_fit="center" v_alignment="start" min_size="Point(32,32)" max_size="Point(32,32)" layout_borders="Rect(0,3,0,0)" />
+      <ItemSlotView name="row_icon" interactive="false" slot_gfx="" corner_disc="F0C060" corner_ink="3A2A00" icon_fit="center" v_alignment="center" min_size="Point(32,32)" max_size="Point(32,32)" />
       <TextView name="row_text" interactive="false" value="" size_to_text="false" font_size="12" color="E8ECF1" weight="1" v_alignment="center" layout_borders="Rect(8,0,0,0)" />
+      <ItemSlotView name="reward_icon_1" interactive="false" visible="false" slot_gfx="" fill_color="0xFF1B2028" icon_fit="center" icon_inset="1" v_alignment="center" min_size="Point(28,28)" max_size="Point(28,28)" layout_borders="Rect(4,0,0,0)" />
+      <ItemSlotView name="reward_icon_2" interactive="false" visible="false" slot_gfx="" fill_color="0xFF1B2028" icon_fit="center" icon_inset="1" v_alignment="center" min_size="Point(28,28)" max_size="Point(28,28)" layout_borders="Rect(2,0,0,0)" />
     </View>
   </Button>
 </root>
