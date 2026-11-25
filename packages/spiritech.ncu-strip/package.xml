@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Package id="spiritech.ncu-strip" name="NCU Strip" version="1.2.1" apiVersion="0.2.0">
+<Package id="spiritech.ncu-strip" name="NCU Strip" version="1.3.0" apiVersion="0.2.0">
   <Requires package="spiritech.modern-common" />
   <View id="strip" name="NCU Strip" />
   <Script src="main.lua" />
