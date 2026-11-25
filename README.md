@@ -22,7 +22,7 @@ Edit files here, never in `ui-packages/`: the next install overwrites them.
 
 | Package | Replaces role | Notes |
 |---|---|---|
-| `spiritech.modern-common` | — | Shared library: flat window frame, theme, centre snap, screen-fit fix, item requirement / implant data |
+| `spiritech.modern-common` | — | Shared library: flat window frame, theme, centre snap, screen-fit fix, item requirement / implant data, NCU list |
 | `spiritech.modern-stats` | `prk.stats` | Compact bottom-centre strip (name, level, AR, ACs) |
 | `spiritech.modern-status-bars` | `prk.status-bars` | Horizontal status bars |
 | `spiritech.player-bars` | — | Movable combined Player Bars panel |
@@ -38,10 +38,14 @@ Edit files here, never in `ui-packages/`: the next install overwrites them.
 | `spiritech.modern-wear` | `prk.wear` | Equipment window |
 | `spiritech.modern-trade` | `prk.trade` | Flat trade / shop lists |
 | `spiritech.modern-missions` | `prk.missions` | Mission list with deadline bars |
-| `spiritech.modern-mission-terminal` | `prk.mission-terminal` | Mission terminal: offers as a list, flat controls |
+| `spiritech.modern-mission-terminal` | `prk.mission-terminal` | Mission terminal: offer list with rewards / requirements, offer map, resizable |
 | `spiritech.modern-info` | `prk.info` | Info window: flat, ◄ ► in the title bar, item names beside icons |
 | `spiritech.modern-team` | `prk.team` | Unit-frame style team window |
+| `spiritech.modern-pets` | `prk.pets` | Unit-frame style pet window with commands |
+| `spiritech.modern-skills` | `prk.skills` | Skills window: favorites, views, IP priorities |
+| `spiritech.modern-nanos` | `prk.nano-programs` | Nano programs: search, nanoline groups, details |
 | `spiritech.modern-ncu` | `prk.ncu` | Slim NCU list |
+| `spiritech.modern-target-ncu` | `prk.target-ncu` | Nano / fight target NCU windows in the same style |
 | `spiritech.ncu-strip` | — | NCU icon strip |
 | `spiritech.modern-actions` | `prk.actions` | Actions list |
 | `spiritech.modern-chat-frame` | `prk.chat-frame` | Flat chat frame |
