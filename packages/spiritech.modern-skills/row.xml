@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- One skill: star | name | unsaved change | value | cap bar | - + . Width / bar are set from main.lua. -->
+<!-- One skill: star | name | unsaved change | value | cap bar | - + . Width / bar are set from main.lua.
+     While IP priorities are edited, priority_area (- priority +) replaces change, value, bar and - +. -->
 <root>
   <Button name="skill_row" flat="true" view_layout="horizontal" capture_input="true" selection_color="23414A" min_size="Point(264,24)" max_size="Point(264,24)">
     <TextButton name="star" label="★" font_size="11" color="3A414C" hover_color="F0C060" pressed_color="F0C060" min_size="Point(16,18)" max_size="Point(16,18)" v_alignment="center" layout_borders="Rect(4,0,0,0)" tooltip="Favorite: show this skill in Favorites" />
@@ -12,5 +13,10 @@
     </View>
     <Button name="decrease" flat="true" label="−" font_size="13" selection_color="5A4A20" repeat_delay_ms="500" repeat_interval_ms="50" min_size="Point(20,20)" max_size="Point(20,20)" v_alignment="center" tooltip="Undo an unsaved improvement. Hold to repeat; Shift-click to undo all unsaved improvements to this skill." />
     <Button name="increase" flat="true" label="+" font_size="13" selection_color="5A4A20" repeat_delay_ms="500" repeat_interval_ms="50" min_size="Point(20,20)" max_size="Point(20,20)" v_alignment="center" layout_borders="Rect(2,0,2,0)" tooltip="Improve this skill. Hold to repeat; Shift-click to raise as far as the skill cap and available IP allow." />
+    <View name="priority_area" visible="false" view_layout="horizontal" min_size="Point(100,20)" max_size="Point(100,20)" v_alignment="center" layout_borders="Rect(0,0,2,0)">
+      <Button name="priority_down" flat="true" label="−" font_size="13" selection_color="5A4A20" min_size="Point(20,20)" max_size="Point(20,20)" v_alignment="center" tooltip="Lower the priority. Below Low is None: Auto-distribute never raises the skill. Shift-click for None." />
+      <TextView name="priority" interactive="false" value="" font_size="12" color="E8ECF1" text_alignment="center" min_size="Point(56,18)" max_size="Point(56,18)" v_alignment="center" layout_borders="Rect(2,0,2,0)" />
+      <Button name="priority_up" flat="true" label="+" font_size="13" selection_color="5A4A20" min_size="Point(20,20)" max_size="Point(20,20)" v_alignment="center" tooltip="Raise the priority. Max gets IP first, then High, Medium and Low. Shift-click for Max." />
+    </View>
   </Button>
 </root>

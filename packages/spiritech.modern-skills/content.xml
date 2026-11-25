@@ -4,14 +4,15 @@
 <root>
   <View name="skills" view_layout="stacked">
     <View name="skills_content" view_layout="vertical" layout_borders="Rect(2,2,2,0)">
-      <!-- Header: remaining IP, native status, suggestion -->
+      <!-- Header: remaining IP, native status, Auto-distribute, IP priorities -->
       <View view_layout="horizontal" min_size="Point(-1,36)" max_size="Point(-1,36)" fill_color="0xFF1B2028">
         <View view_layout="vertical" min_size="Point(150,36)" max_size="Point(150,36)" v_alignment="center" layout_borders="Rect(8,0,0,0)">
           <TextView value="IMPROVEMENT POINTS" interactive="false" font_size="9" color="5E6875" />
           <TextView name="remaining_ip" value="--" font_size="17" color="E8ECF1" />
         </View>
         <TextView name="status" value="" font_size="11" color="8B95A3" word_wrap="true" weight="1" min_size="Point(100,32)" max_size="Point(-1,32)" v_alignment="center" layout_borders="Rect(6,0,6,0)" />
-        <Button name="suggest_ip" label="Suggest IP" font_size="12" min_size="Point(96,24)" max_size="Point(96,24)" v_alignment="center" layout_borders="Rect(0,0,6,0)" />
+        <Button name="suggest_ip" label="Auto-distribute" font_size="12" min_size="Point(104,24)" max_size="Point(104,24)" v_alignment="center" layout_borders="Rect(0,0,4,0)" />
+        <Button name="set_priorities" label="Priorities" font_size="12" min_size="Point(78,24)" max_size="Point(78,24)" v_alignment="center" layout_borders="Rect(0,0,6,0)" tooltip="Choose which skills Auto-distribute raises first, and which it never raises." />
       </View>
       <View name="body" view_layout="horizontal" min_size="Point(-1,378)" max_size="Point(-1,378)" layout_borders="Rect(0,6,0,0)">
         <!-- Categories -->
@@ -26,7 +27,7 @@
             <ScrollViewChild name="group_host" view_layout="vertical" />
           </ScrollView>
         </View>
-        <!-- Details of the selected skill, or the staged suggestion -->
+        <!-- Details of the selected skill, its IP priority (while editing them), or the staged suggestion -->
         <View name="details_column" view_layout="stacked" min_size="Point(190,378)" max_size="Point(190,378)" fill_color="0x99111419">
           <View name="details" view_layout="vertical" layout_borders="Rect(8,6,8,6)">
             <TextView name="stat_name" value="" font_size="14" color="E8ECF1" word_wrap="true" max_size="Point(174,-1)" layout_borders="Rect(0,0,0,6)" />
@@ -45,8 +46,22 @@
               <Button name="reset_skill" label="Reset this skill" font_size="12" min_size="Point(-1,22)" max_size="Point(-1,22)" layout_borders="Rect(0,4,0,0)" />
             </View>
           </View>
+          <View name="priority_details" visible="false" view_layout="vertical" layout_borders="Rect(8,6,8,6)">
+            <TextView name="priority_name" value="" font_size="14" color="E8ECF1" word_wrap="true" max_size="Point(174,-1)" layout_borders="Rect(0,0,0,6)" />
+            <View view_layout="horizontal" min_size="Point(-1,18)" max_size="Point(-1,18)"><TextView value="Your priority" interactive="false" font_size="11" color="8B95A3" /><HLayoutSpacer /><TextView name="priority_value" font_size="12" color="E8ECF1" /></View>
+            <View view_layout="horizontal" min_size="Point(-1,18)" max_size="Point(-1,18)"><TextView value="Default" interactive="false" font_size="11" color="8B95A3" /><HLayoutSpacer /><TextView name="priority_default" font_size="12" color="E8ECF1" /></View>
+            <TextView name="priority_note" value="" font_size="11" color="8B95A3" layout_borders="Rect(0,2,0,0)" />
+            <View interactive="false" fill_color="0xFF232831" min_size="Point(-1,1)" max_size="Point(-1,1)" layout_borders="Rect(0,6,0,6)" />
+            <ScrollView v_scrollbar_mode="auto" scrollbar_width="8" weight="1">
+              <ScrollViewChild view_layout="vertical">
+                <TextView value="Auto-distribute raises all Max skills together, one point each in turn, until none of them can rise. Then it moves on to High, Medium and Low. Skills set to None are never raised." font_size="11" color="A3ADBA" word_wrap="true" max_size="Point(164,-1)" />
+                <TextView value="Priorities are kept on this computer for every character of this profession." font_size="11" color="8B95A3" word_wrap="true" max_size="Point(164,-1)" layout_borders="Rect(0,8,0,0)" />
+              </ScrollViewChild>
+            </ScrollView>
+            <Button name="use_default" label="Use default" font_size="12" min_size="Point(-1,22)" max_size="Point(-1,22)" layout_borders="Rect(0,4,0,0)" />
+          </View>
           <View name="suggestion_result" visible="false" view_layout="vertical" layout_borders="Rect(8,6,8,6)">
-            <TextView value="Suggested improvements are staged. Review them, then Save to keep them." font_size="11" color="A3ADBA" word_wrap="true" max_size="Point(174,-1)" />
+            <TextView value="Auto-distributed improvements are staged. Review them, then Save to keep them." font_size="11" color="A3ADBA" word_wrap="true" max_size="Point(174,-1)" />
             <ScrollView v_scrollbar_mode="auto" scrollbar_width="8" weight="1" layout_borders="Rect(0,6,0,0)">
               <ScrollViewChild name="suggestion_rows" view_layout="vertical" />
             </ScrollView>
@@ -56,9 +71,12 @@
       <!-- Footer -->
       <View view_layout="horizontal" min_size="Point(-1,30)" max_size="Point(-1,30)" layout_borders="Rect(0,6,0,0)">
         <Button name="reset_all" label="Reset all skills" font_size="12" min_size="Point(150,24)" max_size="Point(150,24)" />
+        <Button name="restore_priorities" visible="false" label="Restore defaults" font_size="12" min_size="Point(150,24)" max_size="Point(150,24)" tooltip="Set every skill back to the installed IP distribution table's priority (not saved until Save priorities)." />
         <HLayoutSpacer />
         <Button name="accept" label="Save" font_size="12" min_size="Point(90,24)" max_size="Point(90,24)" layout_borders="Rect(0,0,6,0)" />
         <Button name="quit" label="Close" font_size="12" min_size="Point(70,24)" max_size="Point(70,24)" />
+        <Button name="save_priorities" visible="false" label="Save priorities" font_size="12" min_size="Point(110,24)" max_size="Point(110,24)" layout_borders="Rect(0,0,6,0)" />
+        <Button name="cancel_priorities" visible="false" label="Cancel" font_size="12" min_size="Point(70,24)" max_size="Point(70,24)" />
       </View>
     </View>
   </View>

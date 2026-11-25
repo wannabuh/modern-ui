@@ -1,6 +1,6 @@
 -- Modern Skills: the Skills window (role prk.skills) in the flat Modern style.
--- Layout: IP header (remaining points, native status, Suggest IP), then categories | skills |
--- details, then Reset all / Save / Close. Each skill row: star, name (coloured by IP cost
+-- Layout: IP header (remaining points, native status, Auto-distribute, Priorities), then
+-- categories | skills | details, then Reset all / Save / Close. Each skill row: star, name (coloured by IP cost
 -- tier), unsaved change, value (green buffed / red debuffed), a bar for purchased / cap, - / +.
 --
 -- Views (title menu, remembered, each with its own size): Full (resizable: the skill list
@@ -15,6 +15,12 @@
 -- All skill logic is the built-in package's: the game stages, prices and validates every
 -- change (game.skills.propose), and Save / resets / confirmations stay protected native
 -- actions bound to their buttons. Nothing here calculates IP.
+--
+-- IP priorities (API 0.2.0): Priorities starts a native edit of the order Auto-distribute
+-- spends IP in (Max, High, Medium, Low, None). Rows then show "- priority +" instead of
+-- value / bar / - +, the details column the skill's priority and default, and the footer
+-- Restore defaults / Save priorities / Cancel. The game stages, keeps (per profession, on
+-- this computer) and applies them; full view only, as the built-in window (leaving it cancels).
 --
 -- Favorites are saved per character in this package's storage: fav/<character> = skill ids.
 pcall(ui.require, "spiritech.modern-common/screenfit") -- keep window positions through fullscreen changes
@@ -38,6 +44,11 @@ local ENDS = Window.CONTENT_ENDS or 33
 local TEXT, IDLE = "#E8ECF1", "#A3ADBA"
 local UP, DOWN = "#7FD98A", "#FF7A70"
 local STAR_ON, STAR_OFF = "#F0C060", "#3A414C"
+
+-- IP priorities as the game numbers them: 1 Max .. 4 Low, 0 None. Steps go None -> Max.
+local PRIORITY_ORDER = { 0, 4, 3, 2, 1 }
+local PRIORITY_NAMES = { [0] = "None", "Max", "High", "Medium", "Low" }
+local PRIORITY_COLORS = { [0] = "#5E6875", "#F0C060", "#E8ECF1", "#A3ADBA", "#7A8494" }
 
 local content = ui.load("content.xml")
 local expanded = ui.find(content, "skills_content")
@@ -112,6 +123,38 @@ local function cost_color(level)
 	return "#8C9CFF"
 end
 
+local function editing_priorities()
+	return state ~= nil and state.editing_priorities == true
+end
+
+local function priority_text(value, fixed)
+	if fixed then return "N/A" end
+	return PRIORITY_NAMES[value] or tostring(value)
+end
+
+-- One step along None < Low < Medium < High < Max; Shift jumps to the end.
+local function step_priority(id, step, shifted)
+	local entry = facts[id]
+	if not entry or not editing_priorities() or entry.priority_fixed then
+		return
+	end
+	select_skill(id)
+	local index
+	for position, value in ipairs(PRIORITY_ORDER) do
+		if value == entry.priority then index = position end
+	end
+	if shifted then
+		index = step > 0 and #PRIORITY_ORDER or 1
+	elseif index then
+		index = math.max(1, math.min(#PRIORITY_ORDER, index + step))
+	else
+		index = step > 0 and #PRIORITY_ORDER or 1
+	end
+	if PRIORITY_ORDER[index] ~= entry.priority then
+		game.skills.set_priority(entry.reference, PRIORITY_ORDER[index])
+	end
+end
+
 local function edit(id, direction, shifted)
 	local entry = facts[id]
 	if not entry or not state.can_edit or not entry.known then
@@ -131,7 +174,8 @@ end
 local function add_row(host, id, small, list, kind)
 	local root = ui.find(ui.load("row.xml"), "skill_row")
 	local row = { root = root, id = id, small = small, kind = small and "compact" or (kind or "full") }
-	for _, name in ipairs({ "star", "name", "delta", "value", "bar", "bar_fill", "increase", "decrease" }) do
+	for _, name in ipairs({ "star", "name", "delta", "value", "bar", "bar_fill", "increase", "decrease",
+		"priority_area", "priority", "priority_down", "priority_up" }) do
 		row[name] = ui.find(root, name)
 	end
 	local width = small and COMPACT_ROW_WIDTH or row_width[row.kind]
@@ -151,6 +195,12 @@ local function add_row(host, id, small, list, kind)
 	end)
 	ui.on_repeat(row.decrease, function(shifted)
 		edit(id, -1, shifted)
+	end)
+	ui.on_repeat(row.priority_up, function(shifted)
+		step_priority(id, 1, shifted)
+	end)
+	ui.on_repeat(row.priority_down, function(shifted)
+		step_priority(id, -1, shifted)
 	end)
 	ui.add(host, root)
 	rows[#rows + 1] = row
@@ -420,6 +470,9 @@ set_mode = function(value)
 		return
 	end
 	ui.cancel_input(content)
+	if value ~= "full" and editing_priorities() then
+		game.skills.cancel_priorities()
+	end
 	mode = value
 	ui.visible(expanded, mode == "full")
 	ui.visible(compact, mode == "compact")
@@ -497,6 +550,31 @@ end)
 ui.on_click(ui.find(expanded, "suggest_ip"), function()
 	game.skills.suggest()
 end)
+ui.on_click(ui.find(expanded, "set_priorities"), function()
+	if not editing_priorities() then
+		show_suggestions = false
+		game.skills.edit_priorities()
+	end
+end)
+ui.on_click(ui.find(expanded, "save_priorities"), function()
+	game.skills.save_priorities()
+end)
+ui.on_click(ui.find(expanded, "cancel_priorities"), function()
+	game.skills.cancel_priorities()
+end)
+ui.on_click(ui.find(expanded, "restore_priorities"), function()
+	for _, entry in pairs(facts) do
+		if not entry.priority_fixed and entry.priority ~= entry.default_priority then
+			game.skills.set_priority(entry.reference, entry.default_priority)
+		end
+	end
+end)
+ui.on_click(ui.find(expanded, "use_default"), function()
+	local entry = facts[selected]
+	if entry and editing_priorities() and not entry.priority_fixed then
+		game.skills.set_priority(entry.reference, entry.default_priority)
+	end
+end)
 local function cancel()
 	game.skills.cancel_confirmation(state.confirmation)
 end
@@ -511,7 +589,9 @@ local function render_row(row)
 	if not entry then
 		return
 	end
-	ui.text(row.name, entry.name)
+	local priorities = editing_priorities() and not row.small
+	local changed = priorities and not entry.priority_fixed and entry.priority ~= entry.default_priority
+	ui.text(row.name, entry.name .. (changed and " *" or ""))
 	ui.tooltip(row.root, entry.title)
 	ui.selected(row.root, row.id == selected)
 	ui.text_color(row.name, cost_color(entry.cost_level))
@@ -532,6 +612,20 @@ local function render_row(row)
 	ui.selected(row.decrease, entry.delta > 0)
 	ui.enabled(row.increase, state.can_edit and entry.can_improve)
 	ui.enabled(row.decrease, state.can_edit and entry.can_improve and entry.delta > 0)
+	ui.visible(row.priority_area, priorities)
+	ui.visible(row.delta, not priorities)
+	ui.visible(row.value, not priorities)
+	ui.visible(row.increase, not priorities)
+	ui.visible(row.decrease, not priorities)
+	ui.visible(row.bar, not priorities and not row.small)
+	if priorities then
+		ui.text(row.priority, priority_text(entry.priority, entry.priority_fixed))
+		ui.text_color(row.priority, entry.priority_fixed and "#5E6875" or PRIORITY_COLORS[entry.priority] or TEXT)
+		ui.tooltip(row.priority_area, entry.priority_fixed and "This skill can't be improved, so Auto-distribute never raises it."
+			or ("Default: " .. priority_text(entry.default_priority)))
+		ui.enabled(row.priority_down, not entry.priority_fixed and entry.priority ~= 0)
+		ui.enabled(row.priority_up, not entry.priority_fixed and entry.priority ~= 1)
+	end
 	if not row.small then
 		local share = entry.known and entry.maximum > 0 and math.max(0, math.min(1, entry.purchased / entry.maximum)) or 0
 		local fill = math.floor(BAR_WIDTH * share + 0.5)
@@ -576,9 +670,32 @@ render = function()
 	ui.tooltip(ui.find(expanded, "status"), state.status)
 	ui.enabled(ui.find(expanded, "suggest_ip"), state.can_suggest)
 	ui.tooltip(ui.find(expanded, "suggest_ip"), state.suggestion_hint)
-	ui.visible(ui.find(expanded, "details"), not show_suggestions)
-	ui.visible(ui.find(expanded, "suggestion_result"), show_suggestions)
+	local priorities = editing_priorities()
+	local set_priorities = ui.find(expanded, "set_priorities")
+	ui.selected(set_priorities, priorities)
+	ui.enabled(set_priorities, priorities or state.can_edit_priorities == true)
+	for _, name in ipairs({ "reset_all", "accept", "quit" }) do
+		ui.visible(ui.find(expanded, name), not priorities)
+	end
+	for _, name in ipairs({ "restore_priorities", "save_priorities", "cancel_priorities" }) do
+		ui.visible(ui.find(expanded, name), priorities)
+	end
+	ui.enabled(ui.find(expanded, "save_priorities"), state.priorities_changed == true)
+	ui.visible(ui.find(expanded, "details"), not show_suggestions and not priorities)
+	ui.visible(ui.find(expanded, "priority_details"), priorities)
+	ui.visible(ui.find(expanded, "suggestion_result"), show_suggestions and not priorities)
 	local entry = facts[selected]
+	if entry and priorities then
+		local changed = not entry.priority_fixed and entry.priority ~= entry.default_priority
+		local value = ui.find(expanded, "priority_value")
+		ui.text(ui.find(expanded, "priority_name"), entry.title)
+		ui.text(value, priority_text(entry.priority, entry.priority_fixed))
+		ui.text_color(value, entry.priority_fixed and "#5E6875" or PRIORITY_COLORS[entry.priority] or TEXT)
+		ui.text(ui.find(expanded, "priority_default"), priority_text(entry.default_priority, entry.priority_fixed))
+		ui.text(ui.find(expanded, "priority_note"), entry.priority_fixed and "Can't be improved"
+			or changed and "Changed from default" or "Matches default")
+		ui.enabled(ui.find(expanded, "use_default"), changed)
+	end
 	if entry then
 		ui.text(ui.find(expanded, "stat_name"), entry.title)
 		ui.text(ui.find(expanded, "stat_description"), entry.description)
