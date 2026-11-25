@@ -84,7 +84,7 @@ local function show_buttons(value)
 	buttons = value
 	ui.visible(controls, buttons)
 	if frame then
-		frame:resize(window_width(), window_height())
+		frame:relayout(window_width(), window_height())
 	end
 	publish(false)
 end
@@ -233,7 +233,7 @@ function playfield_map_markers(readings)
 						y = cy + dy / reach * half * EDGE
 					end
 				end
-				view.sprite(graphic, x, y, facing)
+				view.sprite(graphic, x, y, facing, 1)
 			end
 		end
 	end
@@ -269,11 +269,11 @@ function playfield_map_update(facts)
 	if first_pending then
 		first_pending = false
 		size = DEFAULT_SIZE
-		frame:resize(window_width(), window_height())
+		frame:relayout(window_width(), window_height())
 		resizing = true
 	end
 	local old_size = shown_size
-	frame:resize(window_width(), window_height())
+	frame:relayout(window_width(), window_height())
 	resizing = resizing or old_size ~= shown_size
 	ui.enabled(areas_button, facts.land_control)
 	if not facts.land_control then

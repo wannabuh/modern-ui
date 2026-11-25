@@ -1,6 +1,6 @@
 -- Offline harness: runs the client's real Core package plus one of our packages with a mocked
 -- native host (__prk_host), so package logic can be exercised without the game.
--- Usage: lua tools/mock_host.lua <package dir> <scenario.lua> [client dir]
+-- Usage: [MOCK_PRELUDE=pre.lua] lua tools/mock_host.lua <package dir> <scenario.lua> [client dir]
 -- The scenario runs after the package's scripts, with MOCK (see below) and the package globals.
 local package_dir, scenario = arg[1], arg[2]
 local client = arg[3] or (os.getenv("HOME") .. "/Games/spiritech/client")
@@ -14,7 +14,27 @@ local function new_view()
 	MOCK.views = MOCK.views + 1
 	return MOCK.views
 end
+-- Since API 0.2.0 Core's generated ui.lua calls the host by number. Map each id back to the
+-- function that makes the call (read from the client's own ui.lua, so renumbering in a later
+-- update needs nothing here), spelled as the older name-based host calls were.
+local LEGACY = { ["game.actions.execute"] = "actions.execute", ["ui.load"] = "xml.load", ["ui.on_click"] = "ui.click" }
+local host_names = {}
+do
+	local f = io.open(core .. "ui.lua")
+	if f then
+		local current
+		for line in f:lines() do
+			current = line:match("^function ([%w_.]+)%(") or current
+			local id = line:match("host%((%d+)")
+			if id and current then host_names[tonumber(id)] = LEGACY[current] or current end
+		end
+		f:close()
+	end
+end
+MOCK.settings = {} -- ui.settings values by key (toggle / number / choice)
+
 local function host(name, ...)
+	if type(name) == "number" then name = host_names[name] or ("host#" .. name) end
 	local a = { ... }
 	MOCK.calls[name] = (MOCK.calls[name] or 0) + 1
 	if MOCK.log then print("host", name, ...) end
@@ -50,9 +70,19 @@ local function host(name, ...)
 		assert(total <= 256 * 1024, "storage over 256 KiB")
 		return
 	end
+	if name == "ui.bind" then MOCK.bindings = MOCK.bindings or {}; MOCK.bindings[a[1]] = a[2]; return end
+	if name == "ui.binding" then return (MOCK.bindings or {})[a[1]] or 0 end
+	if name == "ui.storage.key" then
+		local keys = {}; for k in pairs(MOCK.storage) do keys[#keys + 1] = k end
+		table.sort(keys); return keys[a[1]] or ""
+	end
 	if name == "ui.storage.count" then local n = 0; for _ in pairs(MOCK.storage) do n = n + 1 end; return n end
 	if name == "ui.preference.read" or name == "ui.preference.read_array_encoded" then return MOCK.preferences[a[1]] or "" end
 	if name == "ui.preference.write" then MOCK.preferences[a[1]] = a[2]; return end
+	if name == "ui.settings.toggle" then return MOCK.settings[a[1]] == true end
+	if name == "ui.settings.number" then return tonumber(MOCK.settings[a[1]]) or 0 end
+	if name == "ui.settings.choice" then return MOCK.settings[a[1]] or "" end
+	if name == "ui.settings.on_change" then MOCK.settings_changed = a[1]; return end
 	if name == "ui.on_update" then MOCK.updates = a[1]; return end
 	if name == "ui.stop_updates" then MOCK.updates = nil; return end
 	if name == "game.effects.subscribe" then
@@ -95,6 +125,8 @@ for library in lines(package_dir .. "/package.xml"):gmatch('<Requires package="(
 	end
 	p:close()
 end
+-- MOCK_PRELUDE=<file>: run before the package's scripts (set MOCK.hook / MOCK.settings for load time).
+if os.getenv("MOCK_PRELUDE") then dofile(os.getenv("MOCK_PRELUDE")) end
 for _, path in ipairs(scripts(package_dir)) do dofile(path) end
 
 function MOCK.tick(ms)

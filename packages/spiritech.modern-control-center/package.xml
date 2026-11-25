@@ -4,10 +4,16 @@
      tells each instance which half it is; main.lua / hotbar.lua return early otherwise.
      Select this package for BOTH "Control center" and "Shortcut bars" in
      Options → Interface & HUD → UI packages. -->
-<Package id="spiritech.modern-control-center" name="Modern Control Center" version="1.2.1" apiVersion="0.1.0">
+<Package id="spiritech.modern-control-center" name="Modern Control Center" version="1.2.1" apiVersion="0.2.0">
   <Provides role="prk.control-center" />
   <Provides role="prk.hotbar" />
   <Requires package="spiritech.modern-common" />
+  <Options category="interface" id="modern-control-center" label="Modern Control Center" description="Settings for the Modern Control Center package.">
+    <Toggle key="minibar" label="Show minibar" scope="character" default="false" hint="Additional top-right buttons; keeps the normal control center." />
+    <Toggle key="rollup" label="Show rollup panel" scope="character" default="false" hint="Shows the docking column. Turning it off floats docked pages." />
+    <Slider key="rollup-opacity" label="Rollup background opacity" scope="character" default="100" hint="Docked windows keep their own background." min="0" max="100" steps="100" unit="%" requires="rollup" />
+    <Toggle key="advanced-aggdef" label="Advanced Agg/Def settings" scope="machine" default="false" hint="An i button beside the AGG/DEF slider opens the Agg/Def window." />
+  </Options>
   <Script src="role.lua" />
   <Script src="minibar.lua" />
   <Script src="rollup_panel.lua" />

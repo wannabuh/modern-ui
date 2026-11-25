@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Package id="spiritech.modern-chat" name="Modern Chat" version="1.2.1" apiVersion="0.1.0">
+<Package id="spiritech.modern-chat" name="Modern Chat" version="1.2.1" apiVersion="0.2.0">
   <Provides role="prk.chat" />
   <Requires package="spiritech.modern-common" />
   <Script src="presentation.lua" />

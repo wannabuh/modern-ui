@@ -9,12 +9,12 @@
 #
 # Stamps version/apiVersion into every packages/*/package.xml, validates, then zips.
 # tools/ folders are left out; LICENSE is copied into every package folder.
-# Usage: ./release.sh 1.1.0            (API_VERSION=0.1.0 ./release.sh ... to override)
+# Usage: ./release.sh 1.1.0            (API_VERSION=0.2.0 ./release.sh ... to override)
 set -euo pipefail
 cd "$(dirname "$0")"
 
 version="${1:?usage: ./release.sh VERSION}"
-api_version="${API_VERSION:-0.1.0}"
+api_version="${API_VERSION:-0.2.0}"
 semver='^[0-9]+\.[0-9]+\.[0-9]+$'
 [[ $version =~ $semver ]] || { echo "version must be MAJOR.MINOR.PATCH" >&2; exit 1; }
 [[ $api_version =~ $semver ]] || { echo "API_VERSION must be MAJOR.MINOR.PATCH" >&2; exit 1; }

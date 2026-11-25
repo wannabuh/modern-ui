@@ -520,12 +520,22 @@ function control_center_refresh()
 	if rollup_panel then rollup_panel:refresh() end
 end
 
+-- Since API 0.2.0 these are this package's own Options settings (package.xml); the
+-- Control Center state no longer carries the built-in package's preferences.
+local function apply_settings()
+	local toggle = ui.settings.toggle
+	ui.visible(minibar, toggle("minibar"))
+	if rollup_panel then rollup_panel:show(toggle("rollup"), ui.settings.number("rollup-opacity") / 100) end
+	show_aggdef_advanced(toggle("advanced-aggdef"))
+end
+
+apply_settings()
+ui.settings.on_change(apply_settings)
+
 function control_center_apply(state, perks)
 	latest_state = state
 	latest_perks = perks
 	cooldown_window:set_perks(perks)
-	ui.visible(minibar, state.minibar_shown == true)
-	if rollup_panel then rollup_panel:show(state.rollup_shown == true, state.rollup_background_opacity) end
 	ui.text(ncu, number(state.used_ncu) .. " / " .. number(state.max_ncu))
 	local used, maximum = state.used_ncu, state.max_ncu
 	local fraction = (used >= 0 and maximum > 0) and math.min(1, used / maximum) or 0
@@ -539,7 +549,6 @@ function control_center_apply(state, perks)
 	ui.size(ncu_meter_fill, math.max(1, fill), -1)
 	ui.tooltip(ncu_window, string.format("NCU: %s of %s used", number(used), number(maximum)))
 	ui.text(credits, grouped(state.credits))
-	show_aggdef_advanced(state.aggdef_advanced)
 	if state.aggdef >= AGGDEF_MIN then
 		ui.progress(aggdef, aggdef_progress(state.aggdef))
 		show_aggdef(state.aggdef)

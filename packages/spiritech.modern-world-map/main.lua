@@ -59,7 +59,7 @@ local PLAYER_COLOR = "#FFFFD84A" -- yellow
 local function draw_markers()
 	view.markers_begin()
 	if game.planet_map.point("quest") ~= 0 then
-		view.sprite("GFX_GUI_PLANETMAP_MISSION_MARKER2", game.planet_map.point("quest_x"), game.planet_map.point("quest_y"), 0)
+		view.sprite("GFX_GUI_PLANETMAP_MISSION_MARKER2", game.planet_map.point("quest_x"), game.planet_map.point("quest_y"), 0, 1)
 	end
 	if game.planet_map.point("character") ~= 0 then
 		local x, y = game.planet_map.point("character_x"), game.planet_map.point("character_y")
